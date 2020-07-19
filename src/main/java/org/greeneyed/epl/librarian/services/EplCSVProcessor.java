@@ -277,6 +277,7 @@ public class EplCSVProcessor {
 			log.info("Descargando fichero desde EPL...");
 			File librosEPL = Files.createTempFile("Libros", ".csv.zip").toFile();
 			File downloaded = httpclient.execute(httpget, new FileDownloadResponseHandler(librosEPL));
+			downloaded.deleteOnExit();
 			log.info("Descargado el fichero en {}", downloaded.getAbsolutePath());
 			try (FileInputStream theFIS = new FileInputStream(downloaded)) {
 				updateSpec = procesarEplCSV(theFIS);
