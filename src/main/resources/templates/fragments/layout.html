@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+   xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" lang="ca">
+
+<!-- Basado en https://github.com/dpwilhelmsen/sb-admin-2-bootstrap-4 -->
+
+<head>
+   <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta http-equiv="Expires" content="now" />
+   <meta http-equiv="Pragma" content="no-cache" />
+   <meta http-equiv="Cache-Control" content="private" />
+   <title>EPL Librarian</title>
+   <style>
+      .lds-dual-ring {
+      display: block;
+      width: 490px;
+      height: 490px;
+      margin: auto;
+      }
+      .lds-dual-ring:after {
+      content: " ";
+      display: block;
+      width: 400px;
+      height: 400px;
+      margin: 8px;
+      border-radius: 50%;
+      border: 30px solid #167df0;
+      border-color: #167df0 transparent #167df0 transparent;
+      animation: lds-dual-ring 1.2s linear infinite;
+      }
+      @keyframes lds-dual-ring {
+         0% {
+            transform: rotate(0deg);
+         }
+         100% {
+            transform: rotate(360deg);
+         }
+      }
+   </style>
+</head>
+
+<body>
+   <div id="loader" class="lds-dual-ring"></div>
+   <div id="app" style="display: none">
+      <div id="wrapper">
+         <header th:replace="~{fragments/navbar :: navbar}"></header>
+         <div class="d-md-flex">
+            <div class="sidebar" role="navigation">
+               <div class="sidebar-nav collapse navbar-collapse show" id="side-menu-wrapper">
+                  <ul class="nav navbar-nav navbar-collapse flex-column side-nav list-group" id="side-menu"
+                     th:replace="fragments/user-sidebar :: user-sidebar">
+                  </ul>
+                  <sumario-biblioteca />
+               </div>
+               <!-- /.sidebar-collapse -->
+            </div>
+
+            <!-- Page Content -->
+            <div id="page-wrapper" layout:fragment="content" class="p-4">
+            </div>
+         </div>
+      </div>
+      <!-- /#wrapper -->
+      <div layout:fragment="postscript">
+      </div>
+   </div>
+   <script th:if="${!#arrays.contains(@environment.getActiveProfiles(), 'devel')}" th:src="@{/librarian/dist/build.js}"></script>
+   <script th:if="${#arrays.contains(@environment.getActiveProfiles(), 'devel')}" src="/webpack/build.js"></script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+UL.cargos {
+	list-style: inside;
+	margin: 0;
+	padding: 0;
+}
+TR.NORMAL TD {
+	background: AliceBlue;
+}
+
+TR.TRANSICIO TD {
+	background: Linen;
+}
+
+TR.flag-actiu TD {
+	background: AliceBlue;
+}
+
+TR.flag-inactiu TD {
+	background: Linen;
+}
+
+.hidden {
+	display: hidden;
+}
+
+SPAN.remove-generation {
+	font-size: .75em;
+	padding-top: 13px;
+	float: right;
+}
+
+.panel-heading a {
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.panel-heading a:after {
+    font-family:'Glyphicons Halflings';
+    content:"\e114";
+    float: right;
+    color: grey;
+}
+
+.panel-heading a.collapsed:after {
+    content:"\e080";
+}
+
+.prevent-overflow {
+  width: 15em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; // This is where the magic happens
+}
+
+textarea.input-large {
+	width: 25em!important;
+}
+
+#phones_info , #phones_length {
+    display: inline-block;
+    margin-right: 2em;
+}
+
+#phones_paginate {
+    display: inline-block;
+    float: right;
+}
+
+.labelTT {
+  vertical-align: top;
+  margin-right: .5em;
+}
+
+#nova_persona {
+  width: 40rem;
+}
+
+/* .input-group-append { */
+/*  padding-bottom: 0.50rem; */
+/* } */
+
+/**
+Typeahead
+**/
+.tt-input, /* UPDATE: newer versions use tt-input instead of tt-query */
+  .tt-hint {
+/*  margin-left: 1em; */
+/*  margin-top: .5em; */
+  width: 396px;
+/*  height: 30px; */
+  padding: 8px 12px;
+/*  font-size: 24px; */
+  line-height: 30px;
+  border: 2px solid #ccc;
+/*  border-radius: 8px; */
+  outline: none;
+}
+
+.tt-input {
+  /* UPDATE: newer versions use tt-input instead of tt-query */
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.tt-hint {
+  color: #999;
+}
+
+.tt-menu {
+  /* UPDATE: newer versions use tt-menu instead of tt-dropdown-menu */
+  width: 40rem;
+  margin-top: 12px;
+  padding: 8px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+  position: static !important;
+}
+
+.tt-suggestion {
+  padding: 3px 20px;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.tt-suggestion.tt-is-under-cursor {
+  /* UPDATE: newer versions use .tt-suggestion.tt-cursor */
+  color: #fff;
+  background-color: #0097cf;
+  cursor: pointer;
+}
+
+.tt-menu.tt-open {
+  cursor: pointer;
+}
+
+.tt-suggestion p {
+  margin: 0;
+}
+
+.empty-message {
+    padding: .5em 1em;
+    font-weight: bold;
+}
