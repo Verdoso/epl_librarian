@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: librarian
+  jmx:
+    default-domain: ${spring.application.name}
