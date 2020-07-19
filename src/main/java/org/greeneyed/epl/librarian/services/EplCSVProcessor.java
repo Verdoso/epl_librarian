@@ -189,6 +189,8 @@ public class EplCSVProcessor {
 						return new UpdateSpec(fechaActualizacion, librosCSVs);
 					})
 					.orElse(UpdateSpec.NO_SPEC);
+					// Marcamos para borrado los ficheros que no sean el ultimo
+					backupFiles().sorted(Comparator.comparing(File::lastModified).reversed()).skip(1).forEach(File::deleteOnExit);
 		} catch (IOException e) {
 			log.error("Error buscando ficheros en el directorio temporal", e);
 		}
