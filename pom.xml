@@ -30,9 +30,9 @@
 		<org.mapstruct.version>1.3.1.Final</org.mapstruct.version>
 		<m2e.apt.activation>jdt_apt</m2e.apt.activation>
 		<cqengine.version>3.5.0</cqengine.version>
-		<sonar.projectKey>Verdoso_epl_librarian</sonar.projectKey>
-		<sonar.organization>verdoso</sonar.organization>
-		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar-projectKey>Verdoso_epl_librarian</sonar-projectKey>
+		<sonar-organization>verdoso</sonar-organization>
+		<sonar-host.url>https://sonarcloud.io</sonar-host.url>
 		<code.coverage.exclusions>
 			**/org/greeneyed/epl/librarian/Application.java
 		</code.coverage.exclusions>
@@ -262,9 +262,9 @@
 				<sonar.sources>.</sonar.sources>
 				<sonar.inclusions>src/main/java/**,src/main/resources/**</sonar.inclusions>
 				<sonar.exclusions>${code.coverage.exclusions}</sonar.exclusions>
-				<sonar.projectKey>${sonar.projectKey}</sonar.projectKey>
-				<sonar.organization>${sonar.organization}</sonar.organization>
-				<sonar.host.url>${sonar.host.url}</sonar.host.url>
+				<sonar.projectKey>${sonar-projectKey}</sonar.projectKey>
+				<sonar.organization>${sonar-organization}</sonar.organization>
+				<sonar.host.url>${sonar-host.url}</sonar.host.url>
 			</properties>
 			<activation>
 				<activeByDefault>false</activeByDefault>
