@@ -236,20 +236,20 @@ public class BibliotecaService {
 		return pagina;
 	}
 
-	public Pagina<Autor> paginaAutor(BusquedaElemento<AUTOR_ORDERING, Autor> busquedaAutor) {
+	public Pagina<Autor> paginaAutor(BusquedaElemento<Autor> busquedaAutor) {
 		return paginaElementos(autores, busquedaAutor);
 	}
 
-	public Pagina<Genero> paginaGenero(BusquedaElemento<GENERO_ORDERING, Genero> busquedaGenero) {
+	public Pagina<Genero> paginaGenero(BusquedaElemento<Genero> busquedaGenero) {
 		return paginaElementos(generos, busquedaGenero);
 	}
 
-	public Pagina<Idioma> paginaIdioma(BusquedaElemento<IDIOMA_ORDERING, Idioma> busquedaIdioma) {
+	public Pagina<Idioma> paginaIdioma(BusquedaElemento<Idioma> busquedaIdioma) {
 		return paginaElementos(idiomas, busquedaIdioma);
 	}
 
 	private <T extends ElementOrdering<O>, O> Pagina<O> paginaElementos(IndexedCollection<O> elementos,
-			BusquedaElemento<T, O> busqueda) {
+			BusquedaElemento<O> busqueda) {
 		Pagina<O> pagina = new Pagina<>();
 		readLock.lock();
 		try (final ResultSet<O> queryResult = elementos.retrieve(busqueda.getQuery(), busqueda.getQueryOptions())) {
