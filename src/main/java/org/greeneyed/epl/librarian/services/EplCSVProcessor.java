@@ -358,7 +358,6 @@ public class EplCSVProcessor {
 				return true;
 			}
 		}).build();
-		HostnameVerifier hnv = new NoopHostnameVerifier();
-		return new SSLConnectionSocketFactory(sslContext, hnv);
+		return new SSLConnectionSocketFactory(sslContext, new NoopHostnameVerifier());
 	}
 }
