@@ -126,7 +126,6 @@ public class Libro {
 	@JsonIgnore
 	public String getGeneroNormalizado() {
 		if (generos != null) {
-//			return Arrays.asList(generos.split(",")).stream().map(Libro::flattenToAscii).collect(Collectors.toList());
 			return flattenToAscii(generos).replace(",", "");
 		} else {
 			return null;
