@@ -69,6 +69,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class EplCSVProcessor {
 
+	private static final String BACKUP_FILES_PREFIX = "Libros";
+	private static final String BACKUP_FILES_SUFFIX = ".epl_bck";
 	private static final String EPUB_LIBRE_CSV = "https://epublibre.org/rssweb/csv";
 
 	@Data
@@ -204,8 +206,8 @@ public class EplCSVProcessor {
 		Path tempDirectory = getTempDirectory();
 		return Stream.of(tempDirectory.toFile().listFiles(file -> {
 			String fileName = file.getName();
-			return file.isFile() && fileName.startsWith("Libros")
-					&& fileName.endsWith("." + LibroCSV.serialVersionUID + ".epl_bck");
+			return file.isFile() && fileName.startsWith(BACKUP_FILES_PREFIX)
+					&& fileName.endsWith("." + LibroCSV.serialVersionUID + BACKUP_FILES_SUFFIX);
 		}));
 	}
 
@@ -221,7 +223,7 @@ public class EplCSVProcessor {
 					InputStreamReader theISR = new InputStreamReader(theZIS);
 					Reader theReader = new BufferedReader(theISR)) {
 				log.info("Descomprimiendo fichero EPL");
-				ZipEntry nextEntry;
+				ZipEntry nextEntry = null;
 				while ((nextEntry = theZIS.getNextEntry()) != null) {
 					FileTime fileTime = nextEntry.getCreationTime();
 					if (fileTime == null) {
@@ -243,7 +245,8 @@ public class EplCSVProcessor {
 							.withSkipLines(1)
 							.build();
 					librosCSVs = cb.parse();
-					File librosBCKFile = Files.createTempFile("Libros", "." + LibroCSV.serialVersionUID + ".epl_bck")
+					File librosBCKFile = Files
+							.createTempFile(BACKUP_FILES_PREFIX, "." + LibroCSV.serialVersionUID + BACKUP_FILES_SUFFIX)
 							.toFile();
 					try (FileOutputStream theFOS = new FileOutputStream(librosBCKFile);
 							BufferedOutputStream theBOS = new BufferedOutputStream(theFOS);
@@ -260,13 +263,6 @@ public class EplCSVProcessor {
 					return new UpdateSpec(Instant.ofEpochMilli(librosBCKFile.lastModified())
 							.atZone(ZoneId.systemDefault())
 							.toLocalDateTime(), librosCSVs);
-				}
-				if (nextEntry == null) {
-					log.error(
-							"Error descomprimiendo fichero, no es un formato ZIP correcto, seguramente EPL ha devuelto una página de \"Servidor sobrecargado\" en su lugar");
-					log.error(
-							"Si el error persiste, intente descargarse manualmente el fichero desde la URL {} y guardelo en el directorio ",
-							EPUB_LIBRE_CSV, getTempDirectory().toFile().getAbsolutePath());
 				}
 			} catch (IOException e) {
 				log.error("Error leyendo fichero: {}", e.getMessage());
@@ -291,7 +287,7 @@ public class EplCSVProcessor {
 				.build();) {
 			HttpGet httpget = new HttpGet(EPUB_LIBRE_CSV);
 			log.info("Descargando fichero desde EPL...");
-			File librosEPL = Files.createTempFile("Libros", ".csv.zip").toFile();
+			File librosEPL = Files.createTempFile(BACKUP_FILES_PREFIX, ".csv.zip").toFile();
 			try (CloseableHttpResponse response = httpclient.execute(httpget)) {
 				HttpEntity entity = response.getEntity();
 				ContentType contentType = ContentType.getOrDefault(entity);
