@@ -312,8 +312,9 @@ public class EplCSVProcessor {
 			} else {
 				showErrorServidorSobrecargado();
 			}
-			librosEPL.deleteOnExit();
-			librosEPL.delete();
+			if(!librosEPL.delete()) {
+				log.error("No se ha podido borrar el fichero {}", librosEPL.getAbsolutePath());
+			}
 		}
 		return updateSpec;
 	}
