@@ -43,29 +43,17 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
 	@Override
 	public void run(ApplicationArguments arguments) throws Exception {
 		log.info("Inicializando datos...");
-		boolean comprobarActualizacionAutomatica = actualizacionAutomatica;
+		boolean comprobaremosActualizacionAutomatica = actualizacionAutomatica;
 		UpdateSpec updateSpec = eplCSVProcessor.processBackup();
 		if (updateSpec.isEmpty()) {
-			comprobarActualizacionAutomatica = false;
+			comprobaremosActualizacionAutomatica = false;
 			updateSpec = eplCSVProcessor.updateFromEPL();
 			if (updateSpec.isEmpty()) {
 				updateSpec = eplCSVProcessor.updateFromEPLManual();
 			}
 		}
-		if (comprobarActualizacionAutomatica) {
-			log.info("El backup tiene una antiguedad de {} horas...", updateSpec.getAntiguedad().toHours());
-			if (updateSpec.getAntiguedad().compareTo(Duration.ofHours(antiguedadMaxima)) > 0) {
-				log.info("El backup tiene más de {} horas. Intentando actualización desde EPL", antiguedadMaxima);
-				UpdateSpec tempUpdateSpec = eplCSVProcessor.updateFromEPL();
-				if (tempUpdateSpec.isEmpty()) {
-					log.info("La descarga no funcion\u00f3, usando backup");
-				} else {
-					log.info("Descargada versi\u00f3n actualizada desde EPL");
-					updateSpec = tempUpdateSpec;
-				}
-			} else {
-				log.info("Usando informaci\u00f3n almacenada en el backup");
-			}
+		if (comprobaremosActualizacionAutomatica) {
+			updateSpec = comprobarActualizacionAutomatica(updateSpec);
 		} else {
 			log.error("No hay backup y la actualizaci\u00f3n autom\u00e1tica est\u00e1 deshabilitada. Ouch!");
 		}
@@ -77,15 +65,36 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
 					DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(updateSpec.getFechaActualizacion()));
 			bibliotecaService.update(updateSpec.getLibroCSVs());
 			log.info("EPL Librarian inicializado");
-			if (!environment.acceptsProfiles(Profiles.of("devel"))) {
-				try {
-					Desktop.getDesktop()
-							.browse(new URI("http://localhost:" + environment.getProperty("local.server.port")
-									+ "/librarian/"));
-				} catch (Exception e) {
-					log.error("Error abriendo navegador automáticamente", e);
-				}
+			abrirEnNavegador();
+		}
+	}
+
+	private void abrirEnNavegador() {
+		if (!environment.acceptsProfiles(Profiles.of("devel"))) {
+			try {
+				Desktop.getDesktop()
+						.browse(new URI(
+								"http://localhost:" + environment.getProperty("local.server.port") + "/librarian/"));
+			} catch (Exception e) {
+				log.error("Error abriendo navegador automáticamente", e);
 			}
 		}
+	}
+
+	private UpdateSpec comprobarActualizacionAutomatica(UpdateSpec updateSpec) {
+		log.info("El backup tiene una antiguedad de {} horas...", updateSpec.getAntiguedad().toHours());
+		if (updateSpec.getAntiguedad().compareTo(Duration.ofHours(antiguedadMaxima)) > 0) {
+			log.info("El backup tiene más de {} horas. Intentando actualización desde EPL", antiguedadMaxima);
+			UpdateSpec tempUpdateSpec = eplCSVProcessor.updateFromEPL();
+			if (tempUpdateSpec.isEmpty()) {
+				log.info("La descarga no funcion\u00f3, usando backup");
+			} else {
+				log.info("Descargada versi\u00f3n actualizada desde EPL");
+				updateSpec = tempUpdateSpec;
+			}
+		} else {
+			log.info("Usando informaci\u00f3n almacenada en el backup");
+		}
+		return updateSpec;
 	}
 }
