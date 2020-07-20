@@ -326,17 +326,22 @@ public class EplCSVProcessor {
 			librosEPL = new File(getTempDirectory().toFile(), "epublibre_csv.zip");
 			if (librosEPL.exists()) {
 				log.info("Encontrada descarga manual ({}), procesando...", librosEPL.getAbsoluteFile());
-				try (FileInputStream theFIS = new FileInputStream(
-						new File(getTempDirectory().toFile(), "epublibre_csv.zip"))) {
-					updateSpec = procesarEplCSV(theFIS);
-				} catch (IOException e) {
-					log.error("Error procesando descarga manual: {} : {}", librosEPL.getAbsoluteFile(), e.getMessage());
-					log.trace(ERROR_DETALLADO, e);
-				}
+				updateSpec = procesarFicheroManual(updateSpec, librosEPL);
 			}
 		} catch (IOException e1) {
 			log.error("Error intentando leer descarga manul: {}", e1.getMessage());
 			log.trace(ERROR_DETALLADO, e1);
+		}
+		return updateSpec;
+	}
+
+	private UpdateSpec procesarFicheroManual(UpdateSpec updateSpec, File librosEPL) {
+		try (FileInputStream theFIS = new FileInputStream(
+				new File(getTempDirectory().toFile(), "epublibre_csv.zip"))) {
+			updateSpec = procesarEplCSV(theFIS);
+		} catch (IOException e) {
+			log.error("Error procesando descarga manual: {} : {}", librosEPL.getAbsoluteFile(), e.getMessage());
+			log.trace(ERROR_DETALLADO, e);
 		}
 		return updateSpec;
 	}
