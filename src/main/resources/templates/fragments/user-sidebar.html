@@ -1,11 +1,16 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
-<!-- User's side bar -->
-<!--  th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}" -->
-<ul th:fragment="user-sidebar" class="nav" id="user-side-menu">
-    <navigation-option label="Biblioteca" target-section="biblioteca" icon="book"></navigation-option>
-    <navigation-option label="Autores" target-section="autores" icon="address-card-o"></navigation-option>
-    <navigation-option label="Generos" target-section="generos" icon="sitemap"></navigation-option>
-    <navigation-option label="Idiomas" target-section="idiomas" icon="flag"></navigation-option>
-</ul>
+<head>
+    <title>Sonar no sabe lo que es un fragmento</title>
+</head>
+<body>
+    <!-- User's side bar -->
+    <!--  th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}" -->
+    <ul th:fragment="user-sidebar" class="nav" id="user-side-menu">
+        <navigation-option label="Biblioteca" target-section="biblioteca" icon="book"></navigation-option>
+        <navigation-option label="Autores" target-section="autores" icon="address-card-o"></navigation-option>
+        <navigation-option label="Generos" target-section="generos" icon="sitemap"></navigation-option>
+        <navigation-option label="Idiomas" target-section="idiomas" icon="flag"></navigation-option>
+    </ul>
+</body>
 </html>
