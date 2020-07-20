@@ -41,6 +41,7 @@
     "file-loader": "^1.1.4",
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
+    "lodash": "^4.17.19",
     "mem": "^6.1.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "vue-loader": "^13.0.5",
