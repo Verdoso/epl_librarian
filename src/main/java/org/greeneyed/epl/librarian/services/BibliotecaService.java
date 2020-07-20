@@ -57,7 +57,7 @@ public class BibliotecaService {
 
 	@Getter
 	@AllArgsConstructor
-	public static enum IDIOMA_ORDERING implements ElementOrdering<Idioma> {
+	public enum IDIOMA_ORDERING implements ElementOrdering<Idioma> {
 		POR_IDIOMA(queryOptions(orderBy(ascending(Idioma.IDIOMA_NOMBRE))),
 				queryOptions(orderBy(descending(Idioma.IDIOMA_NOMBRE)))),
 		POR_LIBROS(queryOptions(orderBy(ascending(Idioma.IDIOMA_LIBROS))),
@@ -71,7 +71,7 @@ public class BibliotecaService {
 
 	@Getter
 	@AllArgsConstructor
-	public static enum GENERO_ORDERING implements ElementOrdering<Genero> {
+	public enum GENERO_ORDERING implements ElementOrdering<Genero> {
 		POR_GENERO(queryOptions(orderBy(ascending(Genero.GENERO_NOMBRE))),
 				queryOptions(orderBy(descending(Genero.GENERO_NOMBRE)))),
 		POR_LIBROS(queryOptions(orderBy(ascending(Genero.GENERO_LIBROS))),
@@ -84,7 +84,7 @@ public class BibliotecaService {
 
 	@Getter
 	@AllArgsConstructor
-	public static enum AUTOR_ORDERING implements ElementOrdering<Autor> {
+	public enum AUTOR_ORDERING implements ElementOrdering<Autor> {
 		POR_AUTOR(queryOptions(orderBy(ascending(Autor.AUTOR_NOMBRE))),
 				queryOptions(orderBy(descending(Autor.AUTOR_NOMBRE)))),
 		POR_LIBROS(queryOptions(orderBy(ascending(Autor.AUTOR_LIBROS))),
@@ -97,7 +97,7 @@ public class BibliotecaService {
 
 	@Getter
 	@AllArgsConstructor
-	public static enum BOOK_ORDERING implements ElementOrdering<Libro> {
+	public enum BOOK_ORDERING implements ElementOrdering<Libro> {
 		POR_TITULO(queryOptions(orderBy(ascending(Libro.LIBRO_TITULO))),
 				queryOptions(orderBy(descending(Libro.LIBRO_TITULO))))
 		//
