@@ -248,7 +248,7 @@ public class BibliotecaService {
 		return paginaElementos(idiomas, busquedaIdioma);
 	}
 
-	private <T extends ElementOrdering<O>, O> Pagina<O> paginaElementos(IndexedCollection<O> elementos,
+	private <O> Pagina<O> paginaElementos(IndexedCollection<O> elementos,
 			BusquedaElemento<O> busqueda) {
 		Pagina<O> pagina = new Pagina<>();
 		readLock.lock();
