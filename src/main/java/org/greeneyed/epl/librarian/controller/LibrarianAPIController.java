@@ -35,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 public class LibrarianAPIController {
 
+	private static final String ERROR_DETALLADO = "Error detallado";
 	private final BibliotecaService bibliotecaService;
 	private static final String DEFAULT_ORDER = "POR_TITULO";// BOOK_ORDERING.POR_TITULO.name();
 	private static final String DEFAULT_ORDER_AUTOR = "POR_AUTOR";// BOOK_ORDERING.POR_AUTOR.name();
@@ -64,7 +65,7 @@ public class LibrarianAPIController {
 				filtroFecha = Instant.ofEpochMilli(filtroFechaLong).atZone(ZoneId.systemDefault()).toLocalDate();
 			} catch (Exception e) {
 				log.error("Filtro fecha con formato incorrecto: {}", e.getMessage());
-				log.trace("Error detallado", e);
+				log.trace(ERROR_DETALLADO, e);
 			}
 		}
 		BusquedaLibro busquedaLibro = new BusquedaLibro(numeroPagina, porPagina, ordering, reversed, filtroTitulo,

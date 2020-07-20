@@ -74,6 +74,8 @@ public class EplCSVProcessor {
 	@Data
 	public static class LibroCSV implements Serializable {
 
+		private static final String ERROR_DETALLADO = "Error detallado";
+
 		private static final long serialVersionUID = 1L;
 
 		private static final DateTimeFormatter PUBLICADO_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -138,7 +140,7 @@ public class EplCSVProcessor {
 				}
 			} catch (Exception e) {
 				log.error("Error parseando fecha de publicacion {}", publicado, e.getMessage());
-				log.trace("Error detallado", e);
+				log.trace(ERROR_DETALLADO, e);
 			}
 			return temp;
 		}
