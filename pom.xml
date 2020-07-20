@@ -198,14 +198,14 @@
 					<executable>true</executable>
 					<excludeArtifactIds>lombok</excludeArtifactIds>
 				</configuration>
-				<dependencies>
+<!-- 				<dependencies> -->
 					<!-- The following enables the "thin jar" deployment option. -->
-					<dependency>
-						<groupId>org.springframework.boot.experimental</groupId>
-						<artifactId>spring-boot-thin-layout</artifactId>
-						<version>1.0.11.RELEASE</version>
-					</dependency>
-				</dependencies>
+<!-- 					<dependency> -->
+<!-- 						<groupId>org.springframework.boot.experimental</groupId> -->
+<!-- 						<artifactId>spring-boot-thin-layout</artifactId> -->
+<!-- 						<version>1.0.11.RELEASE</version> -->
+<!-- 					</dependency> -->
+<!-- 				</dependencies> -->
 			</plugin>
 		</plugins>
 	</build>
