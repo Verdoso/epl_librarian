@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Data
 @Slf4j
-public class BusquedaElemento<T extends ElementOrdering<O>, O> {
+public class BusquedaElemento<O> {
 	private final int numeroPagina;
 	private final int porPagina;
 	private final ElementOrdering<O> ordering;

@@ -81,8 +81,8 @@ public class LibrarianAPIController {
 			@RequestParam(name = "desc", defaultValue = "false") boolean reversed,
 			@RequestParam(name = "orden", defaultValue = DEFAULT_ORDER_AUTOR) AUTOR_ORDERING ordering,
 			@RequestParam(name = "filtro_autor", required = false) String filtroAutor) {
-		BusquedaElemento<AUTOR_ORDERING, Autor> busquedaAutor = new BusquedaElemento<>(numeroPagina, porPagina,
-				ordering, reversed, filtroAutor);
+		BusquedaElemento<Autor> busquedaAutor = new BusquedaElemento<>(numeroPagina, porPagina, ordering, reversed,
+				filtroAutor);
 		log.trace("BusquedaAutor: {}", busquedaAutor);
 		return ResponseEntity.ok(bibliotecaService.paginaAutor(busquedaAutor));
 	}
@@ -94,8 +94,8 @@ public class LibrarianAPIController {
 			@RequestParam(name = "desc", defaultValue = "false") boolean reversed,
 			@RequestParam(name = "orden", defaultValue = DEFAULT_ORDER_GENERO) GENERO_ORDERING ordering,
 			@RequestParam(name = "filtro_genero", required = false) String filtroGenero) {
-		BusquedaElemento<GENERO_ORDERING, Genero> busquedaGenero = new BusquedaElemento<>(numeroPagina, porPagina,
-				ordering, reversed, filtroGenero);
+		BusquedaElemento<Genero> busquedaGenero = new BusquedaElemento<>(numeroPagina, porPagina, ordering, reversed,
+				filtroGenero);
 		log.trace("BusquedaGenero: {}", busquedaGenero);
 		return ResponseEntity.ok(bibliotecaService.paginaGenero(busquedaGenero));
 	}
@@ -107,8 +107,8 @@ public class LibrarianAPIController {
 			@RequestParam(name = "desc", defaultValue = "false") boolean reversed,
 			@RequestParam(name = "orden", defaultValue = DEFAULT_ORDER_IDIOMA) IDIOMA_ORDERING ordering,
 			@RequestParam(name = "filtro_idioma", required = false) String filtroIdioma) {
-		BusquedaElemento<IDIOMA_ORDERING, Idioma> busquedaIdioma = new BusquedaElemento<>(numeroPagina, porPagina,
-				ordering, reversed, filtroIdioma);
+		BusquedaElemento<Idioma> busquedaIdioma = new BusquedaElemento<>(numeroPagina, porPagina, ordering, reversed,
+				filtroIdioma);
 		log.trace("BusquedaIdioma: {}", busquedaIdioma);
 		return ResponseEntity.ok(bibliotecaService.paginaIdioma(busquedaIdioma));
 	}
