@@ -30,6 +30,12 @@
 		<org.mapstruct.version>1.3.1.Final</org.mapstruct.version>
 		<m2e.apt.activation>jdt_apt</m2e.apt.activation>
 		<cqengine.version>3.5.0</cqengine.version>
+		<sonar.projectKey>Verdoso_epl_librarian</sonar.projectKey>
+		<sonar.organization>verdoso</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<code.coverage.exclusions>
+			**/org/greeneyed/epl/librarian/Application.java
+		</code.coverage.exclusions>
 	</properties>
 
 	<dependencies>
@@ -163,10 +169,10 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-<!-- 					<release>${java-version}</release> -->
+					<!-- <release>${java-version}</release> -->
 					<source>${java-version}</source>
 					<target>${java-version}</target>
-<!-- 					<compilerArgument>-Xlint:all,-deprecation,-unchecked,-processing,-requires-transitive-automatic</compilerArgument> -->
+					<!-- <compilerArgument>-Xlint:all,-deprecation,-unchecked,-processing,-requires-transitive-automatic</compilerArgument> -->
 					<testCompilerArgument>-Xlint:none</testCompilerArgument>
 					<showWarnings>true</showWarnings>
 					<showDeprecation>true</showDeprecation>
@@ -198,14 +204,14 @@
 					<executable>true</executable>
 					<excludeArtifactIds>lombok</excludeArtifactIds>
 				</configuration>
-<!-- 				<dependencies> -->
-					<!-- The following enables the "thin jar" deployment option. -->
-<!-- 					<dependency> -->
-<!-- 						<groupId>org.springframework.boot.experimental</groupId> -->
-<!-- 						<artifactId>spring-boot-thin-layout</artifactId> -->
-<!-- 						<version>1.0.11.RELEASE</version> -->
-<!-- 					</dependency> -->
-<!-- 				</dependencies> -->
+				<!-- <dependencies> -->
+				<!-- The following enables the "thin jar" deployment option. -->
+				<!-- <dependency> -->
+				<!-- <groupId>org.springframework.boot.experimental</groupId> -->
+				<!-- <artifactId>spring-boot-thin-layout</artifactId> -->
+				<!-- <version>1.0.11.RELEASE</version> -->
+				<!-- </dependency> -->
+				<!-- </dependencies> -->
 			</plugin>
 		</plugins>
 	</build>
@@ -243,6 +249,37 @@
 								<id>webpack build</id>
 								<goals>
 									<goal>webpack</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>sonar</id>
+			<properties>
+				<sonar.sources>.</sonar.sources>
+				<sonar.inclusions>src/main/java/**,src/main/resources/**</sonar.inclusions>
+				<sonar.exclusions>${code.coverage.exclusions}</sonar.exclusions>
+				<sonar.projectKey>${sonar.projectKey}</sonar.projectKey>
+				<sonar.organization>${sonar.organization}</sonar.organization>
+				<sonar.host.url>${sonar.host.url}</sonar.host.url>
+			</properties>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.sonarsource.scanner.maven</groupId>
+						<artifactId>sonar-maven-plugin</artifactId>
+						<version>3.7.0.1746</version>
+						<executions>
+							<execution>
+								<phase>verify</phase>
+								<goals>
+									<goal>sonar</goal>
 								</goals>
 							</execution>
 						</executions>
