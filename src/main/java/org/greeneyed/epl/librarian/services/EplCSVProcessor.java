@@ -45,6 +45,7 @@ import javax.net.ssl.SSLContext;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -285,29 +286,35 @@ public class EplCSVProcessor {
 				.setDefaultRequestConfig(defaultRequestConfig)
 				.setSSLSocketFactory(getTolerantSSLSocketFactory())
 				.build();) {
-			HttpGet httpget = new HttpGet(EPUB_LIBRE_CSV);
-			log.info("Descargando fichero desde EPL...");
-			File librosEPL = Files.createTempFile(BACKUP_FILES_PREFIX, ".csv.zip").toFile();
-			try (CloseableHttpResponse response = httpclient.execute(httpget)) {
-				HttpEntity entity = response.getEntity();
-				ContentType contentType = ContentType.getOrDefault(entity);
-				log.debug("El fichero descargado es del tipo {}", contentType.getMimeType());
-				if (!"text/html".equalsIgnoreCase(contentType.getMimeType())) {
-					FileUtils.copyInputStreamToFile(entity.getContent(), librosEPL);
-					log.info("Descargado el fichero en {}", librosEPL.getAbsolutePath());
-					try (FileInputStream theFIS = new FileInputStream(librosEPL)) {
-						updateSpec = procesarEplCSV(theFIS);
-					} catch (IOException e) {
-						log.error("Error procesando fichero descargado: {}", librosEPL.getAbsoluteFile(), e);
-					}
-				} else {
-					showErrorServidorSobrecargado();
-				}
-				librosEPL.deleteOnExit();
-				librosEPL.delete();
-			}
+			updateSpec = descargaFicheroDeEPL(httpclient);
 		} catch (Exception e) {
 			log.error("Error descargando actualización desde EPL", e);
+		}
+		return updateSpec;
+	}
+
+	private UpdateSpec descargaFicheroDeEPL(CloseableHttpClient httpclient) throws IOException, ClientProtocolException {
+		UpdateSpec updateSpec = UpdateSpec.NO_SPEC;
+		HttpGet httpget = new HttpGet(EPUB_LIBRE_CSV);
+		log.info("Descargando fichero desde EPL...");
+		File librosEPL = Files.createTempFile(BACKUP_FILES_PREFIX, ".csv.zip").toFile();
+		try (CloseableHttpResponse response = httpclient.execute(httpget)) {
+			HttpEntity entity = response.getEntity();
+			ContentType contentType = ContentType.getOrDefault(entity);
+			log.debug("El fichero descargado es del tipo {}", contentType.getMimeType());
+			if (!"text/html".equalsIgnoreCase(contentType.getMimeType())) {
+				FileUtils.copyInputStreamToFile(entity.getContent(), librosEPL);
+				log.info("Descargado el fichero en {}", librosEPL.getAbsolutePath());
+				try (FileInputStream theFIS = new FileInputStream(librosEPL)) {
+					updateSpec = procesarEplCSV(theFIS);
+				} catch (IOException e) {
+					log.error("Error procesando fichero descargado: {}", librosEPL.getAbsoluteFile(), e);
+				}
+			} else {
+				showErrorServidorSobrecargado();
+			}
+			librosEPL.deleteOnExit();
+			librosEPL.delete();
 		}
 		return updateSpec;
 	}
