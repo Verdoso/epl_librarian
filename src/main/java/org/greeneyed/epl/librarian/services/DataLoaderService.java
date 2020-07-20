@@ -1,6 +1,7 @@
 package org.greeneyed.epl.librarian.services;
 
 import java.awt.Desktop;
+import java.io.IOException;
 import java.net.URI;
 import java.time.Duration;
 import java.time.format.DateTimeFormatter;
@@ -70,7 +71,7 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
 		}
 		//
 		if (updateSpec.isEmpty()) {
-			throw new RuntimeException("Sin datos, para qu\u00e9 arrancar.");
+			throw new IOException("Sin datos, para qu\u00e9 arrancar.");
 		} else {
 			log.info("Preparando {} libros de la descarga con fecha {}", updateSpec.getLibroCSVs().size(),
 					DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(updateSpec.getFechaActualizacion()));
