@@ -258,7 +258,6 @@ public class EplCSVProcessor {
 						theBOS.flush();
 						theFOS.flush();
 						log.info("Creado fichero de backup: {}", librosBCKFile.getAbsolutePath());
-						// TODO Eliminar todos los ficheros de backup excepto el \u00faltimo
 					}
 					return new UpdateSpec(Instant.ofEpochMilli(librosBCKFile.lastModified())
 							.atZone(ZoneId.systemDefault())
