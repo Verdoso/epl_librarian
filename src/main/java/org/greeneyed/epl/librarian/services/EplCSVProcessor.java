@@ -72,11 +72,11 @@ public class EplCSVProcessor {
 	private static final String BACKUP_FILES_PREFIX = "Libros";
 	private static final String BACKUP_FILES_SUFFIX = ".epl_bck";
 	private static final String EPUB_LIBRE_CSV = "https://epublibre.org/rssweb/csv";
+	private static final String ERROR_DETALLADO = "Error detallado";
 
 	@Data
 	public static class LibroCSV implements Serializable {
 
-		private static final String ERROR_DETALLADO = "Error detallado";
 
 		private static final long serialVersionUID = 1L;
 
@@ -266,7 +266,7 @@ public class EplCSVProcessor {
 				}
 			} catch (IOException e) {
 				log.error("Error leyendo fichero: {}", e.getMessage());
-				log.debug("Error detallado", e);
+				log.debug(ERROR_DETALLADO, e);
 			}
 		} else {
 			log.info("No hay fichero en el classpath");
@@ -292,7 +292,7 @@ public class EplCSVProcessor {
 		return updateSpec;
 	}
 
-	private UpdateSpec descargaFicheroDeEPL(CloseableHttpClient httpclient) throws IOException, ClientProtocolException {
+	private UpdateSpec descargaFicheroDeEPL(CloseableHttpClient httpclient) throws IOException {
 		UpdateSpec updateSpec = UpdateSpec.NO_SPEC;
 		HttpGet httpget = new HttpGet(EPUB_LIBRE_CSV);
 		log.info("Descargando fichero desde EPL...");
@@ -333,12 +333,12 @@ public class EplCSVProcessor {
 					updateSpec = procesarEplCSV(theFIS);
 				} catch (IOException e) {
 					log.error("Error procesando descarga manual: {} : {}", librosEPL.getAbsoluteFile(), e.getMessage());
-					log.trace("Error detallado", e);
+					log.trace(ERROR_DETALLADO, e);
 				}
 			}
 		} catch (IOException e1) {
 			log.error("Error intentando leer descarga manul: {}", e1.getMessage());
-			log.trace("Error detallado", e1);
+			log.trace(ERROR_DETALLADO, e1);
 		}
 		return updateSpec;
 	}
