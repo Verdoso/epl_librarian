@@ -21,6 +21,6 @@ jobs:
       with:
         java-version: 1.8
     - name: Build with Maven
-      run: mvn -B clean verify -Psonar
+      run: mvn -B clean verify
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
