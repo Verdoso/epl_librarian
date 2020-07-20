@@ -44,14 +44,14 @@ import javax.net.ssl.SSLContext;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
+import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustStrategy;
+import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
@@ -68,6 +68,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class EplCSVProcessor {
+
+	private static final String EPUB_LIBRE_CSV = "https://epublibre.org/rssweb/csv";
 
 	@Data
 	public static class LibroCSV implements Serializable {
@@ -137,7 +139,6 @@ public class EplCSVProcessor {
 			} catch (Exception e) {
 				log.error("Error parseando fecha de publicacion {}", publicado, e.getMessage());
 				log.trace("Error detallado", e);
-
 			}
 			return temp;
 		}
@@ -189,8 +190,8 @@ public class EplCSVProcessor {
 						return new UpdateSpec(fechaActualizacion, librosCSVs);
 					})
 					.orElse(UpdateSpec.NO_SPEC);
-					// Marcamos para borrado los ficheros que no sean el ultimo
-					backupFiles().sorted(Comparator.comparing(File::lastModified).reversed()).skip(1).forEach(File::deleteOnExit);
+			// Borradmos los ficheros de backup que no sean el ultimo
+			backupFiles().sorted(Comparator.comparing(File::lastModified).reversed()).skip(1).forEach(File::delete);
 		} catch (IOException e) {
 			log.error("Error buscando ficheros en el directorio temporal", e);
 		}
@@ -198,12 +199,16 @@ public class EplCSVProcessor {
 	}
 
 	private Stream<File> backupFiles() throws IOException {
-		Path tempDirectory = Files.createTempDirectory("whatever").getParent();
+		Path tempDirectory = getTempDirectory();
 		return Stream.of(tempDirectory.toFile().listFiles(file -> {
 			String fileName = file.getName();
 			return file.isFile() && fileName.startsWith("Libros")
 					&& fileName.endsWith("." + LibroCSV.serialVersionUID + ".epl_bck");
 		}));
+	}
+
+	private Path getTempDirectory() throws IOException {
+		return Files.createTempDirectory("whatever").getParent();
 	}
 
 	UpdateSpec procesarEplCSV(InputStream theIS) {
@@ -254,6 +259,13 @@ public class EplCSVProcessor {
 							.atZone(ZoneId.systemDefault())
 							.toLocalDateTime(), librosCSVs);
 				}
+				if (nextEntry == null) {
+					log.error(
+							"Error descomprimiendo fichero, no es un formato ZIP correcto, seguramente EPL ha devuelto una página de \"Servidor sobrecargado\" en su lugar");
+					log.error(
+							"Si el error persiste, intente descargarse manualmente el fichero desde la URL {} y guardelo en el directorio ",
+							EPUB_LIBRE_CSV, getTempDirectory().toFile().getAbsolutePath());
+				}
 			} catch (IOException e) {
 				log.error("Error leyendo fichero: {}", e.getMessage());
 				log.debug("Error detallado", e);
@@ -275,22 +287,62 @@ public class EplCSVProcessor {
 				.setDefaultRequestConfig(defaultRequestConfig)
 				.setSSLSocketFactory(getTolerantSSLSocketFactory())
 				.build();) {
-			HttpGet httpget = new HttpGet("https://epublibre.org/rssweb/csv");
+			HttpGet httpget = new HttpGet(EPUB_LIBRE_CSV);
 			log.info("Descargando fichero desde EPL...");
 			File librosEPL = Files.createTempFile("Libros", ".csv.zip").toFile();
-			File downloaded = httpclient.execute(httpget, new FileDownloadResponseHandler(librosEPL));
-			downloaded.deleteOnExit();
-			log.info("Descargado el fichero en {}", downloaded.getAbsolutePath());
-			try (FileInputStream theFIS = new FileInputStream(downloaded)) {
-				updateSpec = procesarEplCSV(theFIS);
-			} catch (IOException e) {
-				log.error("Error procesando fichero descargado: {}", librosEPL.getAbsoluteFile(), e);
+			try (CloseableHttpResponse response = httpclient.execute(httpget)) {
+				HttpEntity entity = response.getEntity();
+				ContentType contentType = ContentType.getOrDefault(entity);
+				log.debug("El fichero descargado es del tipo {}", contentType.getMimeType());
+				if (!"text/html".equalsIgnoreCase(contentType.getMimeType())) {
+					FileUtils.copyInputStreamToFile(entity.getContent(), librosEPL);
+					log.info("Descargado el fichero en {}", librosEPL.getAbsolutePath());
+					try (FileInputStream theFIS = new FileInputStream(librosEPL)) {
+						updateSpec = procesarEplCSV(theFIS);
+					} catch (IOException e) {
+						log.error("Error procesando fichero descargado: {}", librosEPL.getAbsoluteFile(), e);
+					}
+				} else {
+					showErrorServidorSobrecargado();
+				}
+				librosEPL.deleteOnExit();
+				librosEPL.delete();
 			}
-
 		} catch (Exception e) {
 			log.error("Error descargando actualización desde EPL", e);
 		}
 		return updateSpec;
+	}
+
+	public UpdateSpec updateFromEPLManual() {
+		UpdateSpec updateSpec = UpdateSpec.NO_SPEC;
+		File librosEPL;
+		try {
+			librosEPL = new File(getTempDirectory().toFile(), "epublibre_csv.zip");
+			if (librosEPL.exists()) {
+				log.info("Encontrada descarga manual ({}), procesando...", librosEPL.getAbsoluteFile());
+				try (FileInputStream theFIS = new FileInputStream(
+						new File(getTempDirectory().toFile(), "epublibre_csv.zip"))) {
+					updateSpec = procesarEplCSV(theFIS);
+				} catch (IOException e) {
+					log.error("Error procesando descarga manual: {} : {}", librosEPL.getAbsoluteFile(), e.getMessage());
+					log.trace("Error detallado", e);
+				}
+			}
+		} catch (IOException e1) {
+			log.error("Error intentando leer descarga manul: {}", e1.getMessage());
+			log.trace("Error detallado", e1);
+		}
+		return updateSpec;
+	}
+
+	private void showErrorServidorSobrecargado() throws IOException {
+		log.error("Error descomprimiendo fichero descargado, no es un formato ZIP correcto.\n"
+				+ "Seguramente EPL ha devuelto una página de \"Servidor sobrecargado\" o"
+				+ " \"Se ha superado el numero maximo de descargas diarias del fichero (X)\" en su lugar.");
+		log.error(
+				"Si el error persiste, compruebe la URL {} manualmente\n y si consigue descargarse el fichero guardelo en el directorio {}",
+				EPUB_LIBRE_CSV, getTempDirectory().toFile().getAbsolutePath());
 	}
 
 	private SSLConnectionSocketFactory getTolerantSSLSocketFactory()
@@ -304,17 +356,5 @@ public class EplCSVProcessor {
 		HostnameVerifier hnv = new NoopHostnameVerifier();
 		SSLConnectionSocketFactory sslcf = new SSLConnectionSocketFactory(sslContext, hnv);
 		return sslcf;
-	}
-
-	@Data
-	static class FileDownloadResponseHandler implements ResponseHandler<File> {
-		private final File target;
-
-		@Override
-		public File handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
-			FileUtils.copyInputStreamToFile(response.getEntity().getContent(), this.target);
-			return this.target;
-		}
-
 	}
 }
