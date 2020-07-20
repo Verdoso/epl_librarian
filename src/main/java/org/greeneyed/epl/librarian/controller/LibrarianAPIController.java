@@ -19,6 +19,7 @@ import org.greeneyed.epl.librarian.services.model.BusquedaElemento;
 import org.greeneyed.epl.librarian.services.model.BusquedaLibro;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,12 +41,12 @@ public class LibrarianAPIController {
 	private static final String DEFAULT_ORDER_GENERO = "POR_GENERO";// BOOK_ORDERING.POR_GENERO.name();
 	private static final String DEFAULT_ORDER_IDIOMA = "POR_IDIOMA";// BOOK_ORDERING.POR_IDIOMA.name();
 
-	@RequestMapping(value = "/sumario")
+	@GetMapping(value = "/sumario")
 	public ResponseEntity<Sumario> sumario() {
 		return ResponseEntity.ok(bibliotecaService.getSumario());
 	}
 
-	@RequestMapping(value = "/libros")
+	@GetMapping(value = "/libros")
 	public ResponseEntity<Pagina<Libro>> paginaLibro(
 			@RequestParam(name = "numero_pagina", defaultValue = "0") int numeroPagina,
 			@RequestParam(name = "por_pagina", defaultValue = "10") int porPagina,
@@ -72,7 +73,7 @@ public class LibrarianAPIController {
 		return ResponseEntity.ok(bibliotecaService.paginaLibros(busquedaLibro));
 	}
 
-	@RequestMapping(value = "/autores")
+	@GetMapping(value = "/autores")
 	public ResponseEntity<Pagina<Autor>> paginaAutores(
 			@RequestParam(name = "numero_pagina", defaultValue = "0") int numeroPagina,
 			@RequestParam(name = "por_pagina", defaultValue = "10") int porPagina,
@@ -85,7 +86,7 @@ public class LibrarianAPIController {
 		return ResponseEntity.ok(bibliotecaService.paginaAutor(busquedaAutor));
 	}
 
-	@RequestMapping(value = "/generos")
+	@GetMapping(value = "/generos")
 	public ResponseEntity<Pagina<Genero>> paginaGeneros(
 			@RequestParam(name = "numero_pagina", defaultValue = "0") int numeroPagina,
 			@RequestParam(name = "por_pagina", defaultValue = "10") int porPagina,
@@ -98,7 +99,7 @@ public class LibrarianAPIController {
 		return ResponseEntity.ok(bibliotecaService.paginaGenero(busquedaGenero));
 	}
 
-	@RequestMapping(value = "/idiomas")
+	@GetMapping(value = "/idiomas")
 	public ResponseEntity<Pagina<Idioma>> paginaIdiomas(
 			@RequestParam(name = "numero_pagina", defaultValue = "0") int numeroPagina,
 			@RequestParam(name = "por_pagina", defaultValue = "10") int porPagina,
