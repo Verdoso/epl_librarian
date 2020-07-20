@@ -227,7 +227,7 @@ public class BibliotecaService {
 				busquedaLibro.getQueryOptions())) {
 			pagina.setTotal(queryResult.size());
 			pagina.setResults(queryResult.stream()
-					.skip((busquedaLibro.getNumeroPagina() - 1) * busquedaLibro.getPorPagina())
+					.skip((busquedaLibro.getNumeroPagina() - 1) * (long)busquedaLibro.getPorPagina())
 					.limit(busquedaLibro.getPorPagina())
 					.collect(Collectors.toList()));
 		} finally {
@@ -255,7 +255,7 @@ public class BibliotecaService {
 		try (final ResultSet<O> queryResult = elementos.retrieve(busqueda.getQuery(), busqueda.getQueryOptions())) {
 			pagina.setTotal(queryResult.size());
 			pagina.setResults(queryResult.stream()
-					.skip((busqueda.getNumeroPagina() - 1) * busqueda.getPorPagina())
+					.skip((busqueda.getNumeroPagina() - 1) * (long)busqueda.getPorPagina())
 					.limit(busqueda.getPorPagina())
 					.collect(Collectors.toList()));
 		} finally {
