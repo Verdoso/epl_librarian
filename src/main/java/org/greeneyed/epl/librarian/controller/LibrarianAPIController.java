@@ -37,10 +37,10 @@ public class LibrarianAPIController {
 
 	private static final String ERROR_DETALLADO = "Error detallado";
 	private final BibliotecaService bibliotecaService;
-	private static final String DEFAULT_ORDER = "POR_TITULO";// BOOK_ORDERING.POR_TITULO.name();
-	private static final String DEFAULT_ORDER_AUTOR = "POR_AUTOR";// BOOK_ORDERING.POR_AUTOR.name();
-	private static final String DEFAULT_ORDER_GENERO = "POR_GENERO";// BOOK_ORDERING.POR_GENERO.name();
-	private static final String DEFAULT_ORDER_IDIOMA = "POR_IDIOMA";// BOOK_ORDERING.POR_IDIOMA.name();
+	private static final String DEFAULT_ORDER = "POR_TITULO";
+	private static final String DEFAULT_ORDER_AUTOR = "POR_AUTOR";
+	private static final String DEFAULT_ORDER_GENERO = "POR_GENERO";
+	private static final String DEFAULT_ORDER_IDIOMA = "POR_IDIOMA";
 
 	@GetMapping(value = "/sumario")
 	public ResponseEntity<Sumario> sumario() {
