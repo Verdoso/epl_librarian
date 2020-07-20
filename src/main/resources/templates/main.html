@@ -1,21 +1,18 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{fragments/layout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/layout}" lang="es">
+
 <head>
-    <title>EPL Librarian</title>
+	<title>EPL Librarian</title>
 </head>
+
 <body>
 	<div class="starter-template" layout:fragment="content">
-    <keep-alive>
-      <component
-		v-bind:is="this.$store.state.currentTab"
-		:autorfilter="this.$store.state.autorfilter"
-		:generofilter="this.$store.state.generofilter"
-		:idiomafilter="this.$store.state.idiomafilter"
-      >
-      </component>
-    </keep-alive>
+		<keep-alive>
+			<component v-bind:is="this.$store.state.currentTab" :autorfilter="this.$store.state.autorfilter"
+				:generofilter="this.$store.state.generofilter" :idiomafilter="this.$store.state.idiomafilter">
+			</component>
+		</keep-alive>
 		<!-- /.row -->
 		<div class="row">
 			<div id="body" class="col-lg-12">
@@ -25,4 +22,5 @@
 	</div>
 	<!-- /.container -->
 </body>
+
 </html>
