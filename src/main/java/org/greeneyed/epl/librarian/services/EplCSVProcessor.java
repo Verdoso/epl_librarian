@@ -224,19 +224,7 @@ public class EplCSVProcessor {
 				log.info("Descomprimiendo fichero EPL");
 				ZipEntry nextEntry = null;
 				while ((nextEntry = theZIS.getNextEntry()) != null) {
-					FileTime fileTime = nextEntry.getCreationTime();
-					if (fileTime == null) {
-						fileTime = nextEntry.getLastModifiedTime();
-					}
-					if (fileTime != null) {
-						LocalDateTime fechaActualizacion = Instant.ofEpochMilli(fileTime.toMillis())
-								.atZone(ZoneId.systemDefault())
-								.toLocalDateTime();
-						log.info("Procesando fichero {} con fecha {}", nextEntry.getName(),
-								DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(fechaActualizacion));
-					} else {
-						log.info("Procesando fichero {}. Fecha no definida en el comprimido", nextEntry.getName());
-					}
+					mostrarDatosFicheroAProcesar(nextEntry);
 					ColumnPositionMappingStrategy<LibroCSV> ms = new ColumnPositionMappingStrategy<>();
 					ms.setType(LibroCSV.class);
 					CsvToBean<LibroCSV> cb = new CsvToBeanBuilder<LibroCSV>(theReader).withType(LibroCSV.class)
@@ -270,6 +258,22 @@ public class EplCSVProcessor {
 			log.info("No hay fichero en el classpath");
 		}
 		return updateSpec;
+	}
+
+	private void mostrarDatosFicheroAProcesar(ZipEntry nextEntry) {
+		FileTime fileTime = nextEntry.getCreationTime();
+		if (fileTime == null) {
+			fileTime = nextEntry.getLastModifiedTime();
+		}
+		if (fileTime != null) {
+			LocalDateTime fechaActualizacion = Instant.ofEpochMilli(fileTime.toMillis())
+					.atZone(ZoneId.systemDefault())
+					.toLocalDateTime();
+			log.info("Procesando fichero {} con fecha {}", nextEntry.getName(),
+					DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(fechaActualizacion));
+		} else {
+			log.info("Procesando fichero {}. Fecha no definida en el comprimido", nextEntry.getName());
+		}
 	}
 
 	public UpdateSpec updateFromEPL() {
