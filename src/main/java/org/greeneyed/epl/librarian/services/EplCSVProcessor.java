@@ -329,7 +329,7 @@ public class EplCSVProcessor {
 				updateSpec = procesarFicheroManual(updateSpec, librosEPL);
 			}
 		} catch (IOException e1) {
-			log.error("Error intentando leer descarga manul: {}", e1.getMessage());
+			log.error("Error intentando leer descarga manual: {}", e1.getMessage());
 			log.trace(ERROR_DETALLADO, e1);
 		}
 		return updateSpec;
