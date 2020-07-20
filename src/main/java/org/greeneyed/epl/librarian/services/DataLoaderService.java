@@ -42,16 +42,21 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
 	@Override
 	public void run(ApplicationArguments arguments) throws Exception {
 		log.info("Inicializando datos...");
+		boolean comprobarActualizacionAutomatica = actualizacionAutomatica;
 		UpdateSpec updateSpec = eplCSVProcessor.processBackup();
 		if (updateSpec.isEmpty()) {
+			comprobarActualizacionAutomatica = false;
 			updateSpec = eplCSVProcessor.updateFromEPL();
-		} else if (actualizacionAutomatica){
-			log.info("El backup tiene una antiguedad de {} horas...",
-					updateSpec.getAntiguedad().toHours());
+			if (updateSpec.isEmpty()) {
+				updateSpec = eplCSVProcessor.updateFromEPLManual();
+			}
+		}
+		if (comprobarActualizacionAutomatica) {
+			log.info("El backup tiene una antiguedad de {} horas...", updateSpec.getAntiguedad().toHours());
 			if (updateSpec.getAntiguedad().compareTo(Duration.ofHours(antiguedadMaxima)) > 0) {
 				log.info("El backup tiene más de {} horas. Intentando actualización desde EPL", antiguedadMaxima);
 				UpdateSpec tempUpdateSpec = eplCSVProcessor.updateFromEPL();
-				if(tempUpdateSpec.isEmpty()) {
+				if (tempUpdateSpec.isEmpty()) {
 					log.info("La descarga no funcion\u00f3, usando backup");
 				} else {
 					log.info("Descargada versi\u00f3n actualizada desde EPL");
@@ -64,7 +69,7 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
 			log.error("No hay backup y la actualizaci\u00f3n autom\u00e1tica est\u00e1 deshabilitada. Ouch!");
 		}
 		//
-		if(updateSpec.isEmpty()) {
+		if (updateSpec.isEmpty()) {
 			throw new RuntimeException("Sin datos, para qu\u00e9 arrancar.");
 		} else {
 			log.info("Preparando {} libros de la descarga con fecha {}", updateSpec.getLibroCSVs().size(),
@@ -73,7 +78,9 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
 			log.info("EPL Librarian inicializado");
 			if (!environment.acceptsProfiles(Profiles.of("devel"))) {
 				try {
-					Desktop.getDesktop().browse(new URI("http://localhost:8080/librarian/"));
+					Desktop.getDesktop()
+							.browse(new URI("http://localhost:" + environment.getProperty("local.server.port")
+									+ "/librarian/"));
 				} catch (Exception e) {
 					log.error("Error abriendo navegador automáticamente", e);
 				}

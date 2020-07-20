@@ -21,10 +21,8 @@ import com.googlecode.cqengine.query.QueryFactory;
 import com.googlecode.cqengine.query.option.QueryOptions;
 
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 
 @Data
-@Slf4j
 public class BusquedaLibro {
 	private final int numeroPagina;
 	private final int porPagina;
