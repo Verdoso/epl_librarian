@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class PreferencesService {
 
+	private static final String ERROR_DETALLADO = "Error detallado";
 	private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE;
 	private File preferencesFile;
 	private final Properties preferences = new Properties();
@@ -54,7 +55,7 @@ public class PreferencesService {
 			preferences.load(theISW);
 		} catch (Exception e) {
 			log.error("No se han podido leer las preferencias: {}", e.getMessage());
-			log.trace("Error detallado", e);
+			log.trace(ERROR_DETALLADO, e);
 		} finally {
 			readLock.unlock();
 		}
@@ -69,7 +70,7 @@ public class PreferencesService {
 			theFOS.flush();
 		} catch (Exception e) {
 			log.error("No se han podido guardar las preferencias: {}", e.getMessage());
-			log.trace("Error detallado", e);
+			log.trace(ERROR_DETALLADO, e);
 		} finally {
 			writeLock.unlock();
 		}
@@ -89,7 +90,7 @@ public class PreferencesService {
 			} catch (Exception e) {
 				log.error("Error parseando fecha base. el formato es DateTimeFormatter.ISO_LOCAL_DATE: {}",
 						e.getMessage());
-				log.trace("Error detallado", e);
+				log.trace(ERROR_DETALLADO, e);
 			}
 		}
 		return Optional.ofNullable(fechaBase);
