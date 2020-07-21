@@ -42,7 +42,7 @@ jobs:
       
     - name: Perform release
       run: |
-         mvn --batch-mode release:perform -Darguments="-Dmaven.javadoc.skip=true"
+         mvn --batch-mode release:perform -Darguments="-Dmaven.javadoc.skip=true -Dmaven.source.skip=true"
          echo 'Aquí crearemos una nueva release con el fichero que se ha generado en la release'
 
     
