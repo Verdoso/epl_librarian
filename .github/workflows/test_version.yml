@@ -1,6 +1,6 @@
 # This workflow will create a new release when it is called
 
-name: Create release
+name: Test version numbering
 
 on: 
   workflow_dispatch:
