@@ -36,6 +36,12 @@ jobs:
          mvn --batch-mode release:perform
          echo Aquí crearemos una nueva release con el fichero, version $RELEASE_VERSION, que se ha generado en la release
 
+    - name: changelog
+      uses: scottbrenner/generate-changelog-action@master
+      id: Changelog
+      env:
+        REPO: ${{ github.repository }}
+
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -44,6 +50,8 @@ jobs:
       with:
         tag_name: v.{{ $RELEASE_VERSION }}
         release_name: Release {{ $RELEASE_VERSION }}
+        body: |
+          ${{ steps.Changelog.outputs.changelog }}
         draft: false
         prerelease: false
 
