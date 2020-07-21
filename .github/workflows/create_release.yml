@@ -28,11 +28,12 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        mvn --batch-mode release:prepare -Dusername=$GITHUB_ACTOR -Dpassword=$GITHUB_TOKEN
+        #mvn --batch-mode release:prepare -Dusername=$GITHUB_ACTOR -Dpassword=$GITHUB_TOKEN
         PROJECT_VERSION=`mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive  exec:exec`
+        echo Sabemos aquie la version?: $PROJECT_VERSION
     - name: Perform release
       run: |
-         mvn --batch-mode release:perform
+         #mvn --batch-mode release:perform
          echo Aquí crearemos una nueva release con el fichero, version $PROJECT_VERSION, que se ha generado en la release
 
     
