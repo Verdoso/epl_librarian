@@ -17,10 +17,8 @@ jobs:
       with:
         java-version: 1.8
 
-    - name: Find out versio
+    - name: changelog
+      uses: scottbrenner/generate-changelog-action@master
+      id: Changelog
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-         PROJECT_VERSION=`mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive  exec:exec`
-         CLEAN_PROJECT_VERSION=`echo "${PROJECT_VERSION%-SNAPSHOT}"`
-         echo "Version ${PROJECT_VERSION} y reconocida ${CLEAN_PROJECT_VERSION}"
+        REPO: ${{ github.repository }}
