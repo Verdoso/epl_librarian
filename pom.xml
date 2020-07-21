@@ -15,8 +15,7 @@
 		<description>EPL Librarian</description>
 
 		<scm>
-				<developerConnection>scm:git:https://github.com/${project.groupId}/${project.artifactId}</developerConnection>
-				<tag>HEAD</tag>
+				<developerConnection>scm:git:https://github.com/Verdoso/${project.artifactId}</developerConnection>
 		</scm>
 
 		<dependencyManagement>
