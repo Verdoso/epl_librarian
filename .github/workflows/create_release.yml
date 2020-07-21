@@ -36,7 +36,7 @@ jobs:
          mvn --batch-mode release:perform
          PROJECT_VERSION=`mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive  exec:exec`
          echo "::set-env name=RELEASE_VERSION::${PROJECT_VERSION}"
-         echo Version $RELEASE_VERSION preparada para generarse
+         echo "Version ${RELEASE_VERSION} preparada para generarse"
 
 #    - name: changelog
 #      uses: scottbrenner/generate-changelog-action@master
@@ -50,8 +50,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v.{{ $RELEASE_VERSION }}
-        release_name: Release {{ $RELEASE_VERSION }}
+        tag_name: v.${{ RELEASE_VERSION }}
+        release_name: Release ${{ RELEASE_VERSION }}
         body: Test body
         draft: false
         prerelease: false
