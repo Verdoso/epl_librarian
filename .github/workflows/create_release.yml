@@ -41,7 +41,8 @@ jobs:
       run: mvn --batch-mode release:prepare -Dusername=$GITHUB_ACTOR -Dpassword=$GITHUB_TOKEN
       
     - name: Perform release
-      run: mvn --batch-mode release:perform
-      run: echo 'Aquí crearemos una nueva release con el fichero que se ha generado en la release'
+      run: |
+         mvn --batch-mode release:perform
+         echo 'Aquí crearemos una nueva release con el fichero que se ha generado en la release'
 
     
