@@ -22,5 +22,5 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
          PROJECT_VERSION=`mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive  exec:exec`
-         CLEAN_PROJECT_VERSION=`echo "${RELEASE_VERSION%-SNAPSHOT}"`
-         echo "Version ${RELEASE_VERSION} y reconocida ${CLEAN_PROJECT_VERSION}"
+         CLEAN_PROJECT_VERSION=`echo "${PROJECT_VERSION%-SNAPSHOT}"`
+         echo "Version ${PROJECT_VERSION} y reconocida ${CLEAN_PROJECT_VERSION}"
