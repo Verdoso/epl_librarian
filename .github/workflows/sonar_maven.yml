@@ -3,11 +3,14 @@
 
 name: Sonar with Maven
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: 
+  workflow_dispatch:
+# Deshabilitados temporalmente hasta que el desarrollo sea estable, de momento ejecucion manual  
+#on:
+#  push:
+#    branches: [ master ]
+#  pull_request:
+#    branches: [ master ]
 
 jobs:
   build:
