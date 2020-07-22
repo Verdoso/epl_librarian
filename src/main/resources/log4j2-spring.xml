@@ -1,15 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN" monitorInterval="30" shutdownHook="disable">
-    <Appenders>
-        <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%-5p|%d{ISO8601}{GMT}|%c{1}|%m%ex%n" />
-        </Console>
-    </Appenders>
-    <Loggers>
-        <Root level="WARN">
-          <AppenderRef ref="Console" />
-        </Root>
-        <Logger name="org.springframework" level="WARN" />
-        <Logger name="org.greeneyed" level="INFO" />
-    </Loggers>
+  <Properties>
+    <Property name="baseDir">.</Property>
+    <Property name="applicationName">epl_librarian</Property>
+  </Properties>
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%-5p|%d{ISO8601}{GMT}|%c{1}|%m%ex%n" />
+    </Console>
+    <RollingFile name="RollingFile" fileName="${baseDir}/${applicationName}.log"
+      filePattern="${baseDir}/${applicationName}.%d{yyyy-MM-dd}-%i.log"
+    >
+      <PatternLayout pattern="%-5p|%d{ISO8601}{GMT}|%c{1}|%m%ex%n" />
+      <Policies>
+        <OnStartupTriggeringPolicy />
+        <SizeBasedTriggeringPolicy size="5 MB" />
+        <TimeBasedTriggeringPolicy />
+      </Policies>
+      <DefaultRolloverStrategy max="10">
+        <!-- Nested conditions: the inner condition is only evaluated on files for which the outer conditions are true. -->
+        <Delete basePath="${baseDir}">
+          <IfFileName glob="${applicationName}.*.log">
+            <IfAny>
+              <IfAccumulatedFileSize exceeds="10 MB" />
+              <IfAccumulatedFileCount exceeds="10" />
+            </IfAny>
+          </IfFileName>
+        </Delete>
+      </DefaultRolloverStrategy>
+    </RollingFile>
+  </Appenders>
+  <Loggers>
+    <Root level="WARN">
+      <AppenderRef ref="Console" />
+      <AppenderRef ref="RollingFile" />
+    </Root>
+    <Logger name="org.springframework" level="WARN" />
+    <Logger name="org.greeneyed" level="INFO" />
+  </Loggers>
 </Configuration>
