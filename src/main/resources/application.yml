@@ -11,3 +11,8 @@ management:
          exposure:
             include: health,info,env,mappings,loggers,configInspector,configprops,actuators
 logging.config: classpath:log4j2-spring.xml
+---
+spring:
+   profiles: devel
+logging.config: classpath:log4j2-spring-devel.xml
+  
