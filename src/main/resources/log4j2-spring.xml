@@ -2,7 +2,7 @@
 <Configuration status="WARN" monitorInterval="30" shutdownHook="disable">
   <Properties>
     <Property name="baseDir">.</Property>
-    <Property name="applicationName">ep_librarian</Property>
+    <Property name="applicationName">epl_librarian</Property>
   </Properties>
   <Appenders>
     <Console name="Console" target="SYSTEM_OUT">
@@ -32,6 +32,7 @@
   </Appenders>
   <Loggers>
     <Root level="WARN">
+      <AppenderRef ref="Console" />
       <AppenderRef ref="RollingFile" />
     </Root>
     <Logger name="org.springframework" level="WARN" />
