@@ -1,357 +1,400 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-		<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+>
+  <modelVersion>4.0.0</modelVersion>
 
-		<groupId>org.greeneyed</groupId>
-		<artifactId>epl_librarian</artifactId>
-		<version>0.0.13-SNAPSHOT</version>
-		<packaging>jar</packaging>
+  <groupId>org.greeneyed</groupId>
+  <artifactId>epl_librarian</artifactId>
+  <version>0.0.13-SNAPSHOT</version>
+  <packaging>jar</packaging>
 
-		<name>EPL Librarian</name>
-		<description>EPL Librarian</description>
+  <name>EPL Librarian</name>
+  <description>EPL Librarian</description>
 
-		<scm>
-				<developerConnection>scm:git:https://github.com/Verdoso/${project.artifactId}</developerConnection>
-				<tag>HEAD</tag>
-		</scm>
+  <scm>
+    <developerConnection>scm:git:https://github.com/Verdoso/${project.artifactId}</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
 
-		<dependencyManagement>
-				<dependencies>
-						<dependency>
-								<groupId>org.springframework.boot</groupId>
-								<artifactId>spring-boot-dependencies</artifactId>
-								<version>2.2.8.RELEASE</version>
-								<type>pom</type>
-								<scope>import</scope>
-						</dependency>
-				</dependencies>
-		</dependencyManagement>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>2.2.8.RELEASE</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
-		<properties>
-				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-				<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-				<java-version>8</java-version>
-				<javax.inject.version>1</javax.inject.version>
-				<lombok.version>1.18.12</lombok.version>
-				<commons-text.version>1.4</commons-text.version>
-				<commons-io.version>2.7</commons-io.version>
-				<org.mapstruct.version>1.3.1.Final</org.mapstruct.version>
-				<m2e.apt.activation>jdt_apt</m2e.apt.activation>
-				<cqengine.version>3.5.0</cqengine.version>
-				<sonar-projectKey>Verdoso_epl_librarian</sonar-projectKey>
-				<sonar-organization>verdoso</sonar-organization>
-				<sonar-host.url>https://sonarcloud.io</sonar-host.url>
-				<code.coverage.exclusions>
-						**/org/greeneyed/epl/librarian/Application.java
-				</code.coverage.exclusions>
-		</properties>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <java-version>8</java-version>
+    <javax.inject.version>1</javax.inject.version>
+    <lombok.version>1.18.12</lombok.version>
+    <commons-text.version>1.4</commons-text.version>
+    <commons-io.version>2.7</commons-io.version>
+    <org.mapstruct.version>1.3.1.Final</org.mapstruct.version>
+    <m2e.apt.activation>jdt_apt</m2e.apt.activation>
+    <cqengine.version>3.5.0</cqengine.version>
+    <sonar-projectKey>Verdoso_epl_librarian</sonar-projectKey>
+    <sonar-organization>verdoso</sonar-organization>
+    <sonar-host.url>https://sonarcloud.io</sonar-host.url>
+    <code.coverage.exclusions>
+      **/org/greeneyed/epl/librarian/Application.java
+    </code.coverage.exclusions>
+  </properties>
 
-		<dependencies>
+  <dependencies>
 
-				<!-- TEMPORAL DURANTE LA MIGRACION A SPRING BOOT 2 -->
-				<!-- <dependency> -->
-				<!-- <groupId>org.springframework.boot</groupId> -->
-				<!-- <artifactId>spring-boot-properties-migrator</artifactId> -->
-				<!-- <scope>runtime</scope> -->
-				<!-- </dependency> -->
+    <!-- TEMPORAL DURANTE LA MIGRACION A SPRING BOOT 2 -->
+    <!-- <dependency> -->
+    <!-- <groupId>org.springframework.boot</groupId> -->
+    <!-- <artifactId>spring-boot-properties-migrator</artifactId> -->
+    <!-- <scope>runtime</scope> -->
+    <!-- </dependency> -->
 
 
-				<dependency>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-starter-web</artifactId>
-						<exclusions>
-								<exclusion>
-										<groupId>ch.qos.logback</groupId>
-										<artifactId>logback-classic</artifactId>
-								</exclusion>
-								<exclusion>
-										<groupId>org.springframework.boot</groupId>
-										<artifactId>spring-boot-starter-tomcat</artifactId>
-								</exclusion>
-								<exclusion>
-										<groupId>org.springframework.boot</groupId>
-										<artifactId>spring-boot-starter-logging</artifactId>
-								</exclusion>
-								<exclusion>
-										<groupId>org.apache.tomcat.embed</groupId>
-										<artifactId>tomcat-embed-el</artifactId>
-								</exclusion>
-						</exclusions>
-				</dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-classic</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-tomcat</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-logging</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.tomcat.embed</groupId>
+          <artifactId>tomcat-embed-el</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
 
-				<dependency>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-starter-jetty</artifactId>
-				</dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-jetty</artifactId>
+    </dependency>
 
-				<dependency>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-starter-log4j2</artifactId>
-				</dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-log4j2</artifactId>
+    </dependency>
 
-				<dependency>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-starter-actuator</artifactId>
-				</dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
 
-				<dependency>
-						<groupId>org.apache.logging.log4j</groupId>
-						<artifactId>log4j-web</artifactId>
-				</dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-web</artifactId>
+    </dependency>
 
-				<dependency>
-						<groupId>javax.inject</groupId>
-						<artifactId>javax.inject</artifactId>
-						<version>${javax.inject.version}</version>
-				</dependency>
+    <dependency>
+      <groupId>javax.inject</groupId>
+      <artifactId>javax.inject</artifactId>
+      <version>${javax.inject.version}</version>
+    </dependency>
 
-				<dependency>
-						<groupId>org.projectlombok</groupId>
-						<artifactId>lombok</artifactId>
-				</dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+    </dependency>
 
-				<dependency>
-						<groupId>org.apache.commons</groupId>
-						<artifactId>commons-text</artifactId>
-						<version>${commons-text.version}</version>
-				</dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-text</artifactId>
+      <version>${commons-text.version}</version>
+    </dependency>
 
-				<dependency>
-						<groupId>commons-io</groupId>
-						<artifactId>commons-io</artifactId>
-						<version>${commons-io.version}</version>
-				</dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>${commons-io.version}</version>
+    </dependency>
 
-				<dependency>
-						<groupId>org.mapstruct</groupId>
-						<artifactId>mapstruct</artifactId>
-						<version>${org.mapstruct.version}</version>
-				</dependency>
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+      <version>${org.mapstruct.version}</version>
+    </dependency>
 
-				<!-- FrontEnd -->
-				<dependency>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-starter-thymeleaf</artifactId>
-				</dependency>
+    <!-- FrontEnd -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-thymeleaf</artifactId>
+    </dependency>
 
-				<dependency>
-						<groupId>nz.net.ultraq.thymeleaf</groupId>
-						<artifactId>thymeleaf-layout-dialect</artifactId>
-				</dependency>
+    <dependency>
+      <groupId>nz.net.ultraq.thymeleaf</groupId>
+      <artifactId>thymeleaf-layout-dialect</artifactId>
+    </dependency>
 
-				<dependency>
-						<groupId>com.fasterxml.jackson.datatype</groupId>
-						<artifactId>jackson-datatype-jsr310</artifactId>
-				</dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
+    </dependency>
 
-				<dependency>
-						<groupId>org.apache.httpcomponents</groupId>
-						<artifactId>httpclient</artifactId>
-				</dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+    </dependency>
 
-				<dependency>
-						<groupId>com.opencsv</groupId>
-						<artifactId>opencsv</artifactId>
-						<version>4.1</version>
-				</dependency>
+    <dependency>
+      <groupId>com.opencsv</groupId>
+      <artifactId>opencsv</artifactId>
+      <version>4.1</version>
+    </dependency>
 
-				<dependency>
-						<groupId>com.googlecode.cqengine</groupId>
-						<artifactId>cqengine</artifactId>
-						<version>${cqengine.version}</version>
-				</dependency>
+    <dependency>
+      <groupId>com.googlecode.cqengine</groupId>
+      <artifactId>cqengine</artifactId>
+      <version>${cqengine.version}</version>
+    </dependency>
 
-				<!-- Testing -->
-				<dependency>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-starter-test</artifactId>
-						<scope>test</scope>
-				</dependency>
+    <!-- Testing -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
 
-		</dependencies>
+  </dependencies>
 
-		<build>
-				<finalName>${project.artifactId}</finalName>
-				<plugins>
-						<plugin>
-								<groupId>org.apache.maven.plugins</groupId>
-								<artifactId>maven-compiler-plugin</artifactId>
-								<version>3.8.1</version>
-								<configuration>
-										<!-- <release>${java-version}</release> -->
-										<source>${java-version}</source>
-										<target>${java-version}</target>
-										<!-- <compilerArgument>-Xlint:all,-deprecation,-unchecked,-processing,-requires-transitive-automatic</compilerArgument> -->
-										<testCompilerArgument>-Xlint:none</testCompilerArgument>
-										<showWarnings>true</showWarnings>
-										<showDeprecation>true</showDeprecation>
-										<annotationProcessorPaths>
-												<path>
-														<groupId>org.projectlombok</groupId>
-														<artifactId>lombok</artifactId>
-														<version>${lombok.version}</version>
-												</path>
-												<path>
-														<groupId>org.mapstruct</groupId>
-														<artifactId>mapstruct-processor</artifactId>
-														<version>${org.mapstruct.version}</version>
-												</path>
-										</annotationProcessorPaths>
-								</configuration>
-								<dependencies>
-										<dependency>
-												<groupId>org.ow2.asm</groupId>
-												<artifactId>asm</artifactId>
-												<version>6.1.1</version>
-										</dependency>
-								</dependencies>
-						</plugin>
-						<plugin>
-								<groupId>org.springframework.boot</groupId>
-								<artifactId>spring-boot-maven-plugin</artifactId>
-								<version>2.3.1.RELEASE</version>
-								<executions>
-										<execution>
-												<goals>
-														<goal>repackage</goal>
-												</goals>
-										</execution>
-								</executions>
-								<configuration>
-										<executable>true</executable>
-										<excludeArtifactIds>lombok</excludeArtifactIds>
-								</configuration>
-								<!-- <dependencies> -->
-								<!-- The following enables the "thin jar" deployment option. -->
-								<!-- <dependency> -->
-								<!-- <groupId>org.springframework.boot.experimental</groupId> -->
-								<!-- <artifactId>spring-boot-thin-layout</artifactId> -->
-								<!-- <version>1.0.11.RELEASE</version> -->
-								<!-- </dependency> -->
-								<!-- </dependencies> -->
-						</plugin>
-						<!-- Deshabilitamos el deploy, los fuentes y el javadoc por que no queremos que los suba automaticamente a ningún repositorio -->
-						<plugin>
-								<groupId>org.apache.maven.plugins</groupId>
-								<artifactId>maven-deploy-plugin</artifactId>
-								<version>2.8.2</version>
-								<configuration>
-										<skip>true</skip>
-								</configuration>
-						</plugin>
-						<plugin>
-								<groupId>org.apache.maven.plugins</groupId>
-								<artifactId>maven-source-plugin</artifactId>
-								<version>3.2.1</version>
-								<configuration>
-										<skipSource>true</skipSource>
-								</configuration>
-						</plugin>
-						<plugin>
-								<groupId>org.apache.maven.plugins</groupId>
-								<artifactId>maven-javadoc-plugin</artifactId>
-								<version>3.2.0</version>
-								<configuration>
-										<skip>true</skip>
-								</configuration>
-						</plugin>
-						<plugin>
-								<groupId>pl.project13.maven</groupId>
-								<artifactId>git-commit-id-plugin</artifactId>
-								<version>4.0.1</version>
-								<configuration>
-										<excludeProperties>git.build.user.*,git.commit.user.*,git.remote.*,git.closest.*,git.commit.id.describe*</excludeProperties>
-								</configuration>
-						</plugin>
-						<plugin>
-								<groupId>org.apache.maven.plugins</groupId>
-								<artifactId>maven-scm-plugin</artifactId>
-								<version>1.9.5</version>
-								<configuration>
-										<tag>v${project.version}</tag>
-								</configuration>
-						</plugin>
-						<plugin>
-								<groupId>org.apache.maven.plugins</groupId>
-								<artifactId>maven-release-plugin</artifactId>
-								<version>2.5.3</version>
-								<configuration>
-										<tagNameFormat>v@{project.version}</tagNameFormat>
-								</configuration>
-						</plugin>
-				</plugins>
-		</build>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <!-- <release>${java-version}</release> -->
+          <source>${java-version}</source>
+          <target>${java-version}</target>
+          <!-- <compilerArgument>-Xlint:all,-deprecation,-unchecked,-processing,-requires-transitive-automatic</compilerArgument> -->
+          <testCompilerArgument>-Xlint:none</testCompilerArgument>
+          <showWarnings>true</showWarnings>
+          <showDeprecation>true</showDeprecation>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>${lombok.version}</version>
+            </path>
+            <path>
+              <groupId>org.mapstruct</groupId>
+              <artifactId>mapstruct-processor</artifactId>
+              <version>${org.mapstruct.version}</version>
+            </path>
+          </annotationProcessorPaths>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>6.1.1</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>2.3.1.RELEASE</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <executable>true</executable>
+          <excludeArtifactIds>lombok</excludeArtifactIds>
+        </configuration>
+        <!-- <dependencies> -->
+        <!-- The following enables the "thin jar" deployment option. -->
+        <!-- <dependency> -->
+        <!-- <groupId>org.springframework.boot.experimental</groupId> -->
+        <!-- <artifactId>spring-boot-thin-layout</artifactId> -->
+        <!-- <version>1.0.11.RELEASE</version> -->
+        <!-- </dependency> -->
+        <!-- </dependencies> -->
+      </plugin>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <!-- here the phase you need -->
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/conf</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>conf</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.3.0</version>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <appendAssemblyId>false</appendAssemblyId>
+              <descriptors>
+                <descriptor>src/main/assembly/zip.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- Deshabilitamos el deploy, los fuentes y el javadoc por que no queremos que los suba automaticamente a ningún repositorio -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>2.8.2</version>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.2.1</version>
+        <configuration>
+          <skipSource>true</skipSource>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.2.0</version>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>pl.project13.maven</groupId>
+        <artifactId>git-commit-id-plugin</artifactId>
+        <version>4.0.1</version>
+        <configuration>
+          <excludeProperties>git.build.user.*,git.commit.user.*,git.remote.*,git.closest.*,git.commit.id.describe*</excludeProperties>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-scm-plugin</artifactId>
+        <version>1.9.5</version>
+        <configuration>
+          <tag>v${project.version}</tag>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.3</version>
+        <configuration>
+          <tagNameFormat>v@{project.version}</tagNameFormat>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 
-		<profiles>
-				<profile>
-						<id>deployment</id>
-						<build>
-								<plugins>
-										<plugin>
-												<groupId>com.github.eirslett</groupId>
-												<artifactId>frontend-maven-plugin</artifactId>
-												<version>1.6</version>
-												<configuration>
-														<workingDirectory>src/main/frontend</workingDirectory>
-												</configuration>
-												<executions>
-														<execution>
-																<id>install node and npm</id>
-																<goals>
-																		<goal>install-node-and-npm</goal>
-																</goals>
-																<configuration>
-																		<nodeVersion>v12.14.1</nodeVersion>
-																		<npmVersion>6.13.7</npmVersion>
-																</configuration>
-														</execution>
-														<execution>
-																<id>npm install</id>
-																<goals>
-																		<goal>npm</goal>
-																</goals>
-														</execution>
-														<execution>
-																<id>webpack build</id>
-																<goals>
-																		<goal>webpack</goal>
-																</goals>
-														</execution>
-												</executions>
-										</plugin>
-								</plugins>
-						</build>
-				</profile>
-				<profile>
-						<id>sonar</id>
-						<properties>
-								<sonar.sources>.</sonar.sources>
-								<sonar.inclusions>src/main/java/**,src/main/resources/**</sonar.inclusions>
-								<sonar.exclusions>${code.coverage.exclusions}</sonar.exclusions>
-								<sonar.projectKey>${sonar-projectKey}</sonar.projectKey>
-								<sonar.organization>${sonar-organization}</sonar.organization>
-								<sonar.host.url>${sonar-host.url}</sonar.host.url>
-						</properties>
-						<activation>
-								<activeByDefault>false</activeByDefault>
-						</activation>
-						<build>
-								<plugins>
-										<plugin>
-												<groupId>org.sonarsource.scanner.maven</groupId>
-												<artifactId>sonar-maven-plugin</artifactId>
-												<version>3.7.0.1746</version>
-												<executions>
-														<execution>
-																<phase>verify</phase>
-																<goals>
-																		<goal>sonar</goal>
-																</goals>
-														</execution>
-												</executions>
-										</plugin>
-								</plugins>
-						</build>
-				</profile>
-		</profiles>
+  <profiles>
+    <profile>
+      <id>deployment</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <version>1.6</version>
+            <configuration>
+              <workingDirectory>src/main/frontend</workingDirectory>
+            </configuration>
+            <executions>
+              <execution>
+                <id>install node and npm</id>
+                <goals>
+                  <goal>install-node-and-npm</goal>
+                </goals>
+                <configuration>
+                  <nodeVersion>v12.14.1</nodeVersion>
+                  <npmVersion>6.13.7</npmVersion>
+                </configuration>
+              </execution>
+              <execution>
+                <id>npm install</id>
+                <goals>
+                  <goal>npm</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>webpack build</id>
+                <goals>
+                  <goal>webpack</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>sonar</id>
+      <properties>
+        <sonar.sources>.</sonar.sources>
+        <sonar.inclusions>src/main/java/**,src/main/resources/**</sonar.inclusions>
+        <sonar.exclusions>${code.coverage.exclusions}</sonar.exclusions>
+        <sonar.projectKey>${sonar-projectKey}</sonar.projectKey>
+        <sonar.organization>${sonar-organization}</sonar.organization>
+        <sonar.host.url>${sonar-host.url}</sonar.host.url>
+      </properties>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.sonarsource.scanner.maven</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
+            <version>3.7.0.1746</version>
+            <executions>
+              <execution>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sonar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
