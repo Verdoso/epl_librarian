@@ -28,6 +28,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
 
+    @Value("${descarga_epl:true}")
+    private boolean descargarDeEPL;
+
     @Value("${actualizacion_automatica:true}")
     private boolean actualizacionAutomatica;
 
@@ -47,14 +50,16 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
         UpdateSpec updateSpec = eplCSVProcessor.processBackup();
         if (updateSpec.isEmpty()) {
             comprobaremosActualizacionAutomatica = false;
-            updateSpec = eplCSVProcessor.updateFromEPL();
+            if(descargarDeEPL) {
+                updateSpec = eplCSVProcessor.updateFromEPL();
+            }
             if (updateSpec.isEmpty()) {
                 updateSpec = eplCSVProcessor.updateFromEPLManual();
             }
         }
         if (comprobaremosActualizacionAutomatica) {
             updateSpec = comprobarActualizacionAutomatica(updateSpec);
-        } else {
+        } else if (descargarDeEPL){
             log.error("No hay backup y la actualizaci\u00f3n autom\u00e1tica est\u00e1 deshabilitada. Ouch!");
         }
         //
