@@ -66,8 +66,7 @@
 
         <b-table-column field="POR_AUTOR" label="Autor" sortable searchable width="25%">
           <template
-              slot="searchable"
-              slot-scope="props">
+              slot="searchable">
               <b-input
                   v-model="currentAutorFilter"
                   placeholder="autor..."
@@ -89,8 +88,7 @@
 
         <b-table-column field="POR_IDIOMA" label="Idiomas" sortable searchable width="10%">
           <template
-              slot="searchable"
-              slot-scope="props">
+              slot="searchable">
               <b-input
                   v-model="currentIdiomaFilter"
                   placeholder="idioma..."
@@ -104,8 +102,7 @@
 
         <b-table-column field="POR_GENERO" label="Generos" searchable width="25%">
           <template
-              slot="searchable"
-              slot-scope="props">
+              slot="searchable">
               <b-input
                   v-model="currentGeneroFilter"
                   placeholder="genero..."
@@ -368,11 +365,11 @@ export default {
     },
     toMagnet(book) {
       return `magnet:?xt=urn:btih:${book.magnetId}&dn=EPL_${book.id}_${encodeURIComponent(book.titulo)}`
-			        + '&tr=http://tracker.tfile.me/announce'
-			        + '&tr=udp://tracker.opentrackr.org:1337/announce'
-			        + '&tr=udp://tracker.openbittorrent.com:80'
-			        + '&tr=udp://tracker.publicbt.com:80'
-			        + '&tr=udp://open.demonii.com:1337/announce'
+              + '&tr=http://tracker.tfile.me/announce'
+              + '&tr=udp://tracker.opentrackr.org:1337/announce'
+              + '&tr=udp://tracker.openbittorrent.com:80'
+              + '&tr=udp://tracker.publicbt.com:80'
+              + '&tr=udp://open.demonii.com:1337/announce'
     }
   },
   mounted() {

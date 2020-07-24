@@ -125,6 +125,7 @@ public class BibliotecaService {
     }
 
     private final MapperService mapperService;
+    private final PreferencesService preferencesService;
 
     private final IndexedCollection<Libro> libreria = new ConcurrentIndexedCollection<>();
     private final IndexedCollection<Autor> autores = new ConcurrentIndexedCollection<>();
@@ -174,7 +175,7 @@ public class BibliotecaService {
                     .map(nombre -> {
                         try (final ResultSet<Libro> queryResult = libreria
                                 .retrieve(contains(Libro.LIBRO_AUTOR, Libro.flattenToAscii(nombre)))) {
-                            return new Autor(nombre, queryResult.size());
+                            return new Autor(nombre, queryResult.size(), preferencesService.checkAutorFavorito(nombre));
                         }
                     })
                     .collect(Collectors.toList()));
@@ -187,7 +188,8 @@ public class BibliotecaService {
                     .map(nombre -> {
                         try (final ResultSet<Libro> queryResult = libreria
                                 .retrieve(contains(Libro.LIBRO_GENERO, Libro.flattenToAscii(nombre)))) {
-                            return new Genero(nombre, queryResult.size());
+                            return new Genero(nombre, queryResult.size(),
+                                    preferencesService.checkGeneroFavorito(nombre));
                         }
                     })
                     .collect(Collectors.toList()));
@@ -196,7 +198,7 @@ public class BibliotecaService {
             idiomas.addAll(libreria.stream().map(Libro::getIdioma).map(String::trim).distinct().map(nombre -> {
                 try (final ResultSet<Libro> queryResult = libreria
                         .retrieve(contains(Libro.LIBRO_IDIOMA, Libro.flattenToAscii(nombre)))) {
-                    return new Idioma(nombre, queryResult.size());
+                    return new Idioma(nombre, queryResult.size(), preferencesService.checkIdiomaFavorito(nombre));
                 }
             }).collect(Collectors.toList()));
             //
@@ -267,5 +269,4 @@ public class BibliotecaService {
         }
         return pagina;
     }
-
 }
