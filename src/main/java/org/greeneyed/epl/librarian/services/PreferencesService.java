@@ -188,10 +188,8 @@ public class PreferencesService {
 
     private void guardarPreferencias() {
         writeLock.lock();
-        try (FileOutputStream theFOS = new FileOutputStream(preferencesFile);
-                OutputStreamWriter theOSW = new OutputStreamWriter(theFOS)) {
-            preferences.store(theOSW, "Preferencias de EPL Librarian, edítalas manualmente bajo tu propio riesgo");
-            theOSW.flush();
+        try (FileOutputStream theFOS = new FileOutputStream(preferencesFile)) {
+            preferences.store(theFOS, "Preferencias de EPL Librarian, edítalas manualmente bajo tu propio riesgo");
             theFOS.flush();
         } catch (Exception e) {
             log.error("No se han podido guardar las preferencias: {}", e.getMessage());
