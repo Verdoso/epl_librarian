@@ -31,11 +31,6 @@
 
         <b-table-column field="POR_LIBROS" label="# libros" sortable>{{ props.row.libros }}</b-table-column>
       </template>
-      <template slot="bottom-left">
-        <p class="control">
-          <b-button class="button is-primary" @click="guardarFavoritos()">guardar</b-button>
-        </p>
-      </template>
     </b-table>
   </section>
 </template>
@@ -139,12 +134,6 @@ export default {
       this.$store.commit("changeIdiomaFilter", row.nombre);
       this.$store.commit("changeTab", "biblioteca");
     },
-    /*
-     * Handle filter-change event
-     */
-    changedTituloFilter(e) {
-      log.console("Nothing to do in author");
-    },
     containsObject(obj, list) {
       return list.some(elem => elem === obj)
     },
@@ -155,22 +144,22 @@ export default {
       axios
         .post('/librarian/preferences/idiomasFavoritos', formData, {headers: { 'Content-Type': 'multipart/form-data;charset=UTF-8' }})
         .then((response) => {
-          this.$buefy.notification.open({
-            type: 'is-info'
-            , duration: 5000
-            , message:`Idiomas favoritos almacenados en las preferencias`
-            , hasIcon: true
-          });
+          this.$store.commit("markUpdate");
         })
         .catch(error => {
           this.$buefy.notification.open({
             type: 'is-danger'
             , duration: 5000
-            , message:'Error almacenando fecha base: ' + e
+            , message:'Error almacenando idiomas favoritos: ' + e
             , hasIcon: true
           })
           throw error;
         });
+    }
+  },
+  watch: {
+    checkedRows: function() {
+      this.guardarFavoritos();
     }
   },
   mounted() {

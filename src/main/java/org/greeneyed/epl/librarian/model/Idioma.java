@@ -4,16 +4,16 @@ import static com.googlecode.cqengine.query.QueryFactory.attribute;
 
 import com.googlecode.cqengine.attribute.SimpleAttribute;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Data
 @Slf4j
-@NoArgsConstructor
-@AllArgsConstructor
-public class Idioma {
+@RequiredArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class Idioma implements PuedeSerFavorito {
     private static final String IDIOMA_ID_PARAM = "idiomaID";
     private static final String IDIOMA_NOMBRE_PARAM = "idiomaNOMBRE";
     private static final String IDIOMA_LIBROS_PARAM = "idiomaLIBROS";
@@ -26,9 +26,10 @@ public class Idioma {
     public static final SimpleAttribute<Idioma, Integer> IDIOMA_LIBROS = attribute(IDIOMA_LIBROS_PARAM,
             Idioma::getLibros);
 
-    private String nombre;
+    @EqualsAndHashCode.Include
+    private final String nombre;
 
-    private int libros;
+    private final int libros;
 
     private boolean favorito = false;
 
