@@ -42,11 +42,27 @@ public class PreferencesAPIController {
         return OK_BUILDER.build();
     }
 
+    @PostMapping(value = "/autoresFavoritos")
+    public ResponseEntity<String> guardarAutoresFavoritos(
+            @RequestParam(name = "autoresFavoritos") Set<String> autoresFavoritos,
+            @RequestParam(name = "autoresNoFavoritos") Set<String> autoresNoFavoritos) {
+        preferencesService.actualizarAutoresPreferidos(autoresFavoritos,autoresNoFavoritos);
+        return OK_BUILDER.build();
+    }
+
     @PostMapping(value = "/idiomasFavoritos")
     public ResponseEntity<String> guardarIdiomasFavoritos(
             @RequestParam(name = "idiomasFavoritos") Set<String> idiomasFavoritos,
             @RequestParam(name = "idiomasNoFavoritos") Set<String> idiomasNoFavoritos) {
         preferencesService.actualizarIdiomasPreferidos(idiomasFavoritos,idiomasNoFavoritos);
+        return OK_BUILDER.build();
+    }
+
+    @PostMapping(value = "/generosFavoritos")
+    public ResponseEntity<String> guardarGenerosFavoritos(
+            @RequestParam(name = "generosFavoritos") Set<String> generosFavoritos,
+            @RequestParam(name = "generosNoFavoritos") Set<String> generosNoFavoritos) {
+        preferencesService.actualizarGenerosPreferidos(generosFavoritos,generosNoFavoritos);
         return OK_BUILDER.build();
     }
 }

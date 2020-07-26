@@ -21,6 +21,9 @@
         <p class="control">
             <b-button class="button is-primary" @click="guardarFechaBase()">guardar</b-button>
             <b-switch v-model="soloNovedades" @input="cambioNovedades()">Solo novedades</b-switch>
+            <b-switch v-model="soloAutoresFavoritos" @input="cambioAutoresFavoritos()">Solo autores favoritos</b-switch>
+            <b-switch v-model="soloIdiomasFavoritos" @input="cambioIdiomasFavoritos()">Solo idiomas favoritos</b-switch>
+            <b-switch v-model="soloGenerosFavoritos" @input="cambioGenerosFavoritos()">Solo géneros favoritos</b-switch>
         </p>
     </b-field>
     </div>
@@ -174,13 +177,17 @@ export default {
       currentAutorFilter: null,
       currentGeneroFilter: null,
       currentIdiomaFilter: null,
+      lastUpdate: null,
       sortField: "POR_TITULO",
       sortOrder: "asc",
       defaultSortOrder: "asc",
       page: 1,
       filters: null,
       perPage: 15,
-      soloNovedades: false,
+      soloNovedades: true,
+      soloAutoresFavoritos: false,
+      soloIdiomasFavoritos: true,
+      soloGenerosFavoritos: false,
       fechaBase: null
     };
   },
@@ -198,6 +205,9 @@ export default {
         `filtro_autor=${this.filterOnValue(this.autorfilter)}`,
         `filtro_genero=${this.filterOnValue(this.generofilter)}`,
         `filtro_idioma=${this.filterOnValue(this.idiomafilter)}`,
+        `favoritos_autores=${this.soloAutoresFavoritos}`,
+        `favoritos_idiomas=${this.soloIdiomasFavoritos}`,
+        `favoritos_generos=${this.soloGenerosFavoritos}`,
         `filtro_fecha=${this.porFechaBase()}`,
         `por_pagina=${this.perPage}`
       ].join("&");
@@ -293,6 +303,15 @@ export default {
     cambioNovedades() {
       this.loadAsyncData();
     },
+    cambioAutoresFavoritos() {
+      this.loadAsyncData();
+    },
+    cambioIdiomasFavoritos() {
+      this.loadAsyncData();
+    },
+    cambioGenerosFavoritos() {
+      this.loadAsyncData();
+    },
     guardarFechaBase() {
       if(this.fechaBase) {
         var formData = new FormData();
@@ -331,6 +350,11 @@ export default {
     }
   },
   watch: {
+    lastUpdate: function() {
+      if(this.soloAutoresFavoritos || this.soloIdiomasFavoritos || this.soloGenerosFavoritos) {
+        this.loadAsyncData();
+      }
+    },
     autorfilter: function() {
       if(this.currentAutorFilter===this.autorfilter) {
         //console.log('Nothing to do')

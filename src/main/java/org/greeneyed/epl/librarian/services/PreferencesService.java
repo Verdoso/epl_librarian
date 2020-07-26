@@ -4,12 +4,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
@@ -126,17 +126,38 @@ public class PreferencesService {
         return result;
     }
 
-    public void actualizarIdiomasPreferidos(Set<String> idiomasPreferidos, Set<String> idiomasNoPreferidos) {
+    public void actualizarAutoresPreferidos(Set<String> autoresPreferidosToAdd, Set<String> autoresPreferidosToRemove) {
         writeLock.lock();
         try {
+            if (autoresPreferidosToAdd != null) {
+                this.autoresPreferidos.addAll(autoresPreferidosToAdd);
+            }
+            if (autoresPreferidosToRemove != null) {
+                this.autoresPreferidos.removeAll(autoresPreferidosToRemove);
+            }
+            
+            preferences.setProperty(AUTORES_PREFERIDOS_KEY,
+                    this.autoresPreferidos.stream().collect(Collectors.joining(",")));
+            guardarPreferencias();
+        } catch (Exception e) {
+            log.error("Error parseando autores preferidos: {}", e.getMessage());
+            log.trace("Error detallado", e);
+        } finally {
+            writeLock.unlock();
+        }
+    }
+
+    public void actualizarIdiomasPreferidos(Set<String> idiomasPreferidosToAdd, Set<String> idiomasNoPreferidosToRemove) {
+        writeLock.lock();
+        try {
+            if (idiomasPreferidosToAdd != null) {
+                this.idiomasPreferidos.addAll(idiomasPreferidosToAdd);
+            }
+            if (idiomasNoPreferidosToRemove != null) {
+                this.idiomasPreferidos.removeAll(idiomasNoPreferidosToRemove);
+            }
             preferences.setProperty(IDIOMAS_PREFERIDOS_KEY,
-                    idiomasPreferidos.stream().collect(Collectors.joining(",")));
-            if (idiomasPreferidos != null) {
-                this.idiomasPreferidos.addAll(idiomasPreferidos);
-            }
-            if (idiomasNoPreferidos != null) {
-                this.idiomasPreferidos.removeAll(idiomasPreferidos);
-            }
+                    this.idiomasPreferidos.stream().collect(Collectors.joining(",")));
             guardarPreferencias();
         } catch (Exception e) {
             log.error("Error parseando idiomas preferidos: {}", e.getMessage());
@@ -146,40 +167,20 @@ public class PreferencesService {
         }
     }
 
-    public void actualizarGenerosPreferidos(Set<String> generosPreferidos, Set<String> generosNoPreferidos) {
+    public void actualizarGenerosPreferidos(Set<String> generosPreferidosToAdd, Set<String> generosNoPreferidosToRemove) {
         writeLock.lock();
         try {
+            if (generosPreferidosToAdd != null) {
+                this.generosPreferidos.addAll(generosPreferidosToAdd);
+            }
+            if (generosNoPreferidosToRemove != null) {
+                this.generosPreferidos.removeAll(generosNoPreferidosToRemove);
+            }
             preferences.setProperty(GENEROS_PREFERIDOS_KEY,
-                    generosPreferidos.stream().collect(Collectors.joining(",")));
-            if (generosPreferidos != null) {
-                this.generosPreferidos.addAll(generosPreferidos);
-            }
-            if (generosNoPreferidos != null) {
-                this.generosPreferidos.removeAll(generosPreferidos);
-            }
+            		this.generosPreferidos.stream().collect(Collectors.joining(",")));
             guardarPreferencias();
         } catch (Exception e) {
             log.error("Error parseando generos preferidos: {}", e.getMessage());
-            log.trace("Error detallado", e);
-        } finally {
-            writeLock.unlock();
-        }
-    }
-
-    public void actualizarAutoresPreferidos(Set<String> autoresPreferidos, Set<String> autoresNoPreferidos) {
-        writeLock.lock();
-        try {
-            preferences.setProperty(AUTORES_PREFERIDOS_KEY,
-                    autoresPreferidos.stream().collect(Collectors.joining(",")));
-            if (autoresPreferidos != null) {
-                this.autoresPreferidos.addAll(autoresPreferidos);
-            }
-            if (autoresNoPreferidos != null) {
-                this.autoresPreferidos.removeAll(autoresPreferidos);
-            }
-            guardarPreferencias();
-        } catch (Exception e) {
-            log.error("Error parseando autores preferidos: {}", e.getMessage());
             log.trace("Error detallado", e);
         } finally {
             writeLock.unlock();
@@ -233,8 +234,16 @@ public class PreferencesService {
         return idiomasPreferidos.contains(nombre);
     }
 
+    public boolean checkAutorFavorito(List<String> autores) {
+        return autores.stream().map(String::trim).anyMatch(this::checkAutorFavorito);
+    }
+
     public boolean checkAutorFavorito(String nombre) {
         return autoresPreferidos.contains(nombre);
+    }
+
+    public boolean checkGeneroFavorito(List<String> generos) {
+        return generos.stream().map(String::trim).anyMatch(this::checkGeneroFavorito);
     }
 
     public boolean checkGeneroFavorito(String nombre) {

@@ -18,132 +18,144 @@ import com.googlecode.cqengine.attribute.SimpleAttribute;
 import com.googlecode.cqengine.attribute.SimpleNullableAttribute;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @JsonInclude(Include.NON_NULL)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Libro {
 
-	private static final String LIBRO_ID_PARAM = "libroID";
-	private static final String LIBRO_TITULO_PARAM = "libroTITULO";
-	private static final String LIBRO_AUTOR_PARAM = "libroAUTOR";
-	private static final String LIBRO_COLECCION_PARAM = "libroCOLECCION";
-	private static final String LIBRO_GENERO_PARAM = "libroGENERO";
-	private static final String LIBRO_IDIOMA_PARAM = "libroIDIOMA";
-	private static final String LIBRO_VOLUMEN_PARAM = "libroVOLUMEN";
-	private static final String LIBRO_PUBLICADO_PARAM = "libroPUBLICADO";
+    private static final String LIBRO_ID_PARAM = "libroID";
+    private static final String LIBRO_TITULO_PARAM = "libroTITULO";
+    private static final String LIBRO_AUTOR_PARAM = "libroAUTOR";
+    private static final String LIBRO_COLECCION_PARAM = "libroCOLECCION";
+    private static final String LIBRO_GENERO_PARAM = "libroGENERO";
+    private static final String LIBRO_IDIOMA_PARAM = "libroIDIOMA";
+    private static final String LIBRO_VOLUMEN_PARAM = "libroVOLUMEN";
+    private static final String LIBRO_PUBLICADO_PARAM = "libroPUBLICADO";
 
-	public static final SimpleAttribute<Libro, Integer> LIBRO_ID = attribute(LIBRO_ID_PARAM, Libro::getId);
-	public static final SimpleAttribute<Libro, String> LIBRO_TITULO = attribute(LIBRO_TITULO_PARAM,
-			Libro::getTituloNormalizado);
-	public static final SimpleAttribute<Libro, String> LIBRO_AUTOR = attribute(LIBRO_AUTOR_PARAM,
-			Libro::getAutorNormalizado);
-	public static final SimpleAttribute<Libro, String> LIBRO_IDIOMA = attribute(LIBRO_IDIOMA_PARAM,
-			Libro::getIdiomaNormalizado);
-	public static final SimpleNullableAttribute<Libro, ChronoLocalDate> LIBRO_PUBLICADO = nullableAttribute(
-			LIBRO_PUBLICADO_PARAM, Libro::getFechaPublicacion);
-	public static final SimpleNullableAttribute<Libro, String> LIBRO_COLECCION = nullableAttribute(
-			LIBRO_COLECCION_PARAM, Libro::getColeccionNormalizada);
-	public static final SimpleNullableAttribute<Libro, BigDecimal> LIBRO_VOLUMEN = nullableAttribute(
-			LIBRO_VOLUMEN_PARAM, Libro::getVolumen);
-	public static final SimpleNullableAttribute<Libro, String> LIBRO_GENERO = nullableAttribute(LIBRO_GENERO_PARAM,
-			Libro::getGeneroNormalizado);
+    public static final SimpleAttribute<Libro, Integer> LIBRO_ID = attribute(LIBRO_ID_PARAM, Libro::getId);
+    public static final SimpleAttribute<Libro, String> LIBRO_TITULO = attribute(LIBRO_TITULO_PARAM,
+            Libro::getTituloNormalizado);
+    public static final SimpleAttribute<Libro, String> LIBRO_AUTOR = attribute(LIBRO_AUTOR_PARAM,
+            Libro::getAutorNormalizado);
+    public static final SimpleAttribute<Libro, String> LIBRO_IDIOMA = attribute(LIBRO_IDIOMA_PARAM,
+            Libro::getIdiomaNormalizado);
+    public static final SimpleNullableAttribute<Libro, ChronoLocalDate> LIBRO_PUBLICADO = nullableAttribute(
+            LIBRO_PUBLICADO_PARAM, Libro::getFechaPublicacion);
+    public static final SimpleNullableAttribute<Libro, String> LIBRO_COLECCION = nullableAttribute(
+            LIBRO_COLECCION_PARAM, Libro::getColeccionNormalizada);
+    public static final SimpleNullableAttribute<Libro, BigDecimal> LIBRO_VOLUMEN = nullableAttribute(
+            LIBRO_VOLUMEN_PARAM, Libro::getVolumen);
+    public static final SimpleNullableAttribute<Libro, String> LIBRO_GENERO = nullableAttribute(LIBRO_GENERO_PARAM,
+            Libro::getGeneroNormalizado);
 
-	private int id;
+    @EqualsAndHashCode.Include
+    private int id;
 
-	private String titulo;
+    private String titulo;
 
-	private String autor;
+    private String autor;
 
-	private String generos;
+    private String generos;
 
-	private String coleccion;
+    private String coleccion;
 
-	private BigDecimal volumen;
+    private BigDecimal volumen;
 
-	private int anyoPublicacion;
+    private int anyoPublicacion;
 
-	private String sinopsis;
+    private String sinopsis;
 
-	private Integer paginas;
+    private Integer paginas;
 
-	private BigDecimal revision;
+    private BigDecimal revision;
 
-	private String idioma;
+    private String idioma;
 
-	private String publicado;
+    private String publicado;
 
-	private LocalDate fechaPublicacion;
+    private LocalDate fechaPublicacion;
 
-	private String estado;
+    private String estado;
 
-	private BigDecimal valoracion;
+    private BigDecimal valoracion;
 
-	private Integer votos;
+    private Integer votos;
 
-	private String magnetId;
+    private String magnetId;
 
-	@JsonIgnore
-	public List<String> getListaGeneros() {
-		if (generos != null) {
-			return Arrays.asList(generos.split(","));
-		} else {
-			return Collections.emptyList();
-		}
-	}
+    @JsonIgnore
+    public List<String> getListaAutores() {
+        if (autor != null) {
+            return Arrays.asList(autor.split(" & "));
+        } else {
+            return Collections.emptyList();
+        }
+    }
 
-	public String getColeccionCompleta() {
-		String completa = null;
-		if (coleccion != null) {
-			if (volumen != null) {
-				completa = coleccion + " [" + volumen + "]";
-			} else {
-				completa = coleccion;
-			}
-		}
-		return completa;
-	}
+    @JsonIgnore
+    public List<String> getListaGeneros() {
+        if (generos != null) {
+            return Arrays.asList(generos.split(","));
+        } else {
+            return Collections.emptyList();
+        }
+    }
 
-	@JsonIgnore
-	public String getTituloNormalizado() {
-		return flattenToAscii(titulo);
-	}
+    public String getColeccionCompleta() {
+        String completa = null;
+        if (coleccion != null) {
+            if (volumen != null) {
+                completa = coleccion + " [" + volumen + "]";
+            } else {
+                completa = coleccion;
+            }
+        }
+        return completa;
+    }
 
-	@JsonIgnore
-	public String getAutorNormalizado() {
-		return flattenToAscii(autor);
-	}
+    @JsonIgnore
+    public String getTituloNormalizado() {
+        return flattenToAscii(titulo);
+    }
 
-	@JsonIgnore
-	public String getIdiomaNormalizado() {
-		return flattenToAscii(idioma);
-	}
+    @JsonIgnore
+    public String getAutorNormalizado() {
+        return flattenToAscii(autor);
+    }
 
-	@JsonIgnore
-	public String getColeccionNormalizada() {
-		return flattenToAscii(coleccion);
-	}
+    @JsonIgnore
+    public String getIdiomaNormalizado() {
+        return flattenToAscii(idioma);
+    }
 
-	@JsonIgnore
-	public String getGeneroNormalizado() {
-		if (generos != null) {
-			return flattenToAscii(generos).replace(",", "");
-		} else {
-			return null;
-		}
-	}
+    @JsonIgnore
+    public String getColeccionNormalizada() {
+        return flattenToAscii(coleccion);
+    }
 
-	public static String flattenToAscii(String string) {
-		if (string != null) {
-			StringBuilder sb = new StringBuilder(string.length());
-			string = Normalizer.normalize(string.toLowerCase(), Normalizer.Form.NFD);
-			for (char c : string.toCharArray()) {
-				if (c <= '\u007F') {
-					sb.append(c);
-				}
-			}
-			return sb.toString();
-		} else {
-			return null;
-		}
-	}
+    @JsonIgnore
+    public String getGeneroNormalizado() {
+        if (generos != null) {
+            return flattenToAscii(generos).replace(",", "");
+        } else {
+            return null;
+        }
+    }
+
+    public static String flattenToAscii(String string) {
+        if (string != null) {
+            StringBuilder sb = new StringBuilder(string.length());
+            string = Normalizer.normalize(string.toLowerCase(), Normalizer.Form.NFD);
+            for (char c : string.toCharArray()) {
+                if (c <= '\u007F') {
+                    sb.append(c);
+                }
+            }
+            return sb.toString();
+        } else {
+            return null;
+        }
+    }
 }
