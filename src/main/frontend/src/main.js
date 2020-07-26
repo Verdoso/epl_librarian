@@ -36,15 +36,19 @@ Vue.component('navigation-option', navigationOption)
 
 const store = new Vuex.Store({
   state: {
-	currentTab: 'biblioteca',
-	autorfilter: null,
-	generofilter: null,
-	idiomafilter: null
+  currentTab: 'biblioteca',
+  lastUpdate: null,
+  autorfilter: null,
+  generofilter: null,
+  idiomafilter: null
   },
   mutations: {
+    markUpdate (state) {
+      state.lastUpdate = new Date()
+    },
     changeTab (state,newTab) {
       state.currentTab = newTab
-	},
+    },
     changeAutorFilter (state,newFilter) {
       state.autorfilter = newFilter
     },
@@ -58,18 +62,18 @@ const store = new Vuex.Store({
 })
 
 var app = new Vue({
-	el: '#app',
-	store,
-	data() {
-		return {
-			currentTab: this.$store.state.currentTab,
-			autorfilter: this.$store.state.autorfilter,
-			generofilter: this.$store.state.generofilter,
-			idiomafilter: this.$store.state.idiomafilter
-		}
-	},
-	mounted() {
-		document.getElementById("loader").style.display = "none";
-		document.getElementById("app").style.display = "block";
-	}
+  el: '#app',
+  store,
+  data() {
+    return {
+      currentTab: this.$store.state.currentTab,
+      autorfilter: this.$store.state.autorfilter,
+      generofilter: this.$store.state.generofilter,
+      idiomafilter: this.$store.state.idiomafilter
+    }
+  },
+  mounted() {
+    document.getElementById("loader").style.display = "none";
+    document.getElementById("app").style.display = "block";
+  }
 })

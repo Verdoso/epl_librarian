@@ -4,30 +4,34 @@ import static com.googlecode.cqengine.query.QueryFactory.attribute;
 
 import com.googlecode.cqengine.attribute.SimpleAttribute;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class Autor {
-	private static final String AUTOR_ID_PARAM = "autorID";
-	private static final String AUTOR_NOMBRE_PARAM = "autorNOMBRE";
-	private static final String AUTOR_LIBROS_PARAM = "autorLIBROS";
+@RequiredArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class Autor implements PuedeSerFavorito {
+    private static final String AUTOR_ID_PARAM = "autorID";
+    private static final String AUTOR_NOMBRE_PARAM = "autorNOMBRE";
+    private static final String AUTOR_LIBROS_PARAM = "autorLIBROS";
 
-	public static final SimpleAttribute<Autor, String> AUTOR_ID = attribute(AUTOR_ID_PARAM, Autor::getNombre);
+    public static final SimpleAttribute<Autor, String> AUTOR_ID = attribute(AUTOR_ID_PARAM, Autor::getNombre);
 
-	public static final SimpleAttribute<Autor, String> AUTOR_NOMBRE = attribute(AUTOR_NOMBRE_PARAM,
-			Autor::getNombreNormalizado);
+    public static final SimpleAttribute<Autor, String> AUTOR_NOMBRE = attribute(AUTOR_NOMBRE_PARAM,
+            Autor::getNombreNormalizado);
 
-	public static final SimpleAttribute<Autor, Integer> AUTOR_LIBROS = attribute(AUTOR_LIBROS_PARAM, Autor::getLibros);
+    public static final SimpleAttribute<Autor, Integer> AUTOR_LIBROS = attribute(AUTOR_LIBROS_PARAM, Autor::getLibros);
 
-	private String nombre;
+    @EqualsAndHashCode.Include
+    private final String nombre;
 
-	private int libros;
+    private final int libros;
 
-	public String getNombreNormalizado() {
-		return Libro.flattenToAscii(nombre);
-	}
+    private boolean favorito = false;
+
+    public String getNombreNormalizado() {
+        return Libro.flattenToAscii(nombre);
+    }
 }

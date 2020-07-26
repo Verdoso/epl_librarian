@@ -11,6 +11,8 @@ import java.util.Objects;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -21,6 +23,7 @@ import org.greeneyed.epl.librarian.model.Genero;
 import org.greeneyed.epl.librarian.model.Idioma;
 import org.greeneyed.epl.librarian.model.Libro;
 import org.greeneyed.epl.librarian.model.Pagina;
+import org.greeneyed.epl.librarian.model.PuedeSerFavorito;
 import org.greeneyed.epl.librarian.model.Sumario;
 import org.greeneyed.epl.librarian.services.EplCSVProcessor.LibroCSV;
 import org.greeneyed.epl.librarian.services.model.BusquedaElemento;
@@ -125,6 +128,7 @@ public class BibliotecaService {
     }
 
     private final MapperService mapperService;
+    private final PreferencesService preferencesService;
 
     private final IndexedCollection<Libro> libreria = new ConcurrentIndexedCollection<>();
     private final IndexedCollection<Autor> autores = new ConcurrentIndexedCollection<>();
@@ -230,11 +234,27 @@ public class BibliotecaService {
         readLock.lock();
         try (final ResultSet<Libro> queryResult = libreria.retrieve(busquedaLibro.getQuery(),
                 busquedaLibro.getQueryOptions())) {
+            Stream<Libro> resultadosBusqueda = queryResult.stream();
             pagina.setTotal(queryResult.size());
-            pagina.setResults(queryResult.stream()
-                    .skip((busquedaLibro.getNumeroPagina() - 1) * (long) busquedaLibro.getPorPagina())
-                    .limit(busquedaLibro.getPorPagina())
-                    .collect(Collectors.toList()));
+            if (busquedaLibro.isSoloAutoresFavoritos() || busquedaLibro.isSoloIdiomasFavoritos()
+                    || busquedaLibro.isSoloGenerosFavoritos()) {
+                Predicate<Libro> filterPredicate = libro -> true;
+                if (busquedaLibro.isSoloAutoresFavoritos()) {
+                    filterPredicate = filterPredicate.and(this::isAutorFavorito);
+                }
+                if (busquedaLibro.isSoloIdiomasFavoritos()) {
+                    filterPredicate = filterPredicate.and(this::isIdiomaFavorito);
+                }
+                if (busquedaLibro.isSoloGenerosFavoritos()) {
+                    filterPredicate = filterPredicate.and(this::isGeneroFavorito);
+                }
+                pagina.setTotal((int) queryResult.stream().filter(filterPredicate).count());
+                resultadosBusqueda = queryResult.stream().filter(filterPredicate);
+            }
+            pagina.setResults(
+                    resultadosBusqueda.skip((busquedaLibro.getNumeroPagina() - 1) * (long) busquedaLibro.getPorPagina())
+                            .limit(busquedaLibro.getPorPagina())
+                            .collect(Collectors.toList()));
         } finally {
             readLock.unlock();
         }
@@ -242,18 +262,19 @@ public class BibliotecaService {
     }
 
     public Pagina<Autor> paginaAutor(BusquedaElemento<Autor> busquedaAutor) {
-        return paginaElementos(autores, busquedaAutor);
+        return paginaElementos(autores, busquedaAutor, preferencesService::checkAutorFavorito);
     }
 
     public Pagina<Genero> paginaGenero(BusquedaElemento<Genero> busquedaGenero) {
-        return paginaElementos(generos, busquedaGenero);
+        return paginaElementos(generos, busquedaGenero, preferencesService::checkGeneroFavorito);
     }
 
     public Pagina<Idioma> paginaIdioma(BusquedaElemento<Idioma> busquedaIdioma) {
-        return paginaElementos(idiomas, busquedaIdioma);
+        return paginaElementos(idiomas, busquedaIdioma, preferencesService::checkIdiomaFavorito);
     }
 
-    private <O> Pagina<O> paginaElementos(IndexedCollection<O> elementos, BusquedaElemento<O> busqueda) {
+    private <O extends PuedeSerFavorito> Pagina<O> paginaElementos(IndexedCollection<O> elementos,
+            BusquedaElemento<O> busqueda, Function<String, Boolean> esFavorito) {
         Pagina<O> pagina = new Pagina<>();
         readLock.lock();
         try (final ResultSet<O> queryResult = elementos.retrieve(busqueda.getQuery(), busqueda.getQueryOptions())) {
@@ -261,6 +282,7 @@ public class BibliotecaService {
             pagina.setResults(queryResult.stream()
                     .skip((busqueda.getNumeroPagina() - 1) * (long) busqueda.getPorPagina())
                     .limit(busqueda.getPorPagina())
+                    .peek(object -> object.setFavorito(esFavorito.apply(object.getNombre())))
                     .collect(Collectors.toList()));
         } finally {
             readLock.unlock();
@@ -268,4 +290,15 @@ public class BibliotecaService {
         return pagina;
     }
 
+    private boolean isIdiomaFavorito(Libro libro) {
+        return preferencesService.checkIdiomaFavorito(libro.getIdioma());
+    }
+
+    private boolean isAutorFavorito(Libro libro) {
+        return preferencesService.checkAutorFavorito(libro.getListaAutores());
+    }
+
+    private boolean isGeneroFavorito(Libro libro) {
+        return preferencesService.checkGeneroFavorito(libro.getListaGeneros());
+    }
 }

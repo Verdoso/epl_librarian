@@ -8,6 +8,10 @@
       :per-page="perPage"
       :default-sort-direction="defaultSortOrder"
       :default-sort="[sortField, sortOrder]"
+      :checked-rows.sync="checkedRows"
+      :is-row-checkable="(row) => true"
+      checkable
+      checkbox-position="left"
       paginated
       backend-pagination
       backend-sorting
@@ -51,6 +55,7 @@ export default {
   data() {
     return {
       data: [],
+      checkedRows: [],
       total: 0,
       loading: false,
       sortField: "POR_GENERO",
@@ -79,9 +84,13 @@ export default {
         .get(`/librarian/generos?${params}`)
         .then(({ data }) => {
           this.data = [];
+          this.checkedRows = [];
           this.total = data.total;
           data.results.forEach(item => {
             this.data.push(item);
+            if(item.favorito) {
+              this.checkedRows.push(item);
+            }
           });
           this.loading = false;
         })
@@ -133,11 +142,32 @@ export default {
       this.$store.commit('changeGeneroFilter',row.nombre)
       this.$store.commit('changeTab','biblioteca')
     },
-    /*
-     * Handle filter-change event
-     */
-    changedTituloFilter(e) {
-      log.console('Nothing to do in author')
+    containsObject(obj, list) {
+      return list.some(elem => elem === obj)
+    },
+    guardarFavoritos() {
+      var formData = new FormData();
+      formData.append('generosFavoritos',this.checkedRows.map(row => row.nombre).join(','))
+      formData.append('generosNoFavoritos',this.data.filter(row => !this.containsObject(row,this.checkedRows)).map(row => row.nombre).join(','))
+      axios
+        .post('/librarian/preferences/generosFavoritos', formData, {headers: { 'Content-Type': 'multipart/form-data;charset=UTF-8' }})
+        .then((response) => {
+          this.$store.commit("markUpdate");
+        })
+        .catch(error => {
+          this.$buefy.notification.open({
+            type: 'is-danger'
+            , duration: 5000
+            , message:'Error almacenando genero favoritos: ' + e
+            , hasIcon: true
+          })
+          throw error;
+        });
+    }
+  },
+  watch: {
+    checkedRows: function() {
+      this.guardarFavoritos();
     }
   },
   mounted() {
