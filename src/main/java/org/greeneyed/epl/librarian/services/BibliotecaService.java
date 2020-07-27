@@ -6,6 +6,8 @@ import static com.googlecode.cqengine.query.QueryFactory.descending;
 import static com.googlecode.cqengine.query.QueryFactory.orderBy;
 import static com.googlecode.cqengine.query.QueryFactory.queryOptions;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -26,6 +28,7 @@ import org.greeneyed.epl.librarian.model.Pagina;
 import org.greeneyed.epl.librarian.model.PuedeSerFavorito;
 import org.greeneyed.epl.librarian.model.Sumario;
 import org.greeneyed.epl.librarian.services.EplCSVProcessor.LibroCSV;
+import org.greeneyed.epl.librarian.services.EplCSVProcessor.UpdateSpec;
 import org.greeneyed.epl.librarian.services.model.BusquedaElemento;
 import org.greeneyed.epl.librarian.services.model.BusquedaLibro;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,6 +134,8 @@ public class BibliotecaService {
     @Value("${git.build.version}")
     private String buildVersion;
 
+    private LocalDateTime fechaActualizacion = null;
+
     private final MapperService mapperService;
     private final PreferencesService preferencesService;
 
@@ -167,13 +172,13 @@ public class BibliotecaService {
         log.info("Inicializando versi\u00f3n:{}", buildVersion);
     }
 
-    public void update(List<LibroCSV> newLibros) {
+    public void update(UpdateSpec updateSpec) {
         writeLock.lock();
         try {
             // Limpiamos y añadimos los elementos individuales para que no haya referencias
             // sueltas
             libreria.clear();
-            libreria.addAll(newLibros.stream().map(mapperService::from).collect(Collectors.toList()));
+            libreria.addAll(updateSpec.getLibroCSVs().stream().map(mapperService::from).collect(Collectors.toList()));
             //
             autores.clear();
             autores.addAll(libreria.stream()
@@ -210,6 +215,7 @@ public class BibliotecaService {
                 }
             }).collect(Collectors.toList()));
             //
+            this.fechaActualizacion = updateSpec.getFechaActualizacion();
             log.info("Libros almacenados en la biblioteca: {}", libreria.size());
             //
             // Inicializamos el sumario
@@ -230,7 +236,9 @@ public class BibliotecaService {
                     .filter(Objects::nonNull)
                     .distinct()
                     .count();
-            sumario = new Sumario(buildVersion, numLibros, numIdiomas, numAutores, numGeneros);
+            sumario = new Sumario(buildVersion,
+                    fechaActualizacion.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(), numLibros, numIdiomas,
+                    numAutores, numGeneros);
         }
         return sumario;
     }

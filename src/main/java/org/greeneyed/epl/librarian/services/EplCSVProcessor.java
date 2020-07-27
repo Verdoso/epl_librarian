@@ -77,7 +77,6 @@ public class EplCSVProcessor {
     @Data
     public static class LibroCSV implements Serializable {
 
-
         private static final long serialVersionUID = 1L;
 
         private static final DateTimeFormatter PUBLICADO_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -225,7 +224,7 @@ public class EplCSVProcessor {
                 log.info("Descomprimiendo fichero EPL");
                 ZipEntry nextEntry = null;
                 while ((nextEntry = theZIS.getNextEntry()) != null) {
-                    mostrarDatosFicheroAProcesar(nextEntry);
+                    LocalDateTime fechaActualizacion = mostrarDatosFicheroAProcesar(nextEntry);
                     ColumnPositionMappingStrategy<LibroCSV> ms = new ColumnPositionMappingStrategy<>();
                     ms.setType(LibroCSV.class);
                     CsvToBean<LibroCSV> cb = new CsvToBeanBuilder<LibroCSV>(theReader).withType(LibroCSV.class)
@@ -247,9 +246,15 @@ public class EplCSVProcessor {
                         theFOS.flush();
                         log.info("Creado fichero de backup: {}", librosBCKFile.getAbsolutePath());
                     }
-                    return new UpdateSpec(Instant.ofEpochMilli(librosBCKFile.lastModified())
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDateTime(), librosCSVs);
+                    if (fechaActualizacion == null) {
+                        fechaActualizacion = Instant.ofEpochMilli(librosBCKFile.lastModified())
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDateTime();
+                    } else {
+                        librosBCKFile.setLastModified(
+                                fechaActualizacion.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+                    }
+                    return new UpdateSpec(fechaActualizacion, librosCSVs);
                 }
             } catch (IOException e) {
                 log.error("Error leyendo fichero: {}", e.getMessage());
@@ -261,13 +266,14 @@ public class EplCSVProcessor {
         return updateSpec;
     }
 
-    private void mostrarDatosFicheroAProcesar(ZipEntry nextEntry) {
+    private LocalDateTime mostrarDatosFicheroAProcesar(ZipEntry nextEntry) {
+        LocalDateTime fechaActualizacion = null;
         FileTime fileTime = nextEntry.getCreationTime();
         if (fileTime == null) {
             fileTime = nextEntry.getLastModifiedTime();
         }
         if (fileTime != null) {
-            LocalDateTime fechaActualizacion = Instant.ofEpochMilli(fileTime.toMillis())
+            fechaActualizacion = Instant.ofEpochMilli(fileTime.toMillis())
                     .atZone(ZoneId.systemDefault())
                     .toLocalDateTime();
             log.info("Procesando fichero {} con fecha {}", nextEntry.getName(),
@@ -275,6 +281,7 @@ public class EplCSVProcessor {
         } else {
             log.info("Procesando fichero {}. Fecha no definida en el comprimido", nextEntry.getName());
         }
+        return fechaActualizacion;
     }
 
     public UpdateSpec updateFromEPL() {
@@ -341,8 +348,7 @@ public class EplCSVProcessor {
     }
 
     private UpdateSpec procesarFicheroManual(UpdateSpec updateSpec, File librosEPL) {
-        try (FileInputStream theFIS = new FileInputStream(
-                new File(getTempDirectory().toFile(), "epublibre_csv.zip"))) {
+        try (FileInputStream theFIS = new FileInputStream(new File(getTempDirectory().toFile(), "epublibre_csv.zip"))) {
             updateSpec = procesarEplCSV(theFIS);
         } catch (IOException e) {
             log.error("Error procesando descarga manual: {} : {}", librosEPL.getAbsoluteFile(), e.getMessage());
