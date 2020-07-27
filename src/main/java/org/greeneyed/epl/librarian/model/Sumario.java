@@ -8,8 +8,9 @@ import lombok.Data;
 @Data
 @JsonInclude(Include.NON_NULL)
 public class Sumario {
-	private final int libros;
-	private final int idiomas;
-	private final int autores;
-	private final int generos;
+    private final String buildVersion;
+    private final int libros;
+    private final int idiomas;
+    private final int autores;
+    private final int generos;
 }
