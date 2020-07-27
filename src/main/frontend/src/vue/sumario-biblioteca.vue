@@ -2,7 +2,7 @@
     <section>
         <table class="brief_summary" v-if="this.sumario">
             <caption>
-            Sumario
+            Sumario <small>- {{ Intl.DateTimeFormat('es', {timeStyle: "short",dateStyle: "medium"}).format(this.fechaActualizacion) }}</small>
             </caption>
             <tr>
             <th>Libros</th>
@@ -29,6 +29,7 @@
             </td>
             </tr>
         </table>
+        <span></span>
     </section>
 </template>
 
@@ -42,7 +43,8 @@ Vue.use(Vuex);
 export default {
         data () {
             return {
-                sumario: null
+                sumario: null,
+                fechaActualizacion: null
             }
         },
         mounted() {
@@ -50,6 +52,7 @@ export default {
           .get('/librarian/sumario')
           .then(response => {
             this.sumario = response.data;
+            this.fechaActualizacion = new Date(this.sumario.fechaActualizacion);
             this.$store.commit("changeVersion", this.sumario.buildVersion);
           })
          .catch(e => {

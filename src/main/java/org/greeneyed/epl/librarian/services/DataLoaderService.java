@@ -49,18 +49,23 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
         boolean comprobaremosActualizacionAutomatica = actualizacionAutomatica;
         UpdateSpec updateSpec = eplCSVProcessor.processBackup();
         if (updateSpec.isEmpty()) {
-            comprobaremosActualizacionAutomatica = false;
             if(descargarDeEPL) {
                 updateSpec = eplCSVProcessor.updateFromEPL();
             }
             if (updateSpec.isEmpty()) {
                 updateSpec = eplCSVProcessor.updateFromEPLManual();
             }
-        }
-        if (comprobaremosActualizacionAutomatica) {
-            updateSpec = comprobarActualizacionAutomatica(updateSpec);
-        } else if (descargarDeEPL){
-            log.error("No hay backup y la actualizaci\u00f3n autom\u00e1tica est\u00e1 deshabilitada. Ouch!");
+        } else {
+            if (descargarDeEPL && comprobaremosActualizacionAutomatica) {
+                updateSpec = comprobarActualizacionAutomatica(updateSpec);
+            } else {
+                if (!descargarDeEPL) {
+                    log.info("La descarga desde EPL est\u00e1 deshabilitada");
+                }
+                if (!comprobaremosActualizacionAutomatica) {
+                    log.info("La comprobaci\u00f3n de actualizaciones autom\u00e1ticas est\u00e1 deshablitada");
+                }
+            }
         }
         //
         if (updateSpec.isEmpty()) {
@@ -68,7 +73,7 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
         } else {
             log.info("Preparando {} libros de la descarga con fecha {}", updateSpec.getLibroCSVs().size(),
                     DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(updateSpec.getFechaActualizacion()));
-            bibliotecaService.update(updateSpec.getLibroCSVs());
+            bibliotecaService.update(updateSpec);
             log.info("EPL Librarian inicializado");
             abrirEnNavegador();
         }
