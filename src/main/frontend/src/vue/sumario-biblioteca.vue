@@ -55,15 +55,15 @@ export default {
             this.fechaActualizacion = new Date(this.sumario.fechaActualizacion);
             this.$store.commit("changeVersion", this.sumario.buildVersion);
           })
-            .catch(e => {
-                this.$buefy.notification.open({
-                    type: 'is-danger'
-                    , duration: 5000
-                    , message:'Error mostrando sumario: ' + e
-                    , hasIcon: true
-                })
-                console.error(e)
-            });
+         .catch(e => {
+             this.$buefy.notification.open({
+                 type: 'is-danger'
+                 , duration: 5000
+                 , message:'Error mostrando sumario: ' + e
+                 , hasIcon: true
+             })
+             console.error(e)
+         });
         },
     }
 </script>
