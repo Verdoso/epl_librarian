@@ -68,7 +68,7 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
         } else {
             log.info("Preparando {} libros de la descarga con fecha {}", updateSpec.getLibroCSVs().size(),
                     DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(updateSpec.getFechaActualizacion()));
-            bibliotecaService.update(updateSpec.getLibroCSVs());
+            bibliotecaService.update(updateSpec);
             log.info("EPL Librarian inicializado");
             abrirEnNavegador();
         }
