@@ -2,7 +2,7 @@
     <section>
         <table class="brief_summary" v-if="this.sumario">
             <caption>
-            Sumario <small>- {{ Intl.DateTimeFormat('es', {timeStyle: "medium",dateStyle: "short"}).format(this.fechaActualizacion) }}</small>
+            Sumario <small>- {{ Intl.DateTimeFormat('es', {timeStyle: "short",dateStyle: "medium"}).format(this.fechaActualizacion) }}</small>
             </caption>
             <tr>
             <th>Libros</th>
