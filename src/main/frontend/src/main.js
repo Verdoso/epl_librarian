@@ -40,11 +40,15 @@ const store = new Vuex.Store({
   lastUpdate: null,
   autorfilter: null,
   generofilter: null,
-  idiomafilter: null
+  idiomafilter: null,
+  buildVersion: null
   },
   mutations: {
     markUpdate (state) {
       state.lastUpdate = new Date()
+    },
+    changeVersion (state,newBuildVersion) {
+      state.buildVersion = newBuildVersion
     },
     changeTab (state,newTab) {
       state.currentTab = newTab
@@ -69,7 +73,8 @@ var app = new Vue({
       currentTab: this.$store.state.currentTab,
       autorfilter: this.$store.state.autorfilter,
       generofilter: this.$store.state.generofilter,
-      idiomafilter: this.$store.state.idiomafilter
+      idiomafilter: this.$store.state.idiomafilter,
+      buildVersion: this.$store.state.buildVersion
     }
   },
   mounted() {

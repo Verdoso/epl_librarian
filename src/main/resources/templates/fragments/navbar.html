@@ -7,7 +7,7 @@
     <!-- Navigation -->
     <header th:fragment="navbar" class="align-items-start app-header flex-column flex-md-row navbar navbar-expand-md navbar-light">
         <div class="align-items-baseline d-flex flex-row navbar-brand p-lg-3 pl-3 pr-3 pt-3">
-            <a class="navbar-brand" th:href="@{/librarian/}">EPL Librarian</a>
+            <a class="navbar-brand" th:href="@{/librarian/}"><span style="font-size: 1.5em;">EPL Librarian</span><span style="font-size: .75em;"> - {{ this.$store.state.buildVersion }}</span></a>
             <button class="collapsed ml-auto navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#side-menu-wrapper" aria-controls="side-menu" aria-expanded="false"
                     aria-label="Toggle navigation">

@@ -33,7 +33,11 @@
 </template>
 
 <script>
+import Vue from "vue";
 import axios from "axios";
+import Vuex from "vuex";
+
+Vue.use(Vuex);
 
 export default {
         data () {
@@ -42,11 +46,12 @@ export default {
             }
         },
         mounted() {
-        	axios
-        	.get('/librarian/sumario')
-        	.then(response => {
-        		this.sumario = response.data;
-        	})
+          axios
+          .get('/librarian/sumario')
+          .then(response => {
+            this.sumario = response.data;
+            this.$store.commit("changeVersion", this.sumario.buildVersion);
+          })
             .catch(e => {
                 this.$buefy.notification.open({
                     type: 'is-danger'
