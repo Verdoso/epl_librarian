@@ -323,8 +323,7 @@ public class EplCSVProcessor {
                 showErrorServidorSobrecargado();
             }
             try {
-                // TODO temp
-                // Files.delete(librosEPL.toPath());
+                Files.delete(librosEPL.toPath());
             } catch (Exception e) {
                 log.error("No se ha podido borrar el fichero {} : {}", librosEPL.getAbsolutePath(), e.getMessage());
             }
