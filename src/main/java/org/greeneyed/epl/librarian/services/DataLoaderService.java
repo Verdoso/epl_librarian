@@ -56,12 +56,16 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
             if (updateSpec.isEmpty()) {
                 updateSpec = eplCSVProcessor.updateFromEPLManual();
             }
-        }
-        if(descargarDeEPL) {
-            if (comprobaremosActualizacionAutomatica) {
+        } else {
+            if (descargarDeEPL && comprobaremosActualizacionAutomatica) {
                 updateSpec = comprobarActualizacionAutomatica(updateSpec);
             } else {
-                log.error("No hay backup y la actualizaci\u00f3n autom\u00e1tica est\u00e1 deshabilitada. Ouch!");
+                if (!descargarDeEPL) {
+                    log.info("La descarga desde EPL est\u00e1 deshabilitada");
+                }
+                if (!comprobaremosActualizacionAutomatica) {
+                    log.info("La comprobaci\u00f3n de actualizaciones autom\u00e1ticas est\u00e1 deshablitada");
+                }
             }
         }
         //
