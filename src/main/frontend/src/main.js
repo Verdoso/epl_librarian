@@ -16,6 +16,7 @@ import './sb-admin-2'
 import Vue from 'vue'
 import Buefy from 'buefy'
 import Vuex from 'vuex'
+import axios from "axios";
 
 Vue.use(Buefy)
 Vue.use(Vuex)
@@ -75,6 +76,31 @@ var app = new Vue({
       generofilter: this.$store.state.generofilter,
       idiomafilter: this.$store.state.idiomafilter,
       buildVersion: this.$store.state.buildVersion
+    }
+  },
+  methods: {
+    salir(){
+      console.log('Saliendo...')
+          axios
+          .get('/librarian/exit')
+          .then(response => {
+            console.log('Aplicación notificada, saliendo')
+             this.$buefy.notification.open({
+                 type: 'is-info'
+                 , duration: 5000
+                 , message:'La aplicación ha sido notificada, ya puede cerrar esta ventana.'
+                 , hasIcon: true
+             })
+          })
+         .catch(e => {
+             this.$buefy.notification.open({
+                 type: 'is-danger'
+                 , duration: 5000
+                 , message:'Error notificando aplicación: ' + e
+                 , hasIcon: true
+             })
+             console.error(e)
+         });
     }
   },
   mounted() {

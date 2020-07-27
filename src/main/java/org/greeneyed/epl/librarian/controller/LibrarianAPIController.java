@@ -18,6 +18,8 @@ import org.greeneyed.epl.librarian.services.BibliotecaService.IDIOMA_ORDERING;
 import org.greeneyed.epl.librarian.services.model.BusquedaElemento;
 import org.greeneyed.epl.librarian.services.model.BusquedaLibro;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,15 +38,31 @@ import lombok.extern.slf4j.Slf4j;
 public class LibrarianAPIController {
 
     private static final String ERROR_DETALLADO = "Error detallado";
-    private final BibliotecaService bibliotecaService;
     private static final String DEFAULT_ORDER = "POR_TITULO";
     private static final String DEFAULT_ORDER_AUTOR = "POR_AUTOR";
     private static final String DEFAULT_ORDER_GENERO = "POR_GENERO";
     private static final String DEFAULT_ORDER_IDIOMA = "POR_IDIOMA";
 
+    private final BibliotecaService bibliotecaService;
+    private final ApplicationContext applicationContext;
+
     @GetMapping(value = "/sumario")
     public ResponseEntity<Sumario> sumario() {
         return ResponseEntity.ok(bibliotecaService.getSumario());
+    }
+
+    @GetMapping(value = "/exit")
+    public ResponseEntity<String> exit() {
+        new Thread(() -> {
+            try {
+                Thread.sleep(2_000);
+                log.warn("Cerrando aplicación...");
+                SpringApplication.exit(applicationContext, () -> 0);
+            } catch (InterruptedException e) {
+                log.error("Error esperando para cerrar la app");
+            }
+        }).start();
+        return ResponseEntity.ok("OK");
     }
 
     @GetMapping(value = "/libros")
