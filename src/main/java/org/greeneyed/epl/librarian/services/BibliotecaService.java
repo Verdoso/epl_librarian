@@ -29,6 +29,7 @@ import org.greeneyed.epl.librarian.services.EplCSVProcessor.LibroCSV;
 import org.greeneyed.epl.librarian.services.model.BusquedaElemento;
 import org.greeneyed.epl.librarian.services.model.BusquedaLibro;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.googlecode.cqengine.ConcurrentIndexedCollection;
@@ -127,6 +128,9 @@ public class BibliotecaService {
         private final SimpleAttribute<Libro, String> sortAttribute = Libro.LIBRO_TITULO;
     }
 
+    @Value("${git.build.version}")
+    private String buildVersion;
+
     private final MapperService mapperService;
     private final PreferencesService preferencesService;
 
@@ -159,6 +163,8 @@ public class BibliotecaService {
         //
         idiomas.addIndex(UniqueIndex.onAttribute(Idioma.IDIOMA_ID));
         idiomas.addIndex(SuffixTreeIndex.onAttribute(Idioma.IDIOMA_NOMBRE));
+        //
+        log.info("Inicializando versi\u00f3n:{}", buildVersion);
     }
 
     public void update(List<LibroCSV> newLibros) {
@@ -224,7 +230,7 @@ public class BibliotecaService {
                     .filter(Objects::nonNull)
                     .distinct()
                     .count();
-            sumario = new Sumario(numLibros, numIdiomas, numAutores, numGeneros);
+            sumario = new Sumario(buildVersion, numLibros, numIdiomas, numAutores, numGeneros);
         }
         return sumario;
     }
