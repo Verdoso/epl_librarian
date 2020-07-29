@@ -27,7 +27,6 @@ import org.greeneyed.epl.librarian.model.Libro;
 import org.greeneyed.epl.librarian.model.Pagina;
 import org.greeneyed.epl.librarian.model.PuedeSerFavorito;
 import org.greeneyed.epl.librarian.model.Sumario;
-import org.greeneyed.epl.librarian.services.EplCSVProcessor.LibroCSV;
 import org.greeneyed.epl.librarian.services.EplCSVProcessor.UpdateSpec;
 import org.greeneyed.epl.librarian.services.model.BusquedaElemento;
 import org.greeneyed.epl.librarian.services.model.BusquedaLibro;
