@@ -253,13 +253,13 @@ public class BibliotecaService {
             if (busquedaLibro.isSoloAutoresFavoritos() || busquedaLibro.isSoloIdiomasFavoritos()
                     || busquedaLibro.isSoloGenerosFavoritos()) {
                 Predicate<Libro> filterPredicate = libro -> true;
-                if (busquedaLibro.isSoloAutoresFavoritos()) {
+                if (preferencesService.canAplyAutoresFavoritos() && busquedaLibro.isSoloAutoresFavoritos()) {
                     filterPredicate = filterPredicate.and(this::isAutorFavorito);
                 }
-                if (busquedaLibro.isSoloIdiomasFavoritos()) {
+                if (preferencesService.canAplyIdiomasFavoritos() &&busquedaLibro.isSoloIdiomasFavoritos()) {
                     filterPredicate = filterPredicate.and(this::isIdiomaFavorito);
                 }
-                if (busquedaLibro.isSoloGenerosFavoritos()) {
+                if (preferencesService.canAplyGenerosFavoritos() &&busquedaLibro.isSoloGenerosFavoritos()) {
                     filterPredicate = filterPredicate.and(this::isGeneroFavorito);
                 }
                 pagina.setTotal((int) queryResult.stream().filter(filterPredicate).count());

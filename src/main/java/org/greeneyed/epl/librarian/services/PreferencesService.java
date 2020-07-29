@@ -135,7 +135,7 @@ public class PreferencesService {
             if (autoresPreferidosToRemove != null) {
                 this.autoresPreferidos.removeAll(autoresPreferidosToRemove);
             }
-            
+
             preferences.setProperty(AUTORES_PREFERIDOS_KEY,
                     this.autoresPreferidos.stream().collect(Collectors.joining(",")));
             guardarPreferencias();
@@ -177,7 +177,7 @@ public class PreferencesService {
                 this.generosPreferidos.removeAll(generosNoPreferidosToRemove);
             }
             preferences.setProperty(GENEROS_PREFERIDOS_KEY,
-            		this.generosPreferidos.stream().collect(Collectors.joining(",")));
+                    this.generosPreferidos.stream().collect(Collectors.joining(",")));
             guardarPreferencias();
         } catch (Exception e) {
             log.error("Error parseando generos preferidos: {}", e.getMessage());
@@ -248,5 +248,17 @@ public class PreferencesService {
 
     public boolean checkGeneroFavorito(String nombre) {
         return generosPreferidos.contains(nombre);
+    }
+
+    public boolean canAplyAutoresFavoritos() {
+        return !autoresPreferidos.isEmpty();
+    }
+
+    public boolean canAplyIdiomasFavoritos() {
+        return !idiomasPreferidos.isEmpty();
+    }
+
+    public boolean canAplyGenerosFavoritos() {
+        return !generosPreferidos.isEmpty();
     }
 }
