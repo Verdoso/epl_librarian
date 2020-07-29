@@ -1,4 +1,4 @@
-# epl_librarian
+# EPL Librarian
 Repositorio para una mini-aplicación para consultar localmente el catálogo de EPL
 
 ## Para ejecutar
