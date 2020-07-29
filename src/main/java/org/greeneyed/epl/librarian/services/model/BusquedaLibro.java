@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.greeneyed.epl.librarian.model.Libro;
 import org.greeneyed.epl.librarian.services.BibliotecaService.BOOK_ORDERING;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.googlecode.cqengine.attribute.Attribute;
 import com.googlecode.cqengine.query.Query;
@@ -22,7 +21,9 @@ import com.googlecode.cqengine.query.QueryFactory;
 import com.googlecode.cqengine.query.option.QueryOptions;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Data
 public class BusquedaLibro {
     private final int numeroPagina;
@@ -63,6 +64,7 @@ public class BusquedaLibro {
                 query = and(query, partialQueries.get(i));
             }
         }
+        log.debug("Query: {}", query);
         return query;
     }
 
