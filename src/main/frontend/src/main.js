@@ -38,7 +38,7 @@ Vue.component('navigation-option', navigationOption)
 const store = new Vuex.Store({
   state: {
   currentTab: 'biblioteca',
-  lastUpdate: null,
+  lastupdate: null,
   autorfilter: null,
   generofilter: null,
   idiomafilter: null,
@@ -46,7 +46,7 @@ const store = new Vuex.Store({
   },
   mutations: {
     markUpdate (state) {
-      state.lastUpdate = new Date()
+      state.lastupdate = new Date()
     },
     changeVersion (state,newBuildVersion) {
       state.buildVersion = newBuildVersion

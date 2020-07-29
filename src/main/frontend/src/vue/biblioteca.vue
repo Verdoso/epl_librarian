@@ -168,7 +168,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 export default {
-  props : ['autorfilter','generofilter','idiomafilter'],
+  props : ['autorfilter','generofilter','idiomafilter','lastupdate'],
   data() {
     return {
       data: [],
@@ -177,7 +177,6 @@ export default {
       currentAutorFilter: null,
       currentGeneroFilter: null,
       currentIdiomaFilter: null,
-      lastUpdate: null,
       sortField: "POR_TITULO",
       sortOrder: "asc",
       defaultSortOrder: "asc",
@@ -350,7 +349,7 @@ export default {
     }
   },
   watch: {
-    lastUpdate: function() {
+    lastupdate: function() {
       if(this.soloAutoresFavoritos || this.soloIdiomasFavoritos || this.soloGenerosFavoritos) {
         this.loadAsyncData();
       }
