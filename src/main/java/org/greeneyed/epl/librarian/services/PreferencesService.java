@@ -17,9 +17,11 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import lombok.Data;
@@ -83,7 +85,7 @@ public class PreferencesService {
         Set<String> result = Collections.emptySet();
         try {
             if (preferences.containsKey(IDIOMAS_PREFERIDOS_KEY)) {
-                result = new HashSet<>(Arrays.asList(preferences.getProperty(IDIOMAS_PREFERIDOS_KEY).split(",")));
+                result = new HashSet<>(Stream.of(preferences.getProperty(IDIOMAS_PREFERIDOS_KEY).split(",")).filter(StringUtils::isNotBlank).collect(Collectors.toList()));
             }
         } catch (Exception e) {
             log.error("Error parseando idioma preferidos: {}", e.getMessage());
@@ -99,7 +101,7 @@ public class PreferencesService {
         Set<String> result = Collections.emptySet();
         try {
             if (preferences.containsKey(AUTORES_PREFERIDOS_KEY)) {
-                result = new HashSet<>(Arrays.asList(preferences.getProperty(AUTORES_PREFERIDOS_KEY).split(",")));
+                result = new HashSet<>(Stream.of(preferences.getProperty(AUTORES_PREFERIDOS_KEY).split(",")).filter(StringUtils::isNotBlank).collect(Collectors.toList()));
             }
         } catch (Exception e) {
             log.error("Error parseando autores preferidos: {}", e.getMessage());
@@ -115,7 +117,7 @@ public class PreferencesService {
         Set<String> result = Collections.emptySet();
         try {
             if (preferences.containsKey(GENEROS_PREFERIDOS_KEY)) {
-                result = new HashSet<>(Arrays.asList(preferences.getProperty(GENEROS_PREFERIDOS_KEY).split(",")));
+                result = new HashSet<>(Stream.of(preferences.getProperty(GENEROS_PREFERIDOS_KEY).split(",")).filter(StringUtils::isNotBlank).collect(Collectors.toList()));
             }
         } catch (Exception e) {
             log.error("Error parseando autores preferidos: {}", e.getMessage());
@@ -135,7 +137,6 @@ public class PreferencesService {
             if (autoresPreferidosToRemove != null) {
                 this.autoresPreferidos.removeAll(autoresPreferidosToRemove);
             }
-
             preferences.setProperty(AUTORES_PREFERIDOS_KEY,
                     this.autoresPreferidos.stream().collect(Collectors.joining(",")));
             guardarPreferencias();
@@ -255,7 +256,8 @@ public class PreferencesService {
     }
 
     public boolean canAplyIdiomasFavoritos() {
-        return !idiomasPreferidos.isEmpty();
+        final boolean result = idiomasPreferidos.isEmpty();
+        return !result;
     }
 
     public boolean canAplyGenerosFavoritos() {
