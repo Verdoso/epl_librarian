@@ -2,16 +2,22 @@
 Repositorio para una mini-aplicación para consultar localmente el catálogo de EPL
 
 ## Para ejecutar
-Simplemente descargar el binario y ejecutar en un terminal con java -jar epl-librarian-version.jar. Al acabar de preparar el catalogo, debería abrirse automáticamente una ventana del navegador a la direccion http://localhost:7070/librarian/. Ojo que si hacemos doble-click en Windows es posible que nos arranque la aplicación en segundo plano y para matarla tengamos que usar el botón "Cerrar" de la aplicación (arriba a la derecha) o usar el "Administrador de tareas" de Windows.
+Simplemente descargar el fichero zip, descomprimirlo en un directorio sin espacios y ejecutar el fichero .cmd o .sh dependiendo de si estamos en Windows o \*nix. También podemos ejecutarlo directamente en un terminal con el comando java -jar epl_librarian-version.jar. Al acabar de preparar el catalogo, debería abrirse automáticamente una ventana del navegador apuntando a la direccion http://localhost:7070/librarian/. Ojo que si hacemos doble-click en Windows es posible que nos arranque la aplicación en segundo plano y para matarla tengamos que usar el botón "Cerrar" de la aplicación (arriba a la derecha) o usar el "Administrador de tareas" de Windows.
 
 ### Requisitos
 * Tener instalado Java 8 o superior
+* Tener configurado el comando java en el path (lo podemos comprobar ejecutando java -version en un terminal)
 
 ## Actualizaciones de ePubLlibre
 Hay que tener en cuenta que:
-* El programa almacena el catalogo en el directorio temporal del usuario
-* Si el catalogo almacenado tienes mas de 24, intentará descargarse una versión nueva desde ePubLlibre
-* En caso de no poder descargarse una versión nueva, intenta cargar un fichero que se haya descargado manualmente y colocado en el directorio temporal.
+* El programa almacena los ficheros del catalogo en el directorio temporal del usuario
+* Si el catalogo almacenado tienes mas de 24h, intentará descargarse una versión nueva desde ePubLlibre
+* En caso de no poder descargarse una versión nueva, intentará cargar un fichero que se haya descargado manualmente y colocado en el directorio temporal.
+
+## Uso avanzado
+* En caso de que no queramos que intente descargarse la versión de ePubLlibre, podemos añadirle al arrancar la propiedad -Ddescarga_epl=false. En ese caso intentará usar el backup o el fichero descargado manualmente, pero en ningún caso intentará acceder a ePubLlibre.
+* Si queremos incrementar el número de horas antes de descargar una versión de ePubLlibre (por defecto 24h) podemos incrementarlo, por ejemplo a 48h, añadiendo la propiedad -Dantiguedad_maxima=48 al arranque.
+* Si queremos que directamente ignore la antiguedad del backup y si tiene uno lo use, podemos hacerlo añadiendo la propiedad -Dactualizacion_automatica=false al arranque. Si no hay backup intentará la descarga de ePubLlibre, pero si lo hay no la intentará.
 
 ## Funcionamiento
 El programa ofrece varios listados
