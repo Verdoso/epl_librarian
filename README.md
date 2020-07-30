@@ -1,3 +1,7 @@
+[![made-with-java](https://img.shields.io/badge/Made%20with-Java-ca0000.svg)](https://openjdk.java.net/)
+[![made-with-vue](https://img.shields.io/badge/Made%20with-Vue.js-4fc08d.svg)](https://vuejs.org/)
+[![made-with-vue](https://img.shields.io/badge/Made%20with-Spring%20Boot-348c25.svg)](https://spring.io/projects/spring-boot)
+
 # EPL Librarian [![GitHub release](https://img.shields.io/github/release/Verdoso/epl_librarian.svg)](https://GitHub.com/Verdoso/epl_librarian/releases/)
 Repositorio para una mini-aplicación para consultar localmente el catálogo de EPL
 
