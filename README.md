@@ -1,4 +1,4 @@
-# EPL Librarian
+# EPL Librarian [![GitHub release](https://img.shields.io/github/release/Verdoso/epl_librarian.svg)](https://GitHub.com/Verdoso/epl_librarian/releases/)
 Repositorio para una mini-aplicación para consultar localmente el catálogo de EPL
 
 ## Para ejecutar
