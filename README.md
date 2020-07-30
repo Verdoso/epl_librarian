@@ -15,8 +15,8 @@ Hay que tener en cuenta que:
 * En caso de no poder descargarse una versión nueva, intentará cargar un fichero que se haya descargado manualmente y colocado en el directorio temporal.
 
 ## Uso avanzado
-* En caso de que no queramos que intente descargarse la versión de ePubLlibre, podemos añadirle al arrancar la propiedad ```-Ddescarga_epl=false```. En ese caso intentará usar el backup o el fichero descargado manualmente, pero en ningún caso intentará acceder a ePubLlibre.
-* Si queremos incrementar el número de horas antes de descargar una versión de ePubLlibre (por defecto 24h) podemos incrementarlo, por ejemplo a 48h, añadiendo la propiedad ```-Dantiguedad_maxima=48``` al arranque.
+* En caso de que no queramos que intente descargarse una versión nueva de la biblioteca de ePubLlibre, podemos añadir al arrancar la propiedad ```-Ddescarga_epl=false```. En ese caso intentará usar el backup o el fichero descargado manualmente, pero en ningún caso intentará acceder a ePubLlibre.
+* Si queremos incrementar el número de horas antes de descargar una una versión nueva de la biblioteca de ePubLlibre (por defecto 24h) podemos incrementarlo, por ejemplo a 48h, añadiendo la propiedad ```-Dantiguedad_maxima=48``` al arranque.
 * Si queremos que directamente ignore la antiguedad del backup y si tiene uno lo use, podemos hacerlo añadiendo la propiedad ```-Dactualizacion_automatica=false``` al arranque. Si no hay backup intentará la descarga de ePubLlibre, pero si lo hay no la intentará.
 
 ## Funcionamiento
