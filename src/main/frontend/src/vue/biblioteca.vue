@@ -402,11 +402,11 @@ export default {
         if(data) {
           this.fechaBase = new Date(data);
         }
+        this.loadAsyncData();
       })
       .catch(error => {
         throw error;
       });
-    this.loadAsyncData();
   }
 };
 </script>
