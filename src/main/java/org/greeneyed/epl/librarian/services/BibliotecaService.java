@@ -168,7 +168,7 @@ public class BibliotecaService {
         idiomas.addIndex(UniqueIndex.onAttribute(Idioma.IDIOMA_ID));
         idiomas.addIndex(SuffixTreeIndex.onAttribute(Idioma.IDIOMA_NOMBRE));
         //
-        log.info("Inicializando versi\u00f3n:{}", buildVersion);
+        log.info("Inicializando versi\u00f3n: {}", buildVersion);
     }
 
     public void update(UpdateSpec updateSpec) {
