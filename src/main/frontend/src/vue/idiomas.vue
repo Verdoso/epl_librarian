@@ -1,5 +1,15 @@
 <template>
   <section>
+    <div>
+      <b-field>
+        <p class="control">
+          <b-switch
+            v-model="soloIdiomasFavoritos"
+            @input="cambioIdiomasFavoritos()"
+          >Solo idiomas favoritos</b-switch>
+        </p>
+      </b-field>
+    </div>
     <b-table
       ref="table"
       :data="data"
@@ -54,7 +64,8 @@ export default {
       defaultSortOrder: "asc",
       page: 1,
       filters: null,
-      perPage: 15
+      perPage: 15,
+      soloIdiomasFavoritos: false
     };
   },
   methods: {
@@ -67,7 +78,8 @@ export default {
         `numero_pagina=${this.page}`,
         `desc=${this.sortOrder == "desc" ? "true" : "false"}`,
         `filtro_idioma=${this.filterOnCriteria("POR_IDIOMA")}`,
-        `por_pagina=${this.perPage}`
+        `por_pagina=${this.perPage}`,
+        `favoritos_idiomas=${this.soloIdiomasFavoritos}`
       ].join("&");
 
       this.loading = true;
@@ -79,7 +91,7 @@ export default {
           this.total = data.total;
           data.results.forEach(item => {
             this.data.push(item);
-            if(item.favorito) {
+            if (item.favorito) {
               this.checkedRows.push(item);
             }
           });
@@ -135,24 +147,38 @@ export default {
       this.$store.commit("changeTab", "biblioteca");
     },
     containsObject(obj, list) {
-      return list.some(elem => elem === obj)
+      return list.some(elem => elem === obj);
+    },
+    cambioIdiomasFavoritos() {
+      this.loadAsyncData();
     },
     guardarFavoritos() {
       var formData = new FormData();
-      formData.append('idiomasFavoritos',this.checkedRows.map(row => row.nombre).join(','))
-      formData.append('idiomasNoFavoritos',this.data.filter(row => !this.containsObject(row,this.checkedRows)).map(row => row.nombre).join(','))
+      formData.append(
+        "idiomasFavoritos",
+        this.checkedRows.map(row => row.nombre).join(",")
+      );
+      formData.append(
+        "idiomasNoFavoritos",
+        this.data
+          .filter(row => !this.containsObject(row, this.checkedRows))
+          .map(row => row.nombre)
+          .join(",")
+      );
       axios
-        .post('/librarian/preferences/idiomasFavoritos', formData, {headers: { 'Content-Type': 'multipart/form-data;charset=UTF-8' }})
-        .then((response) => {
+        .post("/librarian/preferences/idiomasFavoritos", formData, {
+          headers: { "Content-Type": "multipart/form-data;charset=UTF-8" }
+        })
+        .then(response => {
           this.$store.commit("markUpdate");
         })
         .catch(error => {
           this.$buefy.notification.open({
-            type: 'is-danger'
-            , duration: 5000
-            , message:'Error almacenando idiomas favoritos: ' + e
-            , hasIcon: true
-          })
+            type: "is-danger",
+            duration: 5000,
+            message: "Error almacenando idiomas favoritos: " + e,
+            hasIcon: true
+          });
           throw error;
         });
     }
@@ -169,8 +195,8 @@ export default {
 </script>
 
 <style>
-  .idiomasFavoritosCounter {
-    text-align: right;
-    width: 4em;
-  }
+.idiomasFavoritosCounter {
+  text-align: right;
+  width: 4em;
+}
 </style>
