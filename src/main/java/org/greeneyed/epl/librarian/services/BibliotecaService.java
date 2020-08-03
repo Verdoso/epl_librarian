@@ -137,6 +137,7 @@ public class BibliotecaService {
 
     private final MapperService mapperService;
     private final PreferencesService preferencesService;
+    private final CalibreService calibreService;
 
     private final IndexedCollection<Libro> libreria = new ConcurrentIndexedCollection<>();
     private final IndexedCollection<Autor> autores = new ConcurrentIndexedCollection<>();
@@ -177,7 +178,9 @@ public class BibliotecaService {
             // Limpiamos y añadimos los elementos individuales para que no haya referencias
             // sueltas
             libreria.clear();
-            libreria.addAll(updateSpec.getLibroCSVs().stream().map(mapperService::from).collect(Collectors.toList()));
+            final List<Libro> libros = updateSpec.getLibroCSVs().stream().map(mapperService::from).collect(Collectors.toList());
+            calibreService.updateLibros(libros);
+            libreria.addAll(libros);
             //
             autores.clear();
             autores.addAll(libreria.stream()

@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +34,8 @@ public class PreferencesService {
     private static final String IDIOMAS_PREFERIDOS_KEY = "idiomas_preferidos";
     private static final String AUTORES_PREFERIDOS_KEY = "autores_preferidos";
     private static final String GENEROS_PREFERIDOS_KEY = "generos_preferidos";
+
+    private static final String CALIBRE_HOME_KEY = "calibre_home";
 
     private static final String ERROR_DETALLADO = "Error detallado";
 
@@ -85,7 +86,9 @@ public class PreferencesService {
         Set<String> result = Collections.emptySet();
         try {
             if (preferences.containsKey(IDIOMAS_PREFERIDOS_KEY)) {
-                result = new HashSet<>(Stream.of(preferences.getProperty(IDIOMAS_PREFERIDOS_KEY).split(",")).filter(StringUtils::isNotBlank).collect(Collectors.toList()));
+                result = new HashSet<>(Stream.of(preferences.getProperty(IDIOMAS_PREFERIDOS_KEY).split(","))
+                        .filter(StringUtils::isNotBlank)
+                        .collect(Collectors.toList()));
             }
         } catch (Exception e) {
             log.error("Error parseando idioma preferidos: {}", e.getMessage());
@@ -101,7 +104,9 @@ public class PreferencesService {
         Set<String> result = Collections.emptySet();
         try {
             if (preferences.containsKey(AUTORES_PREFERIDOS_KEY)) {
-                result = new HashSet<>(Stream.of(preferences.getProperty(AUTORES_PREFERIDOS_KEY).split(",")).filter(StringUtils::isNotBlank).collect(Collectors.toList()));
+                result = new HashSet<>(Stream.of(preferences.getProperty(AUTORES_PREFERIDOS_KEY).split(","))
+                        .filter(StringUtils::isNotBlank)
+                        .collect(Collectors.toList()));
             }
         } catch (Exception e) {
             log.error("Error parseando autores preferidos: {}", e.getMessage());
@@ -117,7 +122,9 @@ public class PreferencesService {
         Set<String> result = Collections.emptySet();
         try {
             if (preferences.containsKey(GENEROS_PREFERIDOS_KEY)) {
-                result = new HashSet<>(Stream.of(preferences.getProperty(GENEROS_PREFERIDOS_KEY).split(",")).filter(StringUtils::isNotBlank).collect(Collectors.toList()));
+                result = new HashSet<>(Stream.of(preferences.getProperty(GENEROS_PREFERIDOS_KEY).split(","))
+                        .filter(StringUtils::isNotBlank)
+                        .collect(Collectors.toList()));
             }
         } catch (Exception e) {
             log.error("Error parseando autores preferidos: {}", e.getMessage());
@@ -126,6 +133,33 @@ public class PreferencesService {
             readLock.unlock();
         }
         return result;
+    }
+
+    public Optional<File> getBDDCalibre() {
+        File calibre = null;
+        readLock.lock();
+        try {
+            if (preferences.containsKey(CALIBRE_HOME_KEY)) {
+                File temp = new File(preferences.getProperty(CALIBRE_HOME_KEY));
+                if (temp.exists() && temp.isDirectory()) {
+                    File bddCalibre = new File(temp, "metadata.db");
+                    if (bddCalibre.exists() && bddCalibre.isFile() && bddCalibre.canRead()) {
+                        calibre = bddCalibre;
+                        log.info("Base de datos de Calibre encontrada correctamente: {}", bddCalibre.getAbsolutePath());
+                    } else {
+                        log.error(
+                                "La BDD no se encuentra en el directorio especificado o no es legible: {}. Ignoraremos la configuraci\u00f3n de calibre",
+                                bddCalibre.getAbsolutePath());
+                    }
+                } else {
+                    log.error("El directorio especificado no existe: {}. Ignoraremos la configuraci\u00f3n de calibre",
+                            temp.getAbsolutePath());
+                }
+            }
+        } finally {
+            readLock.unlock();
+        }
+        return Optional.ofNullable(calibre);
     }
 
     public void actualizarAutoresPreferidos(Set<String> autoresPreferidosToAdd, Set<String> autoresPreferidosToRemove) {
@@ -148,7 +182,8 @@ public class PreferencesService {
         }
     }
 
-    public void actualizarIdiomasPreferidos(Set<String> idiomasPreferidosToAdd, Set<String> idiomasNoPreferidosToRemove) {
+    public void actualizarIdiomasPreferidos(Set<String> idiomasPreferidosToAdd,
+            Set<String> idiomasNoPreferidosToRemove) {
         writeLock.lock();
         try {
             if (idiomasPreferidosToAdd != null) {
@@ -168,7 +203,8 @@ public class PreferencesService {
         }
     }
 
-    public void actualizarGenerosPreferidos(Set<String> generosPreferidosToAdd, Set<String> generosNoPreferidosToRemove) {
+    public void actualizarGenerosPreferidos(Set<String> generosPreferidosToAdd,
+            Set<String> generosNoPreferidosToRemove) {
         writeLock.lock();
         try {
             if (generosPreferidosToAdd != null) {
