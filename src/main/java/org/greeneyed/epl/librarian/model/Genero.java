@@ -4,10 +4,8 @@ import static com.googlecode.cqengine.query.QueryFactory.attribute;
 
 import com.googlecode.cqengine.attribute.SimpleAttribute;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Data
