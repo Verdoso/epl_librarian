@@ -102,9 +102,10 @@ public class LibrarianAPIController {
             @RequestParam(name = "por_pagina", defaultValue = "10") int porPagina,
             @RequestParam(name = "desc", defaultValue = "false") boolean reversed,
             @RequestParam(name = "orden", defaultValue = DEFAULT_ORDER_AUTOR) AUTOR_ORDERING ordering,
+            @RequestParam(name = "favoritos_autores", required = false) boolean soloAutoresFavoritos,
             @RequestParam(name = "filtro_autor", required = false) String filtroAutor) {
         BusquedaElemento<Autor> busquedaAutor = new BusquedaElemento<>(numeroPagina, porPagina, ordering, reversed,
-                filtroAutor);
+                soloAutoresFavoritos, filtroAutor);
         log.trace("BusquedaAutor: {}", busquedaAutor);
         return ResponseEntity.ok(bibliotecaService.paginaAutor(busquedaAutor));
     }
@@ -115,9 +116,10 @@ public class LibrarianAPIController {
             @RequestParam(name = "por_pagina", defaultValue = "10") int porPagina,
             @RequestParam(name = "desc", defaultValue = "false") boolean reversed,
             @RequestParam(name = "orden", defaultValue = DEFAULT_ORDER_GENERO) GENERO_ORDERING ordering,
+            @RequestParam(name = "favoritos_generos", required = false) boolean soloGenerosFavoritos,
             @RequestParam(name = "filtro_genero", required = false) String filtroGenero) {
         BusquedaElemento<Genero> busquedaGenero = new BusquedaElemento<>(numeroPagina, porPagina, ordering, reversed,
-                filtroGenero);
+                soloGenerosFavoritos, filtroGenero);
         log.trace("BusquedaGenero: {}", busquedaGenero);
         return ResponseEntity.ok(bibliotecaService.paginaGenero(busquedaGenero));
     }
@@ -128,9 +130,10 @@ public class LibrarianAPIController {
             @RequestParam(name = "por_pagina", defaultValue = "10") int porPagina,
             @RequestParam(name = "desc", defaultValue = "false") boolean reversed,
             @RequestParam(name = "orden", defaultValue = DEFAULT_ORDER_IDIOMA) IDIOMA_ORDERING ordering,
+            @RequestParam(name = "favoritos_idiomas", required = false) boolean soloIdiomasFavoritos,
             @RequestParam(name = "filtro_idioma", required = false) String filtroIdioma) {
         BusquedaElemento<Idioma> busquedaIdioma = new BusquedaElemento<>(numeroPagina, porPagina, ordering, reversed,
-                filtroIdioma);
+                soloIdiomasFavoritos, filtroIdioma);
         log.trace("BusquedaIdioma: {}", busquedaIdioma);
         return ResponseEntity.ok(bibliotecaService.paginaIdioma(busquedaIdioma));
     }
