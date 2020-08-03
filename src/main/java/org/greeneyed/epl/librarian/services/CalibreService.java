@@ -5,14 +5,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.function.BiConsumer;
 
 import javax.annotation.PostConstruct;
 
-import org.greeneyed.epl.librarian.model.Libro;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,9 +25,9 @@ public class CalibreService {
     private final PreferencesService preferencesService;
     private Optional<File> calibreMetadata = null;
     private String url;
-    private static final String BUSCA_TITULO_STMNT =
+    private static final String TODOS_LOS_LIBROS_STMNT =
             //
-            " SELECT DISTINCT group_concat(AUT.name, ' & '), BOK.id" +
+            " SELECT DISTINCT group_concat(AUT.name, ' & '), BOK.title,  BOK.id" +
             //
                     " FROM books BOK" +
                     //
@@ -41,8 +38,6 @@ public class CalibreService {
                     " INNER JOIN authors AUT" +
                     //
                     "   ON AUT.id = LNK.author" +
-                    //
-                    " WHERE LOWER(title) = ?" +
                     //
                     " GROUP BY BOK.id" +
                     //
@@ -70,35 +65,15 @@ public class CalibreService {
         }
     }
 
-    public void updateLibros(List<Libro> libros) {
+    public void updateLibros(BiConsumer<String, String> searchAndUpdateAction) {
         if (enabled) {
             try (Connection con = DriverManager.getConnection(url);
-                    PreparedStatement ps = con.prepareStatement(BUSCA_TITULO_STMNT)) {
-                for (Libro libro : libros) {
-                    log.debug("Comprobando libro {}", libro.getTitulo());
-                    ps.setString(1, libro.getTitulo().toLowerCase());
-                    boolean found = false;
-                    List<String> authorsFound = new ArrayList<>();
-                    try (ResultSet rs = ps.executeQuery();) {
-                        while (rs.next() && !found) {
-                            String autores = rs.getString(1);
-                            if (autores != null && libro.getAutor() !=null && autores.trim().equalsIgnoreCase(libro.getAutor().trim())) {
-                                found = true;
-                            } else {
-                                authorsFound.add(autores);
-                            }
-                        }
-                        if(!found && !authorsFound.isEmpty()) {
-                            log.info(
-                                    "Libro con mismo título ({}) encontrado en Calibre pero con distintos autores. {} != {}",
-                                    libro.getTitulo(), libro.getAutor(), authorsFound.stream().collect(Collectors.joining(", ")));
-                        }
-                    }
-                    if (found) {
-                        log.debug("Libro encontrado en Calibre: {}", libro.getTitulo());
-                        libro.setInCalibre(true);
-                    }
-
+                    PreparedStatement ps = con.prepareStatement(TODOS_LOS_LIBROS_STMNT);
+                    ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String titulo = rs.getString(2);
+                    String autores = rs.getString(1);
+                    searchAndUpdateAction.accept(titulo, autores);
                 }
             } catch (Exception e) {
                 log.error("Error comprobando libros en base de datos de Calibre: {}", e.getMessage());

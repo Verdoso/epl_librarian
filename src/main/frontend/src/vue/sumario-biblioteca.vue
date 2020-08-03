@@ -30,6 +30,17 @@
             </tr>
         </table>
         <span></span>
+        <div class="brief_summary">
+            <button
+                :class="this.$store.state.calibreIntegration ? 'button is-link' : 'button is-light'">
+                <b-icon
+                    pack="fa"
+                    :icon="this.$store.state.calibreIntegration ? 'check' : 'times'"
+                ></b-icon>
+                <span>Integración con Calibre</span>
+                {{  }}
+            </button>
+        </div>
     </section>
 </template>
 
@@ -54,6 +65,7 @@ export default {
             this.sumario = response.data;
             this.fechaActualizacion = new Date(this.sumario.fechaActualizacion);
             this.$store.commit("changeVersion", this.sumario.buildVersion);
+            this.$store.commit("changeCalibreIntegration", this.sumario.integracionCalibreHabilitada);
           })
          .catch(e => {
              this.$buefy.notification.open({

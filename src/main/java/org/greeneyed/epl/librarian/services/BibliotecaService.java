@@ -8,11 +8,15 @@ import static com.googlecode.cqengine.query.QueryFactory.queryOptions;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -110,6 +114,9 @@ public class BibliotecaService {
         , POR_PUBLICADO(queryOptions(orderBy(ascending(Libro.LIBRO_PUBLICADO), ascending(Libro.LIBRO_TITULO))),
                 queryOptions(orderBy(descending(Libro.LIBRO_PUBLICADO), descending(Libro.LIBRO_TITULO))))
         //
+        , POR_CALIBRE(queryOptions(orderBy(ascending(Libro.LIBRO_EN_CALIBRE), ascending(Libro.LIBRO_TITULO))),
+                queryOptions(orderBy(descending(Libro.LIBRO_EN_CALIBRE), descending(Libro.LIBRO_TITULO))))
+        //
         , POR_AUTOR(queryOptions(orderBy(ascending(Libro.LIBRO_AUTOR))),
                 queryOptions(orderBy(descending(Libro.LIBRO_AUTOR))))
         //
@@ -159,6 +166,7 @@ public class BibliotecaService {
         libreria.addIndex(HashIndex.onAttribute(Libro.LIBRO_PUBLICADO));
         libreria.addIndex(SuffixTreeIndex.onAttribute(Libro.LIBRO_COLECCION));
         libreria.addIndex(SuffixTreeIndex.onAttribute(Libro.LIBRO_GENERO));
+        libreria.addIndex(HashIndex.onAttribute(Libro.LIBRO_EN_CALIBRE));
         //
         autores.addIndex(UniqueIndex.onAttribute(Autor.AUTOR_ID));
         autores.addIndex(SuffixTreeIndex.onAttribute(Autor.AUTOR_NOMBRE));
@@ -178,9 +186,12 @@ public class BibliotecaService {
             // Limpiamos y añadimos los elementos individuales para que no haya referencias
             // sueltas
             libreria.clear();
-            final List<Libro> libros = updateSpec.getLibroCSVs().stream().map(mapperService::from).collect(Collectors.toList());
-            calibreService.updateLibros(libros);
+            final List<Libro> libros = updateSpec.getLibroCSVs()
+                    .stream()
+                    .map(mapperService::from)
+                    .collect(Collectors.toList());
             libreria.addAll(libros);
+            calibreService.updateLibros(SEARCH_AND_UDPATE_BOOK);
             //
             autores.clear();
             autores.addAll(libreria.stream()
@@ -240,7 +251,7 @@ public class BibliotecaService {
                     .count();
             sumario = new Sumario(buildVersion,
                     fechaActualizacion.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(), numLibros, numIdiomas,
-                    numAutores, numGeneros);
+                    numAutores, numGeneros, calibreService.isEnabled());
         }
         return sumario;
     }
@@ -258,10 +269,10 @@ public class BibliotecaService {
                 if (preferencesService.canAplyAutoresFavoritos() && busquedaLibro.isSoloAutoresFavoritos()) {
                     filterPredicate = filterPredicate.and(this::isAutorFavorito);
                 }
-                if (preferencesService.canAplyIdiomasFavoritos() &&busquedaLibro.isSoloIdiomasFavoritos()) {
+                if (preferencesService.canAplyIdiomasFavoritos() && busquedaLibro.isSoloIdiomasFavoritos()) {
                     filterPredicate = filterPredicate.and(this::isIdiomaFavorito);
                 }
-                if (preferencesService.canAplyGenerosFavoritos() &&busquedaLibro.isSoloGenerosFavoritos()) {
+                if (preferencesService.canAplyGenerosFavoritos() && busquedaLibro.isSoloGenerosFavoritos()) {
                     filterPredicate = filterPredicate.and(this::isGeneroFavorito);
                 }
                 pagina.setTotal((int) queryResult.stream().filter(filterPredicate).count());
@@ -294,7 +305,7 @@ public class BibliotecaService {
         Pagina<O> pagina = new Pagina<>();
         readLock.lock();
         try (final ResultSet<O> queryResult = elementos.retrieve(busqueda.getQuery(), busqueda.getQueryOptions())) {
-            if(busqueda.isSoloFavoritos()) {
+            if (busqueda.isSoloFavoritos()) {
                 Predicate<O> filterPredicate = object -> esFavorito.apply(object.getNombre());
                 pagina.setTotal((int) queryResult.stream().filter(filterPredicate).count());
                 pagina.setResults(queryResult.stream()
@@ -328,4 +339,30 @@ public class BibliotecaService {
     private boolean isGeneroFavorito(Libro libro) {
         return preferencesService.checkGeneroFavorito(libro.getListaGeneros());
     }
+
+    private BiConsumer<String, String> SEARCH_AND_UDPATE_BOOK = (titulo, autores) -> {
+        List<Libro> aModificar = new ArrayList<>();
+        Set<String> autoresSet = Arrays.asList(autores.split(" & "))
+                .stream()
+                .map(Libro::flattenToAscii)
+                .collect(Collectors.toSet());
+        try (final com.googlecode.cqengine.resultset.ResultSet<Libro> queryResult = libreria
+                .retrieve(BusquedaLibro.getPartialQuery(Libro.flattenToAscii(titulo), Libro.LIBRO_TITULO))) {
+            queryResult.stream().forEach(libro -> {
+                Set<String> autoresSetLibro = libro.getListaAutores()
+                        .stream()
+                        .map(Libro::flattenToAscii)
+                        .collect(Collectors.toSet());
+                if(autoresSetLibro.containsAll(autoresSet) && autoresSet.containsAll(autoresSetLibro)) {
+                    aModificar.add(libro);
+                }
+            });
+        }
+        for (Libro libro : aModificar) {
+            log.debug("Libro encontrado en Calibre: {}", libro.getTitulo());
+            libro.setInCalibre(true);
+            libreria.remove(libro);
+            libreria.add(libro);
+        }
+    };
 }

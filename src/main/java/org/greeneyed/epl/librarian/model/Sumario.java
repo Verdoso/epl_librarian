@@ -14,4 +14,5 @@ public class Sumario {
     private final int idiomas;
     private final int autores;
     private final int generos;
+    private final boolean integracionCalibreHabilitada;
 }
