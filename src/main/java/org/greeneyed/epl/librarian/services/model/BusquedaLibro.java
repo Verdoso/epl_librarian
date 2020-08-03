@@ -68,14 +68,14 @@ public class BusquedaLibro {
         return query;
     }
 
-    private Query<Libro> getFechaQuery(final LocalDate criterio, final Attribute<Libro, ChronoLocalDate> campo) {
+    private static Query<Libro> getFechaQuery(final LocalDate criterio, final Attribute<Libro, ChronoLocalDate> campo) {
         if (criterio != null) {
             return QueryFactory.greaterThanOrEqualTo(campo, criterio);
         } else
             return null;
     }
 
-    private Query<Libro> getPartialQuery(final String criterio, final Attribute<Libro, String> campo) {
+    public static Query<Libro> getPartialQuery(final String criterio, final Attribute<Libro, String> campo) {
         if (StringUtils.isNotBlank(criterio)) {
             return contains(campo, Libro.flattenToAscii(criterio));
         } else

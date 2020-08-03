@@ -21,9 +21,9 @@
         <p class="control">
             <b-button class="button is-primary" @click="guardarFechaBase()">guardar</b-button>
             <b-switch v-model="soloNovedades" @input="cambioNovedades()">Solo novedades</b-switch>
-            <b-switch v-model="soloAutoresFavoritos" @input="cambioAutoresFavoritos()">Solo autores favoritos</b-switch>
-            <b-switch v-model="soloIdiomasFavoritos" @input="cambioIdiomasFavoritos()">Solo idiomas favoritos</b-switch>
-            <b-switch v-model="soloGenerosFavoritos" @input="cambioGenerosFavoritos()">Solo géneros favoritos</b-switch>
+            <b-switch v-model="soloAutoresFavoritos" @input="cambioAutoresFavoritos()">Autores favoritos</b-switch>
+            <b-switch v-model="soloIdiomasFavoritos" @input="cambioIdiomasFavoritos()">Idiomas favoritos</b-switch>
+            <b-switch v-model="soloGenerosFavoritos" @input="cambioGenerosFavoritos()">Géneros favoritos</b-switch>
         </p>
     </b-field>
     </div>
@@ -131,6 +131,20 @@
           width="10%"
         >{{ props.row.publicado.substring(2) }}</b-table-column>
 
+        <b-table-column
+          field="POR_CALIBRE"
+          label="Calibre"
+          :visible="integracioncalibre"
+          sortable
+          width="5%"
+        >
+          <b-icon
+              pack="fa"
+              :type="props.row.inCalibre ? 'is-success' : 'is-danger'"
+              :icon="props.row.inCalibre ? 'check' : 'times'"
+          ></b-icon>
+        </b-table-column>
+
       </template>
       <template slot="detail" slot-scope="props">
         <article class="media">
@@ -175,7 +189,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 export default {
-  props : ['autorfilter','generofilter','idiomafilter','lastupdate'],
+  props : ['autorfilter','generofilter','idiomafilter','lastupdate','integracioncalibre'],
   data() {
     return {
       data: [],

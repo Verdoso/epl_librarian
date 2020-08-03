@@ -6,7 +6,6 @@ import com.googlecode.cqengine.attribute.SimpleAttribute;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Data
