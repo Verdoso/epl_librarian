@@ -14,6 +14,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.googlecode.cqengine.attribute.SimpleAttribute;
 import com.googlecode.cqengine.attribute.SimpleNullableAttribute;
 
@@ -103,6 +104,15 @@ public class Libro {
     public List<String> getListaGeneros() {
         if (generos != null) {
             return Arrays.asList(generos.split(","));
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    @JsonProperty("magnet_ids")
+    public List<String> getListaMagnetIds() {
+        if (magnetId != null) {
+            return Arrays.asList(magnetId.split(", "));
         } else {
             return Collections.emptyList();
         }

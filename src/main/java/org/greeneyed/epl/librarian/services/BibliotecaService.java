@@ -294,12 +294,23 @@ public class BibliotecaService {
         Pagina<O> pagina = new Pagina<>();
         readLock.lock();
         try (final ResultSet<O> queryResult = elementos.retrieve(busqueda.getQuery(), busqueda.getQueryOptions())) {
-            pagina.setTotal(queryResult.size());
-            pagina.setResults(queryResult.stream()
-                    .skip((busqueda.getNumeroPagina() - 1) * (long) busqueda.getPorPagina())
-                    .limit(busqueda.getPorPagina())
-                    .peek(object -> object.setFavorito(esFavorito.apply(object.getNombre())))
-                    .collect(Collectors.toList()));
+            if(busqueda.isSoloFavoritos()) {
+                Predicate<O> filterPredicate = object -> esFavorito.apply(object.getNombre());
+                pagina.setTotal((int) queryResult.stream().filter(filterPredicate).count());
+                pagina.setResults(queryResult.stream()
+                        .filter(filterPredicate)
+                        .skip((busqueda.getNumeroPagina() - 1) * (long) busqueda.getPorPagina())
+                        .limit(busqueda.getPorPagina())
+                        .peek(object -> object.setFavorito(true))
+                        .collect(Collectors.toList()));
+            } else {
+                pagina.setTotal(queryResult.size());
+                pagina.setResults(queryResult.stream()
+                        .skip((busqueda.getNumeroPagina() - 1) * (long) busqueda.getPorPagina())
+                        .limit(busqueda.getPorPagina())
+                        .peek(object -> object.setFavorito(esFavorito.apply(object.getNombre())))
+                        .collect(Collectors.toList()));
+            }
         } finally {
             readLock.unlock();
         }

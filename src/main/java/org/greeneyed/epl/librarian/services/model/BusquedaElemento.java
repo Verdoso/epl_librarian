@@ -23,38 +23,39 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 @Slf4j
 public class BusquedaElemento<O> {
-	private final int numeroPagina;
-	private final int porPagina;
-	private final ElementOrdering<O> ordering;
-	private final boolean reversed;
-	private final String filtro;
+    private final int numeroPagina;
+    private final int porPagina;
+    private final ElementOrdering<O> ordering;
+    private final boolean reversed;
+    private final boolean soloFavoritos;
+    private final String filtro;
 
-	public QueryOptions getQueryOptions() {
-		return reversed ? ordering.getQueryOptionsDescending() : ordering.getQueryOptionsAscending();
-	}
+    public QueryOptions getQueryOptions() {
+        return reversed ? ordering.getQueryOptionsDescending() : ordering.getQueryOptionsAscending();
+    }
 
-	public Query<O> getQuery() {
-		Query<O> query;
-		List<Query<O>> partialQueries = Arrays.asList(getPartialQuery(getFiltro(), ordering.getSortAttribute()))
-				.stream()
-				.filter(Objects::nonNull)
-				.collect(Collectors.toList());
-		if (partialQueries.isEmpty()) {
-			query = all(ordering.getSortAttribute().getObjectType());
-		} else {
-			query = partialQueries.get(0);
-			for (int i = 1; i < partialQueries.size(); i++) {
-				query = and(query, partialQueries.get(i));
-			}
-		}
-		log.trace("Query: {}", query);
-		return query;
-	}
+    public Query<O> getQuery() {
+        Query<O> query;
+        List<Query<O>> partialQueries = Arrays.asList(getPartialQuery(getFiltro(), ordering.getSortAttribute()))
+                .stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        if (partialQueries.isEmpty()) {
+            query = all(ordering.getSortAttribute().getObjectType());
+        } else {
+            query = partialQueries.get(0);
+            for (int i = 1; i < partialQueries.size(); i++) {
+                query = and(query, partialQueries.get(i));
+            }
+        }
+        log.trace("Query: {}", query);
+        return query;
+    }
 
-	private Query<O> getPartialQuery(final String criterio, final Attribute<O, String> campo) {
-		if (StringUtils.isNotBlank(criterio)) {
-			return contains(campo, Libro.flattenToAscii(criterio));
-		} else
-			return null;
-	}
+    private Query<O> getPartialQuery(final String criterio, final Attribute<O, String> campo) {
+        if (StringUtils.isNotBlank(criterio)) {
+            return contains(campo, Libro.flattenToAscii(criterio));
+        } else
+            return null;
+    }
 }

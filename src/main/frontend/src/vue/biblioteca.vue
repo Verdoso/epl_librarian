@@ -142,16 +142,23 @@
                 <br /> {{props.row.sinopsis}}
             </div>
             <div>
+            <b-field grouped v-if="props.row.magnetId">
+              <p
+                v-for="(magnet_id, index) in props.row.magnet_ids"
+                :key="magnet_id"
+                class="control"
+              >
                   <b-button
-                    v-if="props.row.magnetId"
                     tag="a"
-                    :href="props.row | toMagnet"
+                    :href="magnet_id | toMagnet(props.row)"
                     type="is-link"
                     pack="fa"
                     icon-left="magnet"
                   >
-                    Descarga
+                    Descarga {{ props.row.magnet_ids.length > 1 ? index + 1 : ''}}
                   </b-button>
+              </p>
+            </b-field>
             </div>
           </div>
         </article>
@@ -386,8 +393,8 @@ export default {
     truncate(value, length) {
       return value.length > length ? value.substr(0, length) + "..." : value;
     },
-    toMagnet(book) {
-      return `magnet:?xt=urn:btih:${book.magnetId}&dn=EPL_${book.id}_${encodeURIComponent(book.titulo)}`
+    toMagnet(magnet_id, book) {
+      return `magnet:?xt=urn:btih:${magnet_id}&dn=EPL_${book.id}_${encodeURIComponent(book.titulo)}`
               + '&tr=http://tracker.tfile.me/announce'
               + '&tr=udp://tracker.opentrackr.org:1337/announce'
               + '&tr=udp://tracker.openbittorrent.com:80'
