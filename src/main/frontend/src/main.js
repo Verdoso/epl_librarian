@@ -42,7 +42,8 @@ const store = new Vuex.Store({
   autorfilter: null,
   generofilter: null,
   idiomafilter: null,
-  buildVersion: null
+  buildVersion: null,
+  calibreIntegration: false
   },
   mutations: {
     markUpdate (state) {
@@ -59,6 +60,9 @@ const store = new Vuex.Store({
     },
     changeGeneroFilter (state,newFilter) {
       state.generofilter = newFilter
+    },
+    changeCalibreIntegration (state,integration) {
+      state.calibreIntegration = integration
     },
     changeIdiomaFilter (state,newFilter) {
       state.idiomafilter = newFilter
