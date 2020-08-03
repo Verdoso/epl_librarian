@@ -156,22 +156,38 @@
                 <br /> {{props.row.sinopsis}}
             </div>
             <div>
-            <b-field grouped v-if="props.row.magnetId">
+            <b-field grouped>
               <p
-                v-for="(magnet_id, index) in props.row.magnet_ids"
-                :key="magnet_id"
                 class="control"
               >
                   <b-button
                     tag="a"
-                    :href="magnet_id | toMagnet(props.row)"
-                    type="is-link"
-                    pack="fa"
-                    icon-left="magnet"
+                    :href="props.row | toEplURL"
+                    type="is-info"
+                    icon-pack="fa"
+                    icon-left="book"
+                    target="_blank"
                   >
-                    Descarga {{ props.row.magnet_ids.length > 1 ? index + 1 : ''}}
+                    En ePubLibre
                   </b-button>
               </p>
+              <span v-if="props.row.magnetId">
+                <p
+                  v-for="(magnet_id, index) in props.row.magnet_ids"
+                  :key="magnet_id"
+                  class="control"
+                >
+                    <b-button
+                      tag="a"
+                      :href="magnet_id | toMagnet(props.row)"
+                      type="is-link"
+                      icon-pack="fa"
+                      icon-left="magnet"
+                    >
+                      Descarga {{ props.row.magnet_ids.length > 1 ? index + 1 : ''}}
+                    </b-button>
+                </p>
+              </span>
             </b-field>
             </div>
           </div>
@@ -406,6 +422,9 @@ export default {
      */
     truncate(value, length) {
       return value.length > length ? value.substr(0, length) + "..." : value;
+    },
+    toEplURL(book) {
+      return `https://www.epublibre.org/libro/detalle/${book.id}`;
     },
     toMagnet(magnet_id, book) {
       return `magnet:?xt=urn:btih:${magnet_id}&dn=EPL_${book.id}_${encodeURIComponent(book.titulo)}`
