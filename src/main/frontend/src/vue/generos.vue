@@ -1,5 +1,15 @@
 <template>
   <section>
+    <div>
+      <b-field>
+        <p class="control">
+          <b-switch
+            v-model="soloGenerosFavoritos"
+            @input="cambioGenerosFavoritos()"
+          >Solo géneros favoritos</b-switch>
+        </p>
+      </b-field>
+    </div>
     <b-table
       ref="table"
       :data="data"
@@ -27,29 +37,20 @@
       @dblclick="onSelectGenero"
     >
       <template slot-scope="props">
-        <b-table-column
-          field="POR_GENERO"
-          label="Nombre"
-          sortable
-          searchable
-        >{{ props.row.nombre }}</b-table-column>
+        <b-table-column field="POR_GENERO" label="Nombre" sortable searchable>{{ props.row.nombre }}</b-table-column>
 
-        <b-table-column
-          field="POR_LIBROS"
-          label="# libros"
-          sortable
-        >{{ props.row.libros }}</b-table-column>
+        <b-table-column field="POR_LIBROS" label="# libros" sortable>{{ props.row.libros }}</b-table-column>
       </template>
     </b-table>
   </section>
 </template>
 
 <script>
-import Vue from 'vue'
+import Vue from "vue";
 import axios from "axios";
-import Vuex from 'vuex'
+import Vuex from "vuex";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default {
   data() {
@@ -63,7 +64,8 @@ export default {
       defaultSortOrder: "asc",
       page: 1,
       filters: null,
-      perPage: 15
+      perPage: 15,
+      soloGenerosFavoritos: false
     };
   },
   methods: {
@@ -76,7 +78,8 @@ export default {
         `numero_pagina=${this.page}`,
         `desc=${this.sortOrder == "desc" ? "true" : "false"}`,
         `filtro_genero=${this.filterOnCriteria("POR_GENERO")}`,
-        `por_pagina=${this.perPage}`
+        `por_pagina=${this.perPage}`,
+        `favoritos_generos=${this.soloGenerosFavoritos}`
       ].join("&");
 
       this.loading = true;
@@ -88,7 +91,7 @@ export default {
           this.total = data.total;
           data.results.forEach(item => {
             this.data.push(item);
-            if(item.favorito) {
+            if (item.favorito) {
               this.checkedRows.push(item);
             }
           });
@@ -139,28 +142,42 @@ export default {
      * Handle click event
      */
     onSelectGenero(row) {
-      this.$store.commit('changeGeneroFilter',row.nombre)
-      this.$store.commit('changeTab','biblioteca')
+      this.$store.commit("changeGeneroFilter", row.nombre);
+      this.$store.commit("changeTab", "biblioteca");
     },
     containsObject(obj, list) {
-      return list.some(elem => elem === obj)
+      return list.some(elem => elem === obj);
+    },
+    cambioGenerosFavoritos() {
+      this.loadAsyncData();
     },
     guardarFavoritos() {
       var formData = new FormData();
-      formData.append('generosFavoritos',this.checkedRows.map(row => row.nombre).join(','))
-      formData.append('generosNoFavoritos',this.data.filter(row => !this.containsObject(row,this.checkedRows)).map(row => row.nombre).join(','))
+      formData.append(
+        "generosFavoritos",
+        this.checkedRows.map(row => row.nombre).join(",")
+      );
+      formData.append(
+        "generosNoFavoritos",
+        this.data
+          .filter(row => !this.containsObject(row, this.checkedRows))
+          .map(row => row.nombre)
+          .join(",")
+      );
       axios
-        .post('/librarian/preferences/generosFavoritos', formData, {headers: { 'Content-Type': 'multipart/form-data;charset=UTF-8' }})
-        .then((response) => {
+        .post("/librarian/preferences/generosFavoritos", formData, {
+          headers: { "Content-Type": "multipart/form-data;charset=UTF-8" }
+        })
+        .then(response => {
           this.$store.commit("markUpdate");
         })
         .catch(error => {
           this.$buefy.notification.open({
-            type: 'is-danger'
-            , duration: 5000
-            , message:'Error almacenando genero favoritos: ' + e
-            , hasIcon: true
-          })
+            type: "is-danger",
+            duration: 5000,
+            message: "Error almacenando genero favoritos: " + e,
+            hasIcon: true
+          });
           throw error;
         });
     }
