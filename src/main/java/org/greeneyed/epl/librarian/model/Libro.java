@@ -33,6 +33,7 @@ public class Libro {
     private static final String LIBRO_IDIOMA_PARAM = "libroIDIOMA";
     private static final String LIBRO_VOLUMEN_PARAM = "libroVOLUMEN";
     private static final String LIBRO_PUBLICADO_PARAM = "libroPUBLICADO";
+    private static final String LIBRO_EN_CALIBRE_PARAM = "libroEN_CALIBRE";
 
     public static final SimpleAttribute<Libro, Integer> LIBRO_ID = attribute(LIBRO_ID_PARAM, Libro::getId);
     public static final SimpleAttribute<Libro, String> LIBRO_TITULO = attribute(LIBRO_TITULO_PARAM,
@@ -41,6 +42,8 @@ public class Libro {
             Libro::getAutorNormalizado);
     public static final SimpleAttribute<Libro, String> LIBRO_IDIOMA = attribute(LIBRO_IDIOMA_PARAM,
             Libro::getIdiomaNormalizado);
+    public static final SimpleAttribute<Libro, Boolean> LIBRO_EN_CALIBRE = attribute(LIBRO_EN_CALIBRE_PARAM,
+            Libro::isInCalibre);
     public static final SimpleNullableAttribute<Libro, ChronoLocalDate> LIBRO_PUBLICADO = nullableAttribute(
             LIBRO_PUBLICADO_PARAM, Libro::getFechaPublicacion);
     public static final SimpleNullableAttribute<Libro, String> LIBRO_COLECCION = nullableAttribute(
@@ -84,6 +87,8 @@ public class Libro {
     private Integer votos;
 
     private String magnetId;
+
+    private boolean inCalibre = false;
 
     @JsonIgnore
     public List<String> getListaAutores() {
