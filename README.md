@@ -23,6 +23,17 @@ Hay que tener en cuenta que:
 * Si queremos incrementar el número de horas antes de descargar una una versión nueva de la biblioteca de ePubLlibre (por defecto 24h) podemos incrementarlo, por ejemplo a 48h, añadiendo la propiedad ```-Dantiguedad_maxima=48``` al arranque.
 * Si queremos que directamente ignore la antiguedad del backup y si tiene uno lo use, podemos hacerlo añadiendo al arranque la propiedad ```-Dactualizacion_automatica=false```. Si no hay backup intentará la descarga de ePubLlibre, pero si lo hay no la intentará.
 
+## Integración, opcional, con Calibre
+Si tenemos instalado el software para gestión de libros [Calibre](https://calibre-ebook.com/es) en el mismo ordenador donde ejecutar EPL Librarian y queremos que nos compruebe los libros que tenemos, podemos hacerlo especificándole donde se encuentra la biblioteca de Calibre en nuestro ordenador en las preferencias.
+
+Con el EPL Librarian apagado, editamos el fichero $HOME/.librarian/preferences.properties ( EPL Librarian nos indica la localización exacta en la consola al arrancar ) y añadimos una propiedad ```calibre_home``` indicándonle el camino a la biblioteca (el directorio donde Calibre guarda su fichero metadata.db).
+Por ejemplo, si Calibre guarda los libros en un directorio 'D:/Libros' podríamos añadir a preferences.properties la siguiente linea
+calibre_home=D:/Libros
+
+Al arrancar EPL Librarian nos indicará que inetgración con calibre está habilitada, tardará un poco más en arrancar y en la biblioteca aparecera una nueva columna que nos indicará, para cada libro, si se ha encontrado dicho libre en nuestra biblioteca Calibre.
+
+La comprobación mira el título exacto del libro y sus autores, por lo que puede ser que no encuentre algún libro que no tenga exactamente el mismo título (p.e. 'El Camel Club' vs 'Camel Club') o que tenga alguna errata en el nombre (p.e. 'James S.A. Corey' vs 'James S. A. Corey'). Se ha optado por quedarse corto y decir que hay libros que no tenemos, por pequeñas diferencias en los datos, que posibilitar los errores al reves y dar por hecho que tenemos ciertos libros por ser demasiado generosos en las comprobaciones.
+
 ## Funcionamiento
 El programa ofrece varios listados
 
