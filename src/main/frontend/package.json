@@ -13,6 +13,7 @@
     "@mdi/font": "^5.3.45",
     "axios": "^0.19.2",
     "bootstrap": "^4.2.1",
+    "bottleneck": "^2.19.5",
     "buefy": "^0.8.20",
     "font-awesome": "^4.7.0",
     "glyphicons-only-bootstrap": "^1.0.1",

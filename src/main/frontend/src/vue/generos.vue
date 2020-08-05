@@ -49,8 +49,16 @@
 import Vue from "vue";
 import axios from "axios";
 import Vuex from "vuex";
+import Bottleneck from "bottleneck";
 
 Vue.use(Vuex);
+
+const limiter = new Bottleneck({
+  maxConcurrent: 1,
+  highWater: 1,
+  strategy: Bottleneck.strategy.LEAK
+
+});
 
 export default {
   data() {
@@ -83,8 +91,7 @@ export default {
       ].join("&");
 
       this.loading = true;
-      axios
-        .get(`/librarian/generos?${params}`)
+      limiter.schedule(() => axios.get(`/librarian/generos?${params}`))
         .then(({ data }) => {
           this.data = [];
           this.checkedRows = [];
