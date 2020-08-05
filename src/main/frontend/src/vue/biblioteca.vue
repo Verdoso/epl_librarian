@@ -1,31 +1,39 @@
 <template>
   <section>
     <div id="fecha_base">
-    <b-field label="Considerar novedades libros posteriores a" grouped>
+      <b-field label="Considerar novedades libros posteriores a" grouped>
         <b-datepicker
-            placeholder="Selecciona una fecha para filtrar"
-            icon="calendar-today"
-            :first-day-of-week="1"
-            :day-names="['D', 'L', 'M', 'X', 'J', 'V', 'S']"
-            :month-names="['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembere']"
-            trap-focus
-            v-model="fechaBase"
-            @input="cambioFechaNovedades()"
-            >
-            <button class="button is-primary"
-                @click="fechaBaseHoy()">
-                <b-icon icon="calendar-today"></b-icon>
-                <span>Hoy</span>
-            </button>
+          placeholder="Selecciona una fecha para filtrar"
+          icon="calendar-today"
+          :first-day-of-week="1"
+          :day-names="['D', 'L', 'M', 'X', 'J', 'V', 'S']"
+          :month-names="['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembere']"
+          trap-focus
+          v-model="fechaBase"
+          @input="cambioFechaNovedades()"
+        >
+          <button class="button is-primary" @click="fechaBaseHoy()">
+            <b-icon icon="calendar-today"></b-icon>
+            <span>Hoy</span>
+          </button>
         </b-datepicker>
         <p class="control">
-            <b-button class="button is-primary" @click="guardarFechaBase()">guardar</b-button>
-            <b-switch v-model="soloNovedades" @input="cambioNovedades()">Solo novedades</b-switch>
-            <b-switch v-model="soloAutoresFavoritos" @input="cambioAutoresFavoritos()">Autores favoritos</b-switch>
-            <b-switch v-model="soloIdiomasFavoritos" @input="cambioIdiomasFavoritos()">Idiomas favoritos</b-switch>
-            <b-switch v-model="soloGenerosFavoritos" @input="cambioGenerosFavoritos()">Géneros favoritos</b-switch>
+          <b-button class="button is-primary" @click="guardarFechaBase()">guardar</b-button>
+          <b-switch v-model="soloNovedades" @input="cambioNovedades()">Solo novedades</b-switch>
+          <b-switch
+            v-model="soloAutoresFavoritos"
+            @input="cambioAutoresFavoritos()"
+          >Autores favoritos</b-switch>
+          <b-switch
+            v-model="soloIdiomasFavoritos"
+            @input="cambioIdiomasFavoritos()"
+          >Idiomas favoritos</b-switch>
+          <b-switch
+            v-model="soloGenerosFavoritos"
+            @input="cambioGenerosFavoritos()"
+          >Géneros favoritos</b-switch>
         </p>
-    </b-field>
+      </b-field>
     </div>
     <b-table
       ref="table"
@@ -68,52 +76,49 @@
         >{{ props.row.coleccionCompleta }}</b-table-column>
 
         <b-table-column field="POR_AUTOR" label="Autor" sortable searchable width="25%">
-          <template
-              slot="searchable">
-              <b-input
-                  v-model="currentAutorFilter"
-                  placeholder="autor..."
-                  icon-right="close-circle"
-                  icon-right-clickable
-                  @icon-right-click="clearAutorFilter"
-                  @input="changedAutorFilter"
-                  />
+          <template slot="searchable">
+            <b-input
+              v-model="currentAutorFilter"
+              placeholder="autor..."
+              icon-right="close-circle"
+              icon-right-clickable
+              @icon-right-click="clearAutorFilter"
+              @input="changedAutorFilter"
+            />
           </template>
           <b-tooltip
             :label="props.row.autor | truncate(120)"
             type="is-light"
             position="is-bottom"
             v-if="(props.row.autor.length > 45)"
-          >
-        {{ props.row.autor | truncate(45) }}</b-tooltip>
+          >{{ props.row.autor | truncate(45) }}</b-tooltip>
           <span v-if="(props.row.autor.length <= 45)">{{ props.row.autor }}</span>
         </b-table-column>
 
         <b-table-column field="POR_IDIOMA" label="Idiomas" sortable searchable width="10%">
-          <template
-              slot="searchable">
-              <b-input
-                  v-model="currentIdiomaFilter"
-                  placeholder="idioma..."
-                  icon-right="close-circle"
-                  icon-right-clickable
-                  @icon-right-click="clearIdiomaFilter"
-                  @input="changedIdiomaFilter"
-                  />
+          <template slot="searchable">
+            <b-input
+              v-model="currentIdiomaFilter"
+              placeholder="idioma..."
+              icon-right="close-circle"
+              icon-right-clickable
+              @icon-right-click="clearIdiomaFilter"
+              @input="changedIdiomaFilter"
+            />
           </template>
-        {{ props.row.idioma}}</b-table-column>
+          {{ props.row.idioma}}
+        </b-table-column>
 
         <b-table-column field="POR_GENERO" label="Generos" searchable width="25%">
-          <template
-              slot="searchable">
-              <b-input
-                  v-model="currentGeneroFilter"
-                  placeholder="genero..."
-                  icon-right="close-circle"
-                  icon-right-clickable
-                  @icon-right-click="clearGeneroFilter"
-                  @input="changedGeneroFilter"
-                  />
+          <template slot="searchable">
+            <b-input
+              v-model="currentGeneroFilter"
+              placeholder="genero..."
+              icon-right="close-circle"
+              icon-right-clickable
+              @icon-right-click="clearGeneroFilter"
+              @input="changedGeneroFilter"
+            />
           </template>
           <b-tooltip
             :label="props.row.generos"
@@ -139,27 +144,26 @@
           width="5%"
         >
           <b-icon
-              pack="fa"
-              :type="props.row.inCalibre ? 'is-success' : 'is-danger'"
-              :icon="props.row.inCalibre ? 'check' : 'times'"
+            pack="fa"
+            :type="props.row.inCalibre ? 'is-success' : 'is-danger'"
+            :icon="props.row.inCalibre ? 'check' : 'times'"
           ></b-icon>
         </b-table-column>
-
       </template>
       <template slot="detail" slot-scope="props">
         <article class="media">
           <div class="media-content">
             <div class="content">
-                <strong>{{ props.row.titulo }}</strong>
-                - <small>v.{{ props.row.revision }} - {{ props.row.paginas }} pàginas ( {{props.row.autor}} )</small>
-                <hr />
-                <br /> {{props.row.sinopsis}}
+              <strong>{{ props.row.titulo }}</strong>
+              -
+              <small>v.{{ props.row.revision }} - {{ props.row.paginas }} pàginas ( {{props.row.autor}} )</small>
+              <hr />
+              <br />
+              {{props.row.sinopsis}}
             </div>
             <div>
-            <b-field grouped>
-              <p
-                class="control"
-              >
+              <b-field grouped>
+                <p class="control">
                   <b-button
                     tag="a"
                     :href="props.row | toEplURL"
@@ -167,28 +171,24 @@
                     icon-pack="fa"
                     icon-left="book"
                     target="_blank"
+                  >En ePubLibre</b-button>
+                </p>
+                <span v-if="props.row.magnetId">
+                  <p
+                    v-for="(magnet_id, index) in props.row.magnet_ids"
+                    :key="magnet_id"
+                    class="control"
                   >
-                    En ePubLibre
-                  </b-button>
-              </p>
-              <span v-if="props.row.magnetId">
-                <p
-                  v-for="(magnet_id, index) in props.row.magnet_ids"
-                  :key="magnet_id"
-                  class="control"
-                >
                     <b-button
                       tag="a"
                       :href="magnet_id | toMagnet(props.row)"
                       type="is-link"
                       icon-pack="fa"
                       icon-left="magnet"
-                    >
-                      Descarga {{ props.row.magnet_ids.length > 1 ? index + 1 : ''}}
-                    </b-button>
-                </p>
-              </span>
-            </b-field>
+                    >Descarga {{ props.row.magnet_ids.length > 1 ? index + 1 : ''}}</b-button>
+                  </p>
+                </span>
+              </b-field>
             </div>
           </div>
         </article>
@@ -198,14 +198,28 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import Vue from "vue";
 import axios from "axios";
-import Vuex from 'vuex'
+import Vuex from "vuex";
+import Bottleneck from "bottleneck";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
+
+const limiter = new Bottleneck({
+  maxConcurrent: 1,
+  highWater: 1,
+  strategy: Bottleneck.strategy.LEAK
+
+});
 
 export default {
-  props : ['autorfilter','generofilter','idiomafilter','lastupdate','integracioncalibre'],
+  props: [
+    "autorfilter",
+    "generofilter",
+    "idiomafilter",
+    "lastupdate",
+    "integracioncalibre"
+  ],
   data() {
     return {
       data: [],
@@ -236,7 +250,7 @@ export default {
         `orden=${this.sortField}`,
         `numero_pagina=${this.page}`,
         `desc=${this.sortOrder == "desc" ? "true" : "false"}`,
-        `filtro_titulo=${this.filterOnCriteria('POR_TITULO')}`,
+        `filtro_titulo=${this.filterOnCriteria("POR_TITULO")}`,
         `filtro_coleccion=${this.filterOnCriteria("POR_COLECCION")}`,
         `filtro_autor=${this.filterOnValue(this.autorfilter)}`,
         `filtro_genero=${this.filterOnValue(this.generofilter)}`,
@@ -249,10 +263,10 @@ export default {
       ].join("&");
 
       this.loading = true;
-      axios
-        .get(`/librarian/libros?${params}`)
+      console.log("Lanzando peticion")
+      limiter.schedule(() => axios.get(`/librarian/libros?${params}`))
         .then(({ data }) => {
-          // api.themoviedb.org manage max 1000 pages
+          console.log("Procesando resultados " + data.total)
           this.data = [];
           this.total = data.total;
           data.results.forEach(item => {
@@ -263,8 +277,8 @@ export default {
         .catch(error => {
           this.data = [];
           this.total = 0;
-          this.loading = false;
           throw error;
+          this.loading = false;
         });
     },
     /*
@@ -272,9 +286,9 @@ export default {
      */
     filterOnValue(value) {
       if (value == null) {
-        return ''
+        return "";
       } else {
-        return value
+        return value;
       }
     },
     /*
@@ -282,9 +296,9 @@ export default {
      */
     porFechaBase() {
       if (this.soloNovedades && this.fechaBase) {
-        return this.fechaBase.getTime()
+        return this.fechaBase.getTime();
       } else {
-        return ''
+        return "";
       }
     },
     /*
@@ -311,28 +325,28 @@ export default {
       this.loadAsyncData();
     },
     changedAutorFilter(e) {
-      this.$store.commit('changeAutorFilter',this.currentAutorFilter)
+      this.$store.commit("changeAutorFilter", this.currentAutorFilter);
     },
     changedGeneroFilter(e) {
-      this.$store.commit('changeGeneroFilter',this.currentGeneroFilter)
+      this.$store.commit("changeGeneroFilter", this.currentGeneroFilter);
     },
     changedIdiomaFilter(e) {
-      this.$store.commit('changeIdiomaFilter',this.currentIdiomaFilter)
+      this.$store.commit("changeIdiomaFilter", this.currentIdiomaFilter);
     },
     clearAutorFilter(e) {
-      this.$store.commit('changeAutorFilter','')
+      this.$store.commit("changeAutorFilter", "");
     },
     clearGeneroFilter(e) {
-      this.$store.commit('changeGeneroFilter','')
+      this.$store.commit("changeGeneroFilter", "");
     },
     clearIdiomaFilter(e) {
-      this.$store.commit('changeIdiomaFilter','')
+      this.$store.commit("changeIdiomaFilter", "");
     },
     fechaBaseHoy() {
-      this.fechaBase = new Date()
+      this.fechaBase = new Date();
     },
     cambioFechaNovedades() {
-      if(this.soloNovedades) {
+      if (this.soloNovedades) {
         this.loadAsyncData();
       }
     },
@@ -349,29 +363,33 @@ export default {
       this.loadAsyncData();
     },
     guardarFechaBase() {
-      if(this.fechaBase) {
+      if (this.fechaBase) {
         var formData = new FormData();
-        formData.append('fechaBase',this.fechaBase.getTime())
+        formData.append("fechaBase", this.fechaBase.getTime());
         axios
-          .post('/librarian/preferences/fecha_base', formData, {headers: { 'Content-Type': 'multipart/form-data' }})
-          .then((response) => {
+          .post("/librarian/preferences/fecha_base", formData, {
+            headers: { "Content-Type": "multipart/form-data" }
+          })
+          .then(response => {
             this.$buefy.notification.open({
-              type: 'is-info'
-              , duration: 5000
-              , message:`Fecha base ${new Intl.DateTimeFormat('es').format(this.fechaBase)} almacenada en las preferencias`
-              , hasIcon: true
+              type: "is-info",
+              duration: 5000,
+              message: `Fecha base ${new Intl.DateTimeFormat("es").format(
+                this.fechaBase
+              )} almacenada en las preferencias`,
+              hasIcon: true
             });
-            if(this.soloNovedades) {
+            if (this.soloNovedades) {
               this.loadAsyncData();
             }
           })
           .catch(error => {
             this.$buefy.notification.open({
-              type: 'is-danger'
-              , duration: 5000
-              , message:'Error almacenando fecha base: ' + e
-              , hasIcon: true
-            })
+              type: "is-danger",
+              duration: 5000,
+              message: "Error almacenando fecha base: " + e,
+              hasIcon: true
+            });
             throw error;
           });
       }
@@ -387,31 +405,35 @@ export default {
   },
   watch: {
     lastupdate: function() {
-      if(this.soloAutoresFavoritos || this.soloIdiomasFavoritos || this.soloGenerosFavoritos) {
+      if (
+        this.soloAutoresFavoritos ||
+        this.soloIdiomasFavoritos ||
+        this.soloGenerosFavoritos
+      ) {
         this.loadAsyncData();
       }
     },
     autorfilter: function() {
-      if(this.currentAutorFilter===this.autorfilter) {
+      if (this.currentAutorFilter === this.autorfilter) {
         //console.log('Nothing to do')
       } else {
-        this.currentAutorFilter = this.autorfilter
+        this.currentAutorFilter = this.autorfilter;
       }
       this.loadAsyncData();
     },
     generofilter: function() {
-      if(this.currentGeneroFilter===this.generofilter) {
+      if (this.currentGeneroFilter === this.generofilter) {
         //console.log('Nothing to do')
       } else {
-        this.currentGeneroFilter = this.generofilter
+        this.currentGeneroFilter = this.generofilter;
       }
       this.loadAsyncData();
     },
     idiomafilter: function() {
-      if(this.currentIdiomaFilter===this.idiomafilter) {
+      if (this.currentIdiomaFilter === this.idiomafilter) {
         //console.log('Nothing to do')
       } else {
-        this.currentIdiomaFilter = this.idiomafilter
+        this.currentIdiomaFilter = this.idiomafilter;
       }
       this.loadAsyncData();
     }
@@ -427,19 +449,23 @@ export default {
       return `https://www.epublibre.org/libro/detalle/${book.id}`;
     },
     toMagnet(magnet_id, book) {
-      return `magnet:?xt=urn:btih:${magnet_id}&dn=EPL_${book.id}_${encodeURIComponent(book.titulo)}`
-              + '&tr=http://tracker.tfile.me/announce'
-              + '&tr=udp://tracker.opentrackr.org:1337/announce'
-              + '&tr=udp://tracker.openbittorrent.com:80'
-              + '&tr=udp://tracker.publicbt.com:80'
-              + '&tr=udp://open.demonii.com:1337/announce'
+      return (
+        `magnet:?xt=urn:btih:${magnet_id}&dn=EPL_${
+          book.id
+        }_${encodeURIComponent(book.titulo)}` +
+        "&tr=http://tracker.tfile.me/announce" +
+        "&tr=udp://tracker.opentrackr.org:1337/announce" +
+        "&tr=udp://tracker.openbittorrent.com:80" +
+        "&tr=udp://tracker.publicbt.com:80" +
+        "&tr=udp://open.demonii.com:1337/announce"
+      );
     }
   },
   mounted() {
     axios
-      .get('/librarian/preferences/fecha_base')
+      .get("/librarian/preferences/fecha_base")
       .then(({ data }) => {
-        if(data) {
+        if (data) {
           this.fechaBase = new Date(data);
         }
         this.loadAsyncData();
@@ -452,7 +478,7 @@ export default {
 </script>
 
 <style>
-  #fecha_base label {
-    padding-right: .5em;
-  }
+#fecha_base label {
+  padding-right: 0.5em;
+}
 </style>
