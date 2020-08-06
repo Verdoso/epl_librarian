@@ -35,7 +35,7 @@
           <b-switch
             v-model="soloNoEnPropiedad"
             @input="cambioSoloNoEnPropiedad()"
-            :visible="integracioncalibre"
+            v-if="integracioncalibre"
           >Ocultar los que ya tengo</b-switch>
         </p>
       </b-field>
