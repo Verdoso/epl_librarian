@@ -29,9 +29,12 @@ public class Libro {
     private static final String LIBRO_ID_PARAM = "libroID";
     private static final String LIBRO_TITULO_PARAM = "libroTITULO";
     private static final String LIBRO_AUTOR_PARAM = "libroAUTOR";
+    private static final String LIBRO_AUTOR_FAVORITO_PARAM = "libroAUTOR_FAVORITO";
     private static final String LIBRO_COLECCION_PARAM = "libroCOLECCION";
     private static final String LIBRO_GENERO_PARAM = "libroGENERO";
+    private static final String LIBRO_GENERO_FAVORITO_PARAM = "libroGENERO_FAVORITO";
     private static final String LIBRO_IDIOMA_PARAM = "libroIDIOMA";
+    private static final String LIBRO_IDIOMA_FAVORITO_PARAM = "libroIDIOMA_FAVORITO";
     private static final String LIBRO_VOLUMEN_PARAM = "libroVOLUMEN";
     private static final String LIBRO_PUBLICADO_PARAM = "libroPUBLICADO";
     private static final String LIBRO_EN_CALIBRE_PARAM = "libroEN_CALIBRE";
@@ -41,8 +44,12 @@ public class Libro {
             Libro::getTituloNormalizado);
     public static final SimpleAttribute<Libro, String> LIBRO_AUTOR = attribute(LIBRO_AUTOR_PARAM,
             Libro::getAutorNormalizado);
+    public static final SimpleAttribute<Libro, Boolean> LIBRO_AUTOR_FAVORITO = attribute(LIBRO_AUTOR_FAVORITO_PARAM,
+            Libro::getAutorFavorito);
     public static final SimpleAttribute<Libro, String> LIBRO_IDIOMA = attribute(LIBRO_IDIOMA_PARAM,
             Libro::getIdiomaNormalizado);
+    public static final SimpleAttribute<Libro, Boolean> LIBRO_IDIOMA_FAVORITO = attribute(LIBRO_IDIOMA_FAVORITO_PARAM,
+            Libro::getIdiomaFavorito);
     public static final SimpleAttribute<Libro, Boolean> LIBRO_EN_CALIBRE = attribute(LIBRO_EN_CALIBRE_PARAM,
             Libro::getInCalibre);
     public static final SimpleNullableAttribute<Libro, ChronoLocalDate> LIBRO_PUBLICADO = nullableAttribute(
@@ -53,6 +60,8 @@ public class Libro {
             LIBRO_VOLUMEN_PARAM, Libro::getVolumen);
     public static final SimpleNullableAttribute<Libro, String> LIBRO_GENERO = nullableAttribute(LIBRO_GENERO_PARAM,
             Libro::getGeneroNormalizado);
+    public static final SimpleAttribute<Libro, Boolean> LIBRO_GENERO_FAVORITO = attribute(LIBRO_GENERO_FAVORITO_PARAM,
+            Libro::getGeneroFavorito);
 
     @EqualsAndHashCode.Include
     private int id;
@@ -90,6 +99,12 @@ public class Libro {
     private String magnetId;
 
     private Boolean inCalibre = Boolean.FALSE;
+
+    private Boolean autorFavorito = Boolean.FALSE;
+
+    private Boolean generoFavorito = Boolean.FALSE;
+
+    private Boolean idiomaFavorito = Boolean.FALSE;
 
     @JsonIgnore
     public List<String> getListaAutores() {

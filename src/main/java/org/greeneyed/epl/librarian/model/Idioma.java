@@ -7,10 +7,8 @@ import com.googlecode.cqengine.attribute.SimpleAttribute;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Data
-@Slf4j
 @RequiredArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Idioma implements PuedeSerFavorito {

@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Set;
 
+import org.greeneyed.epl.librarian.services.BibliotecaService;
 import org.greeneyed.epl.librarian.services.PreferencesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ public class PreferencesAPIController {
     private static final BodyBuilder OK_BUILDER = ResponseEntity.ok();
 
     private final PreferencesService preferencesService;
+    private final BibliotecaService bibliotecaService;
 
     @GetMapping(value = "/fecha_base")
     public ResponseEntity<Long> fechaBase() {
@@ -46,7 +48,9 @@ public class PreferencesAPIController {
     public ResponseEntity<String> guardarAutoresFavoritos(
             @RequestParam(name = "autoresFavoritos") Set<String> autoresFavoritos,
             @RequestParam(name = "autoresNoFavoritos") Set<String> autoresNoFavoritos) {
-        preferencesService.actualizarAutoresPreferidos(autoresFavoritos,autoresNoFavoritos);
+        preferencesService.actualizarAutoresPreferidos(autoresFavoritos, autoresNoFavoritos);
+        bibliotecaService.actualizaAutoresFavoritos(autoresFavoritos, Boolean.TRUE);
+        bibliotecaService.actualizaAutoresFavoritos(autoresNoFavoritos, Boolean.FALSE);
         return OK_BUILDER.build();
     }
 
@@ -54,7 +58,9 @@ public class PreferencesAPIController {
     public ResponseEntity<String> guardarIdiomasFavoritos(
             @RequestParam(name = "idiomasFavoritos") Set<String> idiomasFavoritos,
             @RequestParam(name = "idiomasNoFavoritos") Set<String> idiomasNoFavoritos) {
-        preferencesService.actualizarIdiomasPreferidos(idiomasFavoritos,idiomasNoFavoritos);
+        preferencesService.actualizarIdiomasPreferidos(idiomasFavoritos, idiomasNoFavoritos);
+        bibliotecaService.actualizaIdiomasFavoritos(idiomasFavoritos, Boolean.TRUE);
+        bibliotecaService.actualizaIdiomasFavoritos(idiomasNoFavoritos, Boolean.FALSE);
         return OK_BUILDER.build();
     }
 
@@ -62,7 +68,9 @@ public class PreferencesAPIController {
     public ResponseEntity<String> guardarGenerosFavoritos(
             @RequestParam(name = "generosFavoritos") Set<String> generosFavoritos,
             @RequestParam(name = "generosNoFavoritos") Set<String> generosNoFavoritos) {
-        preferencesService.actualizarGenerosPreferidos(generosFavoritos,generosNoFavoritos);
+        preferencesService.actualizarGenerosPreferidos(generosFavoritos, generosNoFavoritos);
+        bibliotecaService.actualizaGenerosFavoritos(generosFavoritos, Boolean.TRUE);
+        bibliotecaService.actualizaGenerosFavoritos(generosNoFavoritos, Boolean.FALSE);
         return OK_BUILDER.build();
     }
 }
