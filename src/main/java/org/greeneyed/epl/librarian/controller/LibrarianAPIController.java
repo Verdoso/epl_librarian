@@ -43,12 +43,12 @@ public class LibrarianAPIController {
     private static final String DEFAULT_ORDER_GENERO = "POR_GENERO";
     private static final String DEFAULT_ORDER_IDIOMA = "POR_IDIOMA";
 
-    private final BibliotecaService bibliotecaService;
+    private final BibliotecaService cQEngineBibliotecaImplementation;
     private final ApplicationContext applicationContext;
 
     @GetMapping(value = "/sumario")
     public ResponseEntity<Sumario> sumario() {
-        return ResponseEntity.ok(bibliotecaService.getSumario());
+        return ResponseEntity.ok(cQEngineBibliotecaImplementation.getSumario());
     }
 
     @GetMapping(value = "/exit")
@@ -94,7 +94,7 @@ public class LibrarianAPIController {
                 filtroColeccion, filtroAutor, filtroGenero, filtroIdioma, filtroFecha, soloAutoresFavoritos,
                 soloIdiomasFavoritos, soloGenerosFavoritos, soloNoEnPropiedad);
         log.trace("BusquedaLibro: {}", busquedaLibro);
-        return ResponseEntity.ok(bibliotecaService.paginaLibros(busquedaLibro));
+        return ResponseEntity.ok(cQEngineBibliotecaImplementation.paginaLibros(busquedaLibro));
     }
 
     @GetMapping(value = "/autores")
@@ -108,7 +108,7 @@ public class LibrarianAPIController {
         BusquedaElemento<Autor> busquedaAutor = new BusquedaElemento<>(numeroPagina, porPagina, ordering, reversed,
                 soloAutoresFavoritos, filtroAutor);
         log.trace("BusquedaAutor: {}", busquedaAutor);
-        return ResponseEntity.ok(bibliotecaService.paginaAutor(busquedaAutor));
+        return ResponseEntity.ok(cQEngineBibliotecaImplementation.paginaAutor(busquedaAutor));
     }
 
     @GetMapping(value = "/generos")
@@ -122,7 +122,7 @@ public class LibrarianAPIController {
         BusquedaElemento<Genero> busquedaGenero = new BusquedaElemento<>(numeroPagina, porPagina, ordering, reversed,
                 soloGenerosFavoritos, filtroGenero);
         log.trace("BusquedaGenero: {}", busquedaGenero);
-        return ResponseEntity.ok(bibliotecaService.paginaGenero(busquedaGenero));
+        return ResponseEntity.ok(cQEngineBibliotecaImplementation.paginaGenero(busquedaGenero));
     }
 
     @GetMapping(value = "/idiomas")
@@ -136,6 +136,6 @@ public class LibrarianAPIController {
         BusquedaElemento<Idioma> busquedaIdioma = new BusquedaElemento<>(numeroPagina, porPagina, ordering, reversed,
                 soloIdiomasFavoritos, filtroIdioma);
         log.trace("BusquedaIdioma: {}", busquedaIdioma);
-        return ResponseEntity.ok(bibliotecaService.paginaIdioma(busquedaIdioma));
+        return ResponseEntity.ok(cQEngineBibliotecaImplementation.paginaIdioma(busquedaIdioma));
     }
 }

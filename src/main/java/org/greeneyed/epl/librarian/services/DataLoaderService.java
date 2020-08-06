@@ -49,7 +49,7 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
         boolean comprobaremosActualizacionAutomatica = actualizacionAutomatica;
         UpdateSpec updateSpec = eplCSVProcessor.processBackup();
         if (updateSpec.isEmpty()) {
-            if(descargarDeEPL) {
+            if (descargarDeEPL) {
                 updateSpec = eplCSVProcessor.updateFromEPL();
             }
             if (updateSpec.isEmpty()) {
