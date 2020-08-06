@@ -54,8 +54,8 @@ public class BusquedaLibro {
                         getPartialQuery(getFiltroAutor(), Libro.LIBRO_AUTOR),
                         getPartialQuery(getFiltroIdioma(), Libro.LIBRO_IDIOMA),
                         getPartialQuery(getFiltroColeccion(), Libro.LIBRO_COLECCION),
-                        getPartialQuery(getFiltroGenero(), Libro.LIBRO_GENERO),
-                        getEnCalibreQuery(),
+                        getPartialQuery(getFiltroGenero(), Libro.LIBRO_GENERO), getEnCalibreQuery(),
+                        getAutoresFavoritosQuery(), getIdiomasFavoritosQuery(), getGenerosFavoritosQuery(),
                         getFechaQuery(getFiltroFecha(), Libro.LIBRO_PUBLICADO))
                 .stream()
                 .filter(Objects::nonNull)
@@ -82,6 +82,27 @@ public class BusquedaLibro {
     public Query<Libro> getEnCalibreQuery() {
         if (Boolean.TRUE.equals(soloNoEnPropiedad)) {
             return not(equal(Libro.LIBRO_EN_CALIBRE, Boolean.TRUE));
+        } else
+            return null;
+    }
+
+    public Query<Libro> getAutoresFavoritosQuery() {
+        if (Boolean.TRUE.equals(soloAutoresFavoritos)) {
+            return equal(Libro.LIBRO_AUTOR_FAVORITO, Boolean.TRUE);
+        } else
+            return null;
+    }
+
+    public Query<Libro> getIdiomasFavoritosQuery() {
+        if (Boolean.TRUE.equals(soloIdiomasFavoritos)) {
+            return equal(Libro.LIBRO_IDIOMA_FAVORITO, Boolean.TRUE);
+        } else
+            return null;
+    }
+
+    public Query<Libro> getGenerosFavoritosQuery() {
+        if (Boolean.TRUE.equals(soloGenerosFavoritos)) {
+            return equal(Libro.LIBRO_GENERO_FAVORITO, Boolean.TRUE);
         } else
             return null;
     }
