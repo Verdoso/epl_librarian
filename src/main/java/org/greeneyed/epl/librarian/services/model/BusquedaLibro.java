@@ -3,6 +3,9 @@ package org.greeneyed.epl.librarian.services.model;
 import static com.googlecode.cqengine.query.QueryFactory.all;
 import static com.googlecode.cqengine.query.QueryFactory.and;
 import static com.googlecode.cqengine.query.QueryFactory.contains;
+import static com.googlecode.cqengine.query.QueryFactory.equal;
+import static com.googlecode.cqengine.query.QueryFactory.greaterThanOrEqualTo;
+import static com.googlecode.cqengine.query.QueryFactory.not;
 
 import java.time.LocalDate;
 import java.time.chrono.ChronoLocalDate;
@@ -17,7 +20,6 @@ import org.greeneyed.epl.librarian.services.BibliotecaService.BOOK_ORDERING;
 
 import com.googlecode.cqengine.attribute.Attribute;
 import com.googlecode.cqengine.query.Query;
-import com.googlecode.cqengine.query.QueryFactory;
 import com.googlecode.cqengine.query.option.QueryOptions;
 
 import lombok.Data;
@@ -39,6 +41,7 @@ public class BusquedaLibro {
     private final boolean soloAutoresFavoritos;
     private final boolean soloIdiomasFavoritos;
     private final boolean soloGenerosFavoritos;
+    private final Boolean soloNoEnPropiedad;
 
     public QueryOptions getQueryOptions() {
         return reversed ? ordering.getQueryOptionsDescending() : ordering.getQueryOptionsAscending();
@@ -52,6 +55,7 @@ public class BusquedaLibro {
                         getPartialQuery(getFiltroIdioma(), Libro.LIBRO_IDIOMA),
                         getPartialQuery(getFiltroColeccion(), Libro.LIBRO_COLECCION),
                         getPartialQuery(getFiltroGenero(), Libro.LIBRO_GENERO),
+                        getEnCalibreQuery(),
                         getFechaQuery(getFiltroFecha(), Libro.LIBRO_PUBLICADO))
                 .stream()
                 .filter(Objects::nonNull)
@@ -70,7 +74,14 @@ public class BusquedaLibro {
 
     private static Query<Libro> getFechaQuery(final LocalDate criterio, final Attribute<Libro, ChronoLocalDate> campo) {
         if (criterio != null) {
-            return QueryFactory.greaterThanOrEqualTo(campo, criterio);
+            return greaterThanOrEqualTo(campo, criterio);
+        } else
+            return null;
+    }
+
+    public Query<Libro> getEnCalibreQuery() {
+        if (Boolean.TRUE.equals(soloNoEnPropiedad)) {
+            return not(equal(Libro.LIBRO_EN_CALIBRE, Boolean.TRUE));
         } else
             return null;
     }
