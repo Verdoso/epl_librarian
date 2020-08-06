@@ -44,7 +44,7 @@ public class Libro {
     public static final SimpleAttribute<Libro, String> LIBRO_IDIOMA = attribute(LIBRO_IDIOMA_PARAM,
             Libro::getIdiomaNormalizado);
     public static final SimpleAttribute<Libro, Boolean> LIBRO_EN_CALIBRE = attribute(LIBRO_EN_CALIBRE_PARAM,
-            Libro::isInCalibre);
+            Libro::getInCalibre);
     public static final SimpleNullableAttribute<Libro, ChronoLocalDate> LIBRO_PUBLICADO = nullableAttribute(
             LIBRO_PUBLICADO_PARAM, Libro::getFechaPublicacion);
     public static final SimpleNullableAttribute<Libro, String> LIBRO_COLECCION = nullableAttribute(
@@ -89,7 +89,7 @@ public class Libro {
 
     private String magnetId;
 
-    private boolean inCalibre = false;
+    private Boolean inCalibre = Boolean.FALSE;
 
     @JsonIgnore
     public List<String> getListaAutores() {
