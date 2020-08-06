@@ -1,7 +1,7 @@
 <template>
   <section>
     <div id="fecha_base">
-      <b-field label="Considerar novedades libros posteriores a" grouped>
+      <b-field label="Son novedad posteriores a" grouped>
         <b-datepicker
           placeholder="Selecciona una fecha para filtrar"
           icon="calendar-today"
@@ -32,6 +32,11 @@
             v-model="soloGenerosFavoritos"
             @input="cambioGenerosFavoritos()"
           >Géneros favoritos</b-switch>
+          <b-switch
+            v-model="soloNoEnPropiedad"
+            @input="cambioSoloNoEnPropiedad()"
+            :visible="integracioncalibre"
+          >Ocultar los que ya tengo</b-switch>
         </p>
       </b-field>
     </div>
@@ -238,6 +243,7 @@ export default {
       soloAutoresFavoritos: false,
       soloIdiomasFavoritos: true,
       soloGenerosFavoritos: false,
+      soloNoEnPropiedad: false,
       fechaBase: null
     };
   },
@@ -259,6 +265,7 @@ export default {
         `favoritos_idiomas=${this.soloIdiomasFavoritos}`,
         `favoritos_generos=${this.soloGenerosFavoritos}`,
         `filtro_fecha=${this.porFechaBase()}`,
+        `solo_no_en_propiedad=${this.soloNoEnPropiedad}`,
         `por_pagina=${this.perPage}`
       ].join("&");
 
@@ -360,6 +367,9 @@ export default {
       this.loadAsyncData();
     },
     cambioGenerosFavoritos() {
+      this.loadAsyncData();
+    },
+    cambioSoloNoEnPropiedad() {
       this.loadAsyncData();
     },
     guardarFechaBase() {

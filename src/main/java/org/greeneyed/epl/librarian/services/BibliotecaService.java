@@ -44,6 +44,7 @@ import com.googlecode.cqengine.attribute.SimpleAttribute;
 import com.googlecode.cqengine.index.hash.HashIndex;
 import com.googlecode.cqengine.index.suffix.SuffixTreeIndex;
 import com.googlecode.cqengine.index.unique.UniqueIndex;
+import com.googlecode.cqengine.query.Query;
 import com.googlecode.cqengine.query.option.QueryOptions;
 import com.googlecode.cqengine.resultset.ResultSet;
 
@@ -259,7 +260,8 @@ public class BibliotecaService {
     public Pagina<Libro> paginaLibros(BusquedaLibro busquedaLibro) {
         Pagina<Libro> pagina = new Pagina<>();
         readLock.lock();
-        try (final ResultSet<Libro> queryResult = libreria.retrieve(busquedaLibro.getQuery(),
+        final Query<Libro> query = busquedaLibro.getQuery();
+		try (final ResultSet<Libro> queryResult = libreria.retrieve(query,
                 busquedaLibro.getQueryOptions())) {
             Stream<Libro> resultadosBusqueda = queryResult.stream();
             pagina.setTotal(queryResult.size());

@@ -79,6 +79,7 @@ public class LibrarianAPIController {
             @RequestParam(name = "favoritos_autores", required = false) boolean soloAutoresFavoritos,
             @RequestParam(name = "favoritos_idiomas", required = false) boolean soloIdiomasFavoritos,
             @RequestParam(name = "favoritos_generos", required = false) boolean soloGenerosFavoritos,
+            @RequestParam(name = "solo_no_en_propiedad", required = false) Boolean soloNoEnPropiedad,
             @RequestParam(name = "filtro_fecha", required = false) Long filtroFechaLong) {
         LocalDate filtroFecha = null;
         if (filtroFechaLong != null) {
@@ -91,7 +92,7 @@ public class LibrarianAPIController {
         }
         BusquedaLibro busquedaLibro = new BusquedaLibro(numeroPagina, porPagina, ordering, reversed, filtroTitulo,
                 filtroColeccion, filtroAutor, filtroGenero, filtroIdioma, filtroFecha, soloAutoresFavoritos,
-                soloIdiomasFavoritos, soloGenerosFavoritos);
+                soloIdiomasFavoritos, soloGenerosFavoritos, soloNoEnPropiedad);
         log.trace("BusquedaLibro: {}", busquedaLibro);
         return ResponseEntity.ok(bibliotecaService.paginaLibros(busquedaLibro));
     }
