@@ -14,7 +14,7 @@
         >
           <button class="button is-primary" @click="fechaBaseHoy()">
             <b-icon icon="calendar-today"></b-icon>
-            <span>Hoy</span>
+            <span>hoy</span>
           </button>
         </b-datepicker>
         <p class="control">
