@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -298,5 +299,20 @@ public class PreferencesService {
 
     public boolean canAplyGenerosFavoritos() {
         return !generosPreferidos.isEmpty();
+    }
+
+    public void updateAutoresFavoritos(BiConsumer<String, Boolean> updateAction) {
+        log.info("Actualizando autores preferidos");
+        autoresPreferidos.forEach(nombre -> updateAction.accept(nombre, Boolean.TRUE));
+    }
+
+    public void updateIdiomasFavoritos(BiConsumer<String, Boolean> updateAction) {
+        log.info("Actualizando idiomas preferidos");
+        idiomasPreferidos.forEach(nombre -> updateAction.accept(nombre, Boolean.TRUE));
+    }
+
+    public void updateGenerosFavoritos(BiConsumer<String, Boolean> updateAction) {
+        log.info("Actualizando generos preferidos");
+        generosPreferidos.forEach(nombre -> updateAction.accept(nombre, Boolean.TRUE));
     }
 }

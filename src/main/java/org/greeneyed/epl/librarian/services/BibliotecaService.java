@@ -44,7 +44,6 @@ import com.googlecode.cqengine.attribute.SimpleAttribute;
 import com.googlecode.cqengine.index.hash.HashIndex;
 import com.googlecode.cqengine.index.suffix.SuffixTreeIndex;
 import com.googlecode.cqengine.index.unique.UniqueIndex;
-import com.googlecode.cqengine.query.Query;
 import com.googlecode.cqengine.query.option.QueryOptions;
 import com.googlecode.cqengine.resultset.ResultSet;
 
@@ -168,6 +167,9 @@ public class BibliotecaService {
         libreria.addIndex(SuffixTreeIndex.onAttribute(Libro.LIBRO_COLECCION));
         libreria.addIndex(SuffixTreeIndex.onAttribute(Libro.LIBRO_GENERO));
         libreria.addIndex(HashIndex.onAttribute(Libro.LIBRO_EN_CALIBRE));
+        libreria.addIndex(HashIndex.onAttribute(Libro.LIBRO_AUTOR_FAVORITO));
+        libreria.addIndex(HashIndex.onAttribute(Libro.LIBRO_IDIOMA_FAVORITO));
+        libreria.addIndex(HashIndex.onAttribute(Libro.LIBRO_GENERO_FAVORITO));
         //
         autores.addIndex(UniqueIndex.onAttribute(Autor.AUTOR_ID));
         autores.addIndex(SuffixTreeIndex.onAttribute(Autor.AUTOR_NOMBRE));
@@ -192,7 +194,12 @@ public class BibliotecaService {
                     .map(mapperService::from)
                     .collect(Collectors.toList());
             libreria.addAll(libros);
+            log.info("Libros añadidos.");
+            // Actualizamos segun los datos que tenemos
             calibreService.updateLibros(SEARCH_AND_UDPATE_BOOK);
+            preferencesService.updateAutoresFavoritos(SEARCH_AND_UDPATE_AUTOR_FAVORITO);
+            preferencesService.updateIdiomasFavoritos(SEARCH_AND_UDPATE_IDIOMA_FAVORITO);
+            preferencesService.updateGenerosFavoritos(SEARCH_AND_UDPATE_GENERO_FAVORITO);
             //
             autores.clear();
             autores.addAll(libreria.stream()
@@ -260,30 +267,13 @@ public class BibliotecaService {
     public Pagina<Libro> paginaLibros(BusquedaLibro busquedaLibro) {
         Pagina<Libro> pagina = new Pagina<>();
         readLock.lock();
-        final Query<Libro> query = busquedaLibro.getQuery();
-		try (final ResultSet<Libro> queryResult = libreria.retrieve(query,
+        try (final ResultSet<Libro> queryResult = libreria.retrieve(busquedaLibro.getQuery(),
                 busquedaLibro.getQueryOptions())) {
-            Stream<Libro> resultadosBusqueda = queryResult.stream();
             pagina.setTotal(queryResult.size());
-            if (busquedaLibro.isSoloAutoresFavoritos() || busquedaLibro.isSoloIdiomasFavoritos()
-                    || busquedaLibro.isSoloGenerosFavoritos()) {
-                Predicate<Libro> filterPredicate = libro -> true;
-                if (preferencesService.canAplyAutoresFavoritos() && busquedaLibro.isSoloAutoresFavoritos()) {
-                    filterPredicate = filterPredicate.and(this::isAutorFavorito);
-                }
-                if (preferencesService.canAplyIdiomasFavoritos() && busquedaLibro.isSoloIdiomasFavoritos()) {
-                    filterPredicate = filterPredicate.and(this::isIdiomaFavorito);
-                }
-                if (preferencesService.canAplyGenerosFavoritos() && busquedaLibro.isSoloGenerosFavoritos()) {
-                    filterPredicate = filterPredicate.and(this::isGeneroFavorito);
-                }
-                pagina.setTotal((int) queryResult.stream().filter(filterPredicate).count());
-                resultadosBusqueda = queryResult.stream().filter(filterPredicate);
-            }
-            pagina.setResults(
-                    resultadosBusqueda.skip((busquedaLibro.getNumeroPagina() - 1) * (long) busquedaLibro.getPorPagina())
-                            .limit(busquedaLibro.getPorPagina())
-                            .collect(Collectors.toList()));
+            pagina.setResults(queryResult.stream()
+                    .skip((busquedaLibro.getNumeroPagina() - 1) * (long) busquedaLibro.getPorPagina())
+                    .limit(busquedaLibro.getPorPagina())
+                    .collect(Collectors.toList()));
         } finally {
             readLock.unlock();
         }
@@ -330,17 +320,65 @@ public class BibliotecaService {
         return pagina;
     }
 
-    private boolean isIdiomaFavorito(Libro libro) {
-        return preferencesService.checkIdiomaFavorito(libro.getIdioma());
+    public void actualizaAutoresFavoritos(Set<String> autores, Boolean favorito) {
+        autores.forEach(nombre -> SEARCH_AND_UDPATE_AUTOR_FAVORITO.accept(nombre, favorito));
     }
 
-    private boolean isAutorFavorito(Libro libro) {
-        return preferencesService.checkAutorFavorito(libro.getListaAutores());
+    private BiConsumer<String, Boolean> SEARCH_AND_UDPATE_AUTOR_FAVORITO = (autor, valor) -> {
+        List<Libro> aModificar = new ArrayList<>();
+        try (final ResultSet<Libro> queryResult = libreria
+                .retrieve(contains(Libro.LIBRO_AUTOR, Libro.flattenToAscii(autor)))) {
+            queryResult.stream().forEach(libro -> {
+                if (!valor.equals(libro.getAutorFavorito())) {
+                    libro.setAutorFavorito(valor);
+                    aModificar.add(libro);
+                }
+            });
+        }
+        if (!aModificar.isEmpty()) {
+            libreria.update(aModificar, aModificar);
+        }
+    };
+
+    public void actualizaIdiomasFavoritos(Set<String> idiomas, Boolean favorito) {
+        idiomas.forEach(nombre -> SEARCH_AND_UDPATE_IDIOMA_FAVORITO.accept(nombre, favorito));
     }
 
-    private boolean isGeneroFavorito(Libro libro) {
-        return preferencesService.checkGeneroFavorito(libro.getListaGeneros());
+    private BiConsumer<String, Boolean> SEARCH_AND_UDPATE_IDIOMA_FAVORITO = (idioma, valor) -> {
+        List<Libro> aModificar = new ArrayList<>();
+        try (final ResultSet<Libro> queryResult = libreria
+                .retrieve(contains(Libro.LIBRO_IDIOMA, Libro.flattenToAscii(idioma)))) {
+            queryResult.stream().forEach(libro -> {
+                if (!valor.equals(libro.getIdiomaFavorito())) {
+                    libro.setIdiomaFavorito(valor);
+                    aModificar.add(libro);
+                }
+            });
+        }
+        if (!aModificar.isEmpty()) {
+            libreria.update(aModificar, aModificar);
+        }
+    };
+
+    public void actualizaGenerosFavoritos(Set<String> generos, Boolean favorito) {
+        generos.forEach(nombre -> SEARCH_AND_UDPATE_GENERO_FAVORITO.accept(nombre, favorito));
     }
+
+    private BiConsumer<String, Boolean> SEARCH_AND_UDPATE_GENERO_FAVORITO = (genero, valor) -> {
+        List<Libro> aModificar = new ArrayList<>();
+        try (final ResultSet<Libro> queryResult = libreria
+                .retrieve(contains(Libro.LIBRO_GENERO, Libro.flattenToAscii(genero)))) {
+            queryResult.stream().forEach(libro -> {
+                if (!valor.equals(libro.getGeneroFavorito())) {
+                    libro.setGeneroFavorito(valor);
+                    aModificar.add(libro);
+                }
+            });
+        }
+        if (!aModificar.isEmpty()) {
+            libreria.update(aModificar, aModificar);
+        }
+    };
 
     private BiConsumer<String, String> SEARCH_AND_UDPATE_BOOK = (titulo, autores) -> {
         List<Libro> aModificar = new ArrayList<>();
@@ -355,16 +393,12 @@ public class BibliotecaService {
                         .stream()
                         .map(Libro::flattenToAscii)
                         .collect(Collectors.toSet());
-                if(autoresSetLibro.containsAll(autoresSet) && autoresSet.containsAll(autoresSetLibro)) {
+                if (autoresSetLibro.containsAll(autoresSet) && autoresSet.containsAll(autoresSetLibro)) {
+                    libro.setInCalibre(true);
                     aModificar.add(libro);
                 }
             });
         }
-        for (Libro libro : aModificar) {
-            log.debug("Libro encontrado en Calibre: {}", libro.getTitulo());
-            libro.setInCalibre(true);
-            libreria.remove(libro);
-            libreria.add(libro);
-        }
+        libreria.update(aModificar, aModificar);
     };
 }
