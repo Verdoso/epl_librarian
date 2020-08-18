@@ -71,7 +71,8 @@ public class EplCSVProcessor {
 
     private static final String BACKUP_FILES_PREFIX = "Libros";
     private static final String BACKUP_FILES_SUFFIX = ".epl_bck";
-    private static final String EPUB_LIBRE_CSV = "https://epublibre.org/rssweb/csv";
+    //private static final String EPUB_LIBRE_CSV = "https://epublibre.org/rssweb/csv";
+    private static final String EPUB_LIBRE_CSV = "https://www.dropbox.com/s/a9r4p7oyaftaz1b/csv_full_imgs.zip?dl=1";
     private static final String ERROR_DETALLADO = "Error detallado";
 
     @Data
@@ -132,6 +133,9 @@ public class EplCSVProcessor {
 
         @CsvBindByPosition(position = 15)
         private String magnetId;
+
+        @CsvBindByPosition(position = 16)
+        private String portada;
 
         public LocalDate getFechaPublicacion() {
             LocalDate temp = null;
