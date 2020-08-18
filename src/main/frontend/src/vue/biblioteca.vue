@@ -157,6 +157,11 @@
       </template>
       <template slot="detail" slot-scope="props">
         <article class="media">
+          <figure class="media-left">
+              <p class="image">
+                  <img :src="props.row.portada" style="height: 350px; width: auto;">
+              </p>
+          </figure>
           <div class="media-content">
             <div class="content">
               <strong>{{ props.row.titulo }}</strong>
