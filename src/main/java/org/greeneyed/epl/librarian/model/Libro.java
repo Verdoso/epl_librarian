@@ -98,6 +98,8 @@ public class Libro {
 
     private String magnetId;
 
+    private String portada;
+
     private Boolean inCalibre = Boolean.FALSE;
 
     private Boolean autorFavorito = Boolean.FALSE;
