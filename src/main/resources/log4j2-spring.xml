@@ -35,6 +35,7 @@
       <AppenderRef ref="Console" />
       <AppenderRef ref="RollingFile" />
     </Root>
+    <Logger name="org.apache.http.client.protocol.ResponseProcessCookies" level="ERROR" />
     <Logger name="org.springframework" level="WARN" />
     <Logger name="org.greeneyed" level="INFO" />
   </Loggers>
