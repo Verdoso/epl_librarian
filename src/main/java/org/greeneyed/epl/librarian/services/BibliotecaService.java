@@ -194,7 +194,7 @@ public class BibliotecaService {
                     .map(mapperService::from)
                     .collect(Collectors.toList());
             libreria.addAll(libros);
-            log.info("Libros añadidos.");
+            log.info("Libros a\u00f1adidos.");
             // Actualizamos segun los datos que tenemos
             calibreService.updateLibros(SEARCH_AND_UDPATE_BOOK);
             preferencesService.updateAutoresFavoritos(SEARCH_AND_UDPATE_AUTOR_FAVORITO);
