@@ -76,7 +76,7 @@ public class Libro {
 
     private BigDecimal volumen;
 
-    private int anyoPublicacion;
+    //private int anyoPublicacion;
 
     private String sinopsis;
 
@@ -92,9 +92,9 @@ public class Libro {
 
     private String estado;
 
-    private BigDecimal valoracion;
+    //private BigDecimal valoracion;
 
-    private Integer votos;
+    //private Integer votos;
 
     private String magnetId;
 
