@@ -36,6 +36,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -79,6 +81,7 @@ public class EplCSVProcessor {
 
         private static final long serialVersionUID = 1L;
 
+        private static final Pattern IMGUR_IMAGE_PATTERN = Pattern.compile("https?://(?:i.)?imgur.com/(.+)\\.jpg", Pattern.CASE_INSENSITIVE);
         private static final DateTimeFormatter PUBLICADO_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         @CsvBindByPosition(position = 0)
@@ -134,7 +137,20 @@ public class EplCSVProcessor {
         private String magnetId;
 
         @CsvBindByPosition(position = 16)
-        private String portada;
+        private String portadaCompleta;
+
+        public String getPortada() {
+            String result = null;
+            if(portadaCompleta!=null) {
+                Matcher matcher = IMGUR_IMAGE_PATTERN.matcher(portadaCompleta);
+                if(matcher.find()) {
+                    result = matcher.group(1);
+                } else {
+                    result = portadaCompleta;
+                }
+            }
+            return result;
+        }
 
         public LocalDate getFechaPublicacion() {
             LocalDate temp = null;

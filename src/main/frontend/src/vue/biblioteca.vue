@@ -159,7 +159,7 @@
         <article class="media">
           <figure class="media-left">
               <p class="image">
-                  <img :src="props.row.portada" style="height: 350px; width: auto;">
+                  <img :src="props.row | toPortada" style="height: 350px; width: auto;">
               </p>
           </figure>
           <div class="media-content">
@@ -459,6 +459,13 @@ export default {
      */
     truncate(value, length) {
       return value.length > length ? value.substr(0, length) + "..." : value;
+    },
+    toPortada(book) {
+      if(book.portada.startsWith('http')) {
+        return book.portada;
+      } else {
+        return `https://i.imgur.com/${book.portada}.jpg`;
+      }
     },
     toEplURL(book) {
       return `https://www.epublibre.org/libro/detalle/${book.id}`;
