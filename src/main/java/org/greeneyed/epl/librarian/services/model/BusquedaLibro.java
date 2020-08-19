@@ -5,7 +5,6 @@ import static com.googlecode.cqengine.query.QueryFactory.and;
 import static com.googlecode.cqengine.query.QueryFactory.contains;
 import static com.googlecode.cqengine.query.QueryFactory.equal;
 import static com.googlecode.cqengine.query.QueryFactory.greaterThanOrEqualTo;
-import static com.googlecode.cqengine.query.QueryFactory.not;
 
 import java.time.LocalDate;
 import java.time.chrono.ChronoLocalDate;
@@ -81,7 +80,7 @@ public class BusquedaLibro {
 
     public Query<Libro> getEnCalibreQuery() {
         if (Boolean.TRUE.equals(soloNoEnPropiedad)) {
-            return not(equal(Libro.LIBRO_EN_CALIBRE, Boolean.TRUE));
+            return equal(Libro.LIBRO_EN_CALIBRE, Boolean.FALSE);
         } else
             return null;
     }
