@@ -11,17 +11,17 @@ import org.springframework.core.io.ClassPathResource;
 @ComponentScan(basePackageClasses = Application.class)
 public class Application {
 
-    public static void main(String[] args) {
-        SpringApplicationBuilder builder = new SpringApplicationBuilder(Application.class);
-        builder.headless(false).run(args);
-    }
+	public static void main(String[] args) {
+		SpringApplicationBuilder builder = new SpringApplicationBuilder(Application.class);
+		builder.headless(false).run(args);
+	}
 
-    @Bean
-    public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
-        PropertySourcesPlaceholderConfigurer propsConfig = new PropertySourcesPlaceholderConfigurer();
-        propsConfig.setLocation(new ClassPathResource("git.properties"));
-        propsConfig.setIgnoreResourceNotFound(true);
-        propsConfig.setIgnoreUnresolvablePlaceholders(true);
-        return propsConfig;
-    }
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
+		PropertySourcesPlaceholderConfigurer propsConfig = new PropertySourcesPlaceholderConfigurer();
+		propsConfig.setLocation(new ClassPathResource("git.properties"));
+		propsConfig.setIgnoreResourceNotFound(true);
+		propsConfig.setIgnoreUnresolvablePlaceholders(true);
+		return propsConfig;
+	}
 }
