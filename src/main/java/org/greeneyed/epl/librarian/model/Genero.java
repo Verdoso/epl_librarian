@@ -16,13 +16,14 @@ public class Genero implements PuedeSerFavorito {
     private static final String GENERO_NOMBRE_PARAM = "generoNOMBRE";
     private static final String GENERO_LIBROS_PARAM = "generoLIBROS";
 
-    public static final SimpleAttribute<Genero, String> GENERO_ID = attribute(GENERO_ID_PARAM, Genero::getNombre);
+    public static final SimpleAttribute<Genero, String> GENERO_ID = attribute(Genero.class, String.class,
+            GENERO_ID_PARAM, Genero::getNombre);
 
-    public static final SimpleAttribute<Genero, String> GENERO_NOMBRE = attribute(GENERO_NOMBRE_PARAM,
-            Genero::getNombreNormalizado);
+    public static final SimpleAttribute<Genero, String> GENERO_NOMBRE = attribute(Genero.class, String.class,
+            GENERO_NOMBRE_PARAM, Genero::getNombreNormalizado);
 
-    public static final SimpleAttribute<Genero, Integer> GENERO_LIBROS = attribute(GENERO_LIBROS_PARAM,
-            Genero::getLibros);
+    public static final SimpleAttribute<Genero, Integer> GENERO_LIBROS = attribute(Genero.class, Integer.class,
+            GENERO_LIBROS_PARAM, Genero::getLibros);
 
     @EqualsAndHashCode.Include
     private final String nombre;

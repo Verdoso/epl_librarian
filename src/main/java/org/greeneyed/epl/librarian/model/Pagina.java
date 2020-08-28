@@ -6,6 +6,6 @@ import lombok.Data;
 
 @Data
 public class Pagina<T> {
-    private List<T> results;
-    private int total;
+	private List<T> results;
+	private int total;
 }
