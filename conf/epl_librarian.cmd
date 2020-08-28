@@ -5,13 +5,18 @@ ECHO Comprobando instalación de Java...
 where /q java || ECHO No hemos podido detectar java instalado en su sistema. No se puede ejecutar el programa. && PAUSE && EXIT /B
 ECHO Java detectado!
 
-ECHO Comprobando versión de Java...
-for /f tokens^=2-5^ delims^=.-_^" %%j in ('java -fullversion 2^>^&1') do set "jver=%%j%%k%%l%%m"
-if %jver% LSS 180000 ECHO La versión minima de Java soportada es la 1.8. No se puede ejecutar el programa. && PAUSE && EXIT /B
-ECHO La versión de Java es suficiente!
+ECHO Comprobando Java instalado...
+for /f "tokens=3" %%g in ('java -version 2^>^&1 ^| findstr /i "version"') do set "JAVAVER=%%g"
+set JAVAVER=%JAVAVER:"=%
+
+for /f "delims=. tokens=1-3" %%v in ("%JAVAVER%") do set "jver=%%v.%%w"
+ECHO Java instalado= %jver%
+
+if %jver% LSS 1.8 ECHO La versión minima de Java soportada es la 1.8. No se puede ejecutar el programa. && PAUSE && EXIT /B
+ECHO Java instalado compatible!
 
 ECHO Ejecutando...
 @ECHO ON
 
-java -Xms1g -Xmx1g -jar epl_librarian-${project.version}.jar
+java -Xms1g -Xmx1g -jar epl_librarian-0.0.31.jar
 PAUSE
