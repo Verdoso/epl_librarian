@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.greeneyed.epl.librarian.model.Libro;
+import org.greeneyed.epl.librarian.services.PreferencesService;
 import org.greeneyed.epl.librarian.services.BibliotecaService.BOOK_ORDERING;
 
 import com.googlecode.cqengine.attribute.Attribute;
@@ -46,16 +47,15 @@ public class BusquedaLibro {
 		return reversed ? ordering.getQueryOptionsDescending() : ordering.getQueryOptionsAscending();
 	}
 
-	public Query<Libro> getQuery() {
+	public Query<Libro> getQuery(PreferencesService preferencesService) {
 		Query<Libro> query;
-		List<Query<Libro>> partialQueries = Arrays
-				.asList(getPartialQuery(getFiltroTitulo(), Libro.LIBRO_TITULO),
-						getPartialQuery(getFiltroAutor(), Libro.LIBRO_AUTOR),
-						getPartialQuery(getFiltroIdioma(), Libro.LIBRO_IDIOMA),
-						getPartialQuery(getFiltroColeccion(), Libro.LIBRO_COLECCION),
-						getPartialQuery(getFiltroGenero(), Libro.LIBRO_GENERO), getEnCalibreQuery(),
-						getAutoresFavoritosQuery(), getIdiomasFavoritosQuery(), getGenerosFavoritosQuery(),
-						getFechaQuery(getFiltroFecha(), Libro.LIBRO_PUBLICADO))
+		List<Query<Libro>> partialQueries = Arrays.asList(getPartialQuery(getFiltroTitulo(), Libro.LIBRO_TITULO),
+				getPartialQuery(getFiltroAutor(), Libro.LIBRO_AUTOR),
+				getPartialQuery(getFiltroIdioma(), Libro.LIBRO_IDIOMA),
+				getPartialQuery(getFiltroColeccion(), Libro.LIBRO_COLECCION),
+				getPartialQuery(getFiltroGenero(), Libro.LIBRO_GENERO), getEnCalibreQuery(),
+				getAutoresFavoritosQuery(preferencesService), getIdiomasFavoritosQuery(preferencesService),
+				getGenerosFavoritosQuery(preferencesService), getFechaQuery(getFiltroFecha(), Libro.LIBRO_PUBLICADO))
 				.stream()
 				.filter(Objects::nonNull)
 				.collect(Collectors.toList());
@@ -85,22 +85,22 @@ public class BusquedaLibro {
 			return null;
 	}
 
-	public Query<Libro> getAutoresFavoritosQuery() {
-		if (Boolean.TRUE.equals(soloAutoresFavoritos)) {
+	public Query<Libro> getAutoresFavoritosQuery(PreferencesService preferencesService) {
+		if (preferencesService.canAplyAutoresFavoritos() && Boolean.TRUE.equals(soloAutoresFavoritos)) {
 			return equal(Libro.LIBRO_AUTOR_FAVORITO, Boolean.TRUE);
 		} else
 			return null;
 	}
 
-	public Query<Libro> getIdiomasFavoritosQuery() {
-		if (Boolean.TRUE.equals(soloIdiomasFavoritos)) {
+	public Query<Libro> getIdiomasFavoritosQuery(PreferencesService preferencesService) {
+		if (preferencesService.canAplyIdiomasFavoritos() && Boolean.TRUE.equals(soloIdiomasFavoritos)) {
 			return equal(Libro.LIBRO_IDIOMA_FAVORITO, Boolean.TRUE);
 		} else
 			return null;
 	}
 
-	public Query<Libro> getGenerosFavoritosQuery() {
-		if (Boolean.TRUE.equals(soloGenerosFavoritos)) {
+	public Query<Libro> getGenerosFavoritosQuery(PreferencesService preferencesService) {
+		if (preferencesService.canAplyGenerosFavoritos() && Boolean.TRUE.equals(soloGenerosFavoritos)) {
 			return equal(Libro.LIBRO_GENERO_FAVORITO, Boolean.TRUE);
 		} else
 			return null;

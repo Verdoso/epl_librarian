@@ -267,7 +267,7 @@ public class BibliotecaService {
 	public Pagina<Libro> paginaLibros(BusquedaLibro busquedaLibro) {
 		Pagina<Libro> pagina = new Pagina<>();
 		readLock.lock();
-		try (final ResultSet<Libro> queryResult = libreria.retrieve(busquedaLibro.getQuery(),
+		try (final ResultSet<Libro> queryResult = libreria.retrieve(busquedaLibro.getQuery(preferencesService),
 				busquedaLibro.getQueryOptions())) {
 			pagina.setTotal(queryResult.size());
 			pagina.setResults(queryResult.stream()
