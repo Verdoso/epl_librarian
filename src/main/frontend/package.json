@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@mdi/font": "^5.3.45",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bootstrap": "^4.2.1",
     "bottleneck": "^2.19.5",
     "buefy": "^0.8.20",
