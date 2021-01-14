@@ -7,7 +7,7 @@
           icon="calendar-today"
           :first-day-of-week="1"
           :day-names="['D', 'L', 'M', 'X', 'J', 'V', 'S']"
-          :month-names="['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembere']"
+          :month-names="['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']"
           trap-focus
           v-model="fechaBase"
           @input="cambioFechaNovedades()"
