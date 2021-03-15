@@ -2,6 +2,7 @@ var path = require('path')
 var webpack = require('webpack')
 
 const APP_PATH = path.resolve(__dirname, '../resources/static/librarian');
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 const PATHS = {
   src: path.resolve(__dirname, 'src'),
@@ -11,12 +12,10 @@ const PATHS = {
 
 module.exports = {
   entry: [
-    //path.join(PATHS.node_modules, 'jquery/dist/jquery.js'),
-    //path.join(PATHS.node_modules, 'jquery-ui-dist/jquery-ui.js'),
-    //path.join(PATHS.node_modules, 'bootstrap/dist/js/bootstrap.js'),
-    //path.join(PATHS.node_modules, 'metismenu/dist/metisMenu.js'),
-    //path.join(PATHS.js, 'sb-admin-2.js'),
     path.join(PATHS.src, 'main.js'),
+  ],
+  plugins: [
+  new VueLoaderPlugin()
   ],
   output: {
     path: path.resolve(APP_PATH, 'dist'),
@@ -96,6 +95,7 @@ if (process.env.NODE_ENV === 'development') {
 
 if (process.env.NODE_ENV === 'production') {
   module.exports.devtool = '#source-map'
+  module.exports.optimization = {minimize : true}
   // http://vue-loader.vuejs.org/en/workflow/production.html
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({
