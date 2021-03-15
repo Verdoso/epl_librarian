@@ -31,7 +31,7 @@ Con el EPL Librarian apagado, editamos el fichero $HOME/.librarian/preferences.p
 Por ejemplo, si Calibre guarda los libros en un directorio 'D:/Libros' podríamos añadir a preferences.properties la siguiente linea
 calibre_home=D:/Libros
 
-Al arrancar EPL Librarian nos indicará que inetgración con calibre está habilitada, tardará un poco más en arrancar y en la biblioteca aparecera una nueva columna que nos indicará, para cada libro, si se ha encontrado dicho libre en nuestra biblioteca Calibre.
+Al arrancar EPL Librarian nos indicará que integración con calibre está habilitada, tardará un poco más en arrancar y en la biblioteca aparecera una nueva columna que nos indicará, para cada libro, si se ha encontrado dicho libre en nuestra biblioteca Calibre.
 
 La comprobación mira el título exacto del libro y sus autores, por lo que puede ser que no encuentre algún libro que no tenga exactamente el mismo título (p.e. 'El Camel Club' vs 'Camel Club') o que tenga alguna errata en el nombre (p.e. 'James S.A. Corey' vs 'James S. A. Corey'). Se ha optado por quedarse corto y decir que hay libros que no tenemos, por pequeñas diferencias en los datos, que posibilitar los errores al reves y dar por hecho que tenemos ciertos libros por ser demasiado generosos en las comprobaciones.
 
