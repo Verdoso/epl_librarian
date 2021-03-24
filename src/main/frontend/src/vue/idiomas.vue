@@ -36,11 +36,9 @@
       @sort="onSort"
       @dblclick="onSelectIdioma"
     >
-      <template slot-scope="props">
-        <b-table-column field="POR_IDIOMA" label="Nombre" sortable searchable>{{ props.row.nombre }}</b-table-column>
+      <b-table-column field="POR_IDIOMA" label="Nombre" sortable searchable v-slot="props">{{ props.row.nombre }}</b-table-column>
 
-        <b-table-column field="POR_LIBROS" label="# libros" sortable>{{ props.row.libros }}</b-table-column>
-      </template>
+      <b-table-column field="POR_LIBROS" label="# libros" sortable v-slot="props">{{ props.row.libros }}</b-table-column>
     </b-table>
   </section>
 </template>
@@ -102,14 +100,18 @@ export default {
               this.checkedRows.push(item);
             }
           });
-          this.loading = false;
+          this.$nextTick(() => {
+            this.loading = false;
+          });
         })
         .catch(error => {
-          this.data = [];
-          this.checkedRows = [];
-          this.total = 0;
-          this.loading = false;
-          throw error;
+          this.$nextTick(() => {
+            this.data = [];
+            this.checkedRows = [];
+            this.total = 0;
+            this.loading = false;
+            throw error;
+          });
         });
     },
     /*
@@ -192,7 +194,9 @@ export default {
   },
   watch: {
     checkedRows: function() {
-      this.guardarFavoritos();
+      if(!this.loading) {
+        this.guardarFavoritos();
+      }
     }
   },
   mounted() {

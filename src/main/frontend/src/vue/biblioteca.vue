@@ -63,34 +63,35 @@
       @page-change="onPageChange"
       @sort="onSort"
     >
-      <template slot-scope="props">
-        <b-table-column
-          field="POR_TITULO"
-          label="Titulo"
-          searchable
-          sortable
-          width="20%"
-        >{{ props.row.titulo }}</b-table-column>
+      <b-table-column
+        field="POR_TITULO"
+        label="Titulo"
+        searchable
+        sortable
+        width="20%"
+        v-slot="props"
+      >{{ props.row.titulo }}</b-table-column>
 
-        <b-table-column
-          field="POR_COLECCION"
-          label="Coleccion"
-          sortable
-          searchable
-          width="20%"
-        >{{ props.row.coleccionCompleta }}</b-table-column>
+      <b-table-column
+        field="POR_COLECCION"
+        label="Coleccion"
+        sortable
+        searchable
+        width="20%"
+        v-slot="props"
+      >{{ props.row.coleccionCompleta }}</b-table-column>
 
-        <b-table-column field="POR_AUTOR" label="Autor" sortable searchable width="25%">
-          <template slot="searchable">
-            <b-input
-              v-model="currentAutorFilter"
-              placeholder="autor..."
-              icon-right="close-circle"
-              icon-right-clickable
-              @icon-right-click="clearAutorFilter"
-              @input="changedAutorFilter"
-            />
-          </template>
+      <b-table-column field="POR_AUTOR" label="Autor" sortable searchable width="25%">
+        <template #searchable="props">
+          <b-input
+            v-model="props.filters[props.column.field]"
+            placeholder="autor..."
+            icon-right="close-circle"
+            icon-right-clickable
+            @icon-right-click="clearAutorFilter(props)"
+          />
+        </template>
+        <template  v-slot="props">
           <b-tooltip
             :label="props.row.autor | truncate(120)"
             type="is-light"
@@ -98,33 +99,35 @@
             v-if="(props.row.autor.length > 45)"
           >{{ props.row.autor | truncate(45) }}</b-tooltip>
           <span v-if="(props.row.autor.length <= 45)">{{ props.row.autor }}</span>
-        </b-table-column>
+        </template>
+      </b-table-column>
 
-        <b-table-column field="POR_IDIOMA" label="Idiomas" sortable searchable width="10%">
-          <template slot="searchable">
-            <b-input
-              v-model="currentIdiomaFilter"
-              placeholder="idioma..."
-              icon-right="close-circle"
-              icon-right-clickable
-              @icon-right-click="clearIdiomaFilter"
-              @input="changedIdiomaFilter"
-            />
-          </template>
+      <b-table-column field="POR_IDIOMA" label="Idiomas" sortable searchable width="10%">
+        <template #searchable="props">
+          <b-input
+            v-model="props.filters[props.column.field]"
+            placeholder="idioma..."
+            icon-right="close-circle"
+            icon-right-clickable
+            @icon-right-click="clearIdiomaFilter(props)"
+          />
+        </template>
+        <template  v-slot="props">
           {{ props.row.idioma}}
-        </b-table-column>
+        </template>
+      </b-table-column>
 
-        <b-table-column field="POR_GENERO" label="Generos" searchable width="25%">
-          <template slot="searchable">
-            <b-input
-              v-model="currentGeneroFilter"
-              placeholder="genero..."
-              icon-right="close-circle"
-              icon-right-clickable
-              @icon-right-click="clearGeneroFilter"
-              @input="changedGeneroFilter"
-            />
-          </template>
+      <b-table-column field="POR_GENERO" label="Generos" searchable width="25%">
+        <template #searchable="props">
+          <b-input
+            v-model="props.filters[props.column.field]"
+            placeholder="genero..."
+            icon-right="close-circle"
+            icon-right-clickable
+            @icon-right-click="clearGeneroFilter(props)"
+          />
+        </template>
+        <template  v-slot="props">
           <b-tooltip
             :label="props.row.generos"
             type="is-light"
@@ -132,30 +135,32 @@
             v-if="(props.row.generos.length > 45)"
           >{{ props.row.generos | truncate(45) }}</b-tooltip>
           <span v-if="(props.row.generos.length <= 45)">{{ props.row.generos }}</span>
-        </b-table-column>
+        </template>
+      </b-table-column>
 
-        <b-table-column
-          field="POR_PUBLICADO"
-          label="Publicado"
-          sortable
-          width="10%"
-        >{{ props.row.publicado.substring(2) }}</b-table-column>
+      <b-table-column
+        field="POR_PUBLICADO"
+        label="Publicado"
+        sortable
+        width="10%"
+        v-slot="props"
+      >{{ props.row.publicado.substring(2) }}</b-table-column>
 
-        <b-table-column
-          field="POR_CALIBRE"
-          label="Calibre"
-          :visible="integracioncalibre"
-          sortable
-          width="5%"
-        >
-          <b-icon
-            pack="fa"
-            :type="props.row.inCalibre ? 'is-success' : 'is-danger'"
-            :icon="props.row.inCalibre ? 'check' : 'times'"
-          ></b-icon>
-        </b-table-column>
-      </template>
-      <template slot="detail" slot-scope="props">
+      <b-table-column
+        field="POR_CALIBRE"
+        label="Calibre"
+        :visible="integracioncalibre"
+        sortable
+        width="5%"
+        v-slot="props"
+      >
+        <b-icon
+          pack="fa"
+          :type="props.row.inCalibre ? 'is-success' : 'is-danger'"
+          :icon="props.row.inCalibre ? 'check' : 'times'"
+        ></b-icon>
+      </b-table-column>
+      <template #detail="props">
         <article class="media">
           <figure class="media-left">
               <p class="image">
@@ -235,9 +240,6 @@ export default {
       data: [],
       total: 0,
       loading: false,
-      currentAutorFilter: null,
-      currentGeneroFilter: null,
-      currentIdiomaFilter: null,
       sortField: "POR_TITULO",
       sortOrder: "asc",
       defaultSortOrder: "asc",
@@ -263,9 +265,9 @@ export default {
         `desc=${this.sortOrder == "desc" ? "true" : "false"}`,
         `filtro_titulo=${this.filterOnCriteria("POR_TITULO")}`,
         `filtro_coleccion=${this.filterOnCriteria("POR_COLECCION")}`,
-        `filtro_autor=${this.filterOnValue(this.autorfilter)}`,
-        `filtro_genero=${this.filterOnValue(this.generofilter)}`,
-        `filtro_idioma=${this.filterOnValue(this.idiomafilter)}`,
+        `filtro_autor=${this.filterOnCriteria("POR_AUTOR")}`,
+        `filtro_genero=${this.filterOnCriteria("POR_GENERO")}`,
+        `filtro_idioma=${this.filterOnCriteria("POR_IDIOMA")}`,
         `favoritos_autores=${this.soloAutoresFavoritos}`,
         `favoritos_idiomas=${this.soloIdiomasFavoritos}`,
         `favoritos_generos=${this.soloGenerosFavoritos}`,
@@ -278,7 +280,6 @@ export default {
       console.log("Lanzando peticion")
       limiter.schedule(() => axios.get(`/librarian/libros?${params}`))
         .then(({ data }) => {
-          console.log("Procesando resultados " + data.total)
           this.data = [];
           this.total = data.total;
           data.results.forEach(item => {
@@ -336,22 +337,16 @@ export default {
       this.filters = filters;
       this.loadAsyncData();
     },
-    changedAutorFilter(e) {
-      this.$store.commit("changeAutorFilter", this.currentAutorFilter);
+    clearAutorFilter(props) {
+      props.filters[props.column.field] = '';
+      this.$store.commit("changeAutorFilter", '');
     },
-    changedGeneroFilter(e) {
-      this.$store.commit("changeGeneroFilter", this.currentGeneroFilter);
-    },
-    changedIdiomaFilter(e) {
-      this.$store.commit("changeIdiomaFilter", this.currentIdiomaFilter);
-    },
-    clearAutorFilter(e) {
-      this.$store.commit("changeAutorFilter", "");
-    },
-    clearGeneroFilter(e) {
+    clearGeneroFilter(props) {
+      props.filters[props.column.field] = '';
       this.$store.commit("changeGeneroFilter", "");
     },
-    clearIdiomaFilter(e) {
+    clearIdiomaFilter(props) {
+      props.filters[props.column.field] = '';
       this.$store.commit("changeIdiomaFilter", "");
     },
     fechaBaseHoy() {
@@ -429,28 +424,25 @@ export default {
       }
     },
     autorfilter: function() {
-      if (this.currentAutorFilter === this.autorfilter) {
-        //console.log('Nothing to do')
-      } else {
-        this.currentAutorFilter = this.autorfilter;
+      if (this.$refs.table.filters['POR_AUTOR'] !== this.autorfilter) {
+        this.$nextTick(() => {
+          this.$set(this.$refs.table.filters,'POR_AUTOR',this.autorfilter);
+        });
       }
-      this.loadAsyncData();
     },
     generofilter: function() {
-      if (this.currentGeneroFilter === this.generofilter) {
-        //console.log('Nothing to do')
-      } else {
-        this.currentGeneroFilter = this.generofilter;
+      if (this.$refs.table.filters['POR_GENERO'] !== this.generofilter) {
+        this.$nextTick(() => {
+          this.$set(this.$refs.table.filters,'POR_GENERO',this.generofilter);
+        });
       }
-      this.loadAsyncData();
     },
     idiomafilter: function() {
-      if (this.currentIdiomaFilter === this.idiomafilter) {
-        //console.log('Nothing to do')
-      } else {
-        this.currentIdiomaFilter = this.idiomafilter;
+      if (this.$refs.table.filters['POR_IDIOMA'] !== this.idiomafilter) {
+        this.$nextTick(() => {
+          this.$set(this.$refs.table.filters,'POR_IDIOMA',this.idiomafilter);
+        });
       }
-      this.loadAsyncData();
     }
   },
   filters: {
