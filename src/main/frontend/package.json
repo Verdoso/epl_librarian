@@ -14,7 +14,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^4.2.1",
     "bottleneck": "^2.19.5",
-    "buefy": "^0.8.20",
+    "buefy": "^0.9.4",
     "font-awesome": "^4.7.0",
     "glyphicons-only-bootstrap": "^1.0.1",
     "jquery": "^3.5.1",
