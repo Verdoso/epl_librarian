@@ -39,9 +39,9 @@ const store = new Vuex.Store({
   state: {
   currentTab: 'biblioteca',
   lastupdate: null,
-  autorfilter: null,
-  generofilter: null,
-  idiomafilter: null,
+  autorfilter: '',
+  generofilter: '',
+  idiomafilter: '',
   buildVersion: null,
   calibreIntegration: false
   },
