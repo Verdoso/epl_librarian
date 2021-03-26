@@ -22,15 +22,21 @@ import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+@Configuration
 @Data
 @Slf4j
 @Service
 public class PreferencesService {
+
+    @Value("${superportable:false}")
+    private boolean superPortable;
 
     private static final String IDIOMAS_PREFERIDOS_KEY = "idiomas_preferidos";
     private static final String AUTORES_PREFERIDOS_KEY = "autores_preferidos";
@@ -54,7 +60,7 @@ public class PreferencesService {
 
     @PostConstruct
     public void postConstruct() {
-        preferencesFile = getPreferencesFile();
+        preferencesFile = findPreferencesFile(superPortable);
         log.info("Leyendo preferencias desde {}", preferencesFile.getAbsolutePath());
         if (preferencesFile.exists()) {
             cargarPreferencias();
@@ -238,9 +244,9 @@ public class PreferencesService {
         }
     }
 
-    public static File getPreferencesFile() {
-        return new File(
-                String.join(File.separator, System.getProperty("user.home"), ".librarian", "preferences.properties"));
+    public static File findPreferencesFile(boolean superPortable) {
+        return new File(String.join(File.separator, System.getProperty(superPortable ? "user.dir" : "user.home"),
+                ".librarian", "preferences.properties"));
     }
 
     public Optional<LocalDate> getFechaBase() {

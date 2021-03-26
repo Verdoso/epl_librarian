@@ -1,5 +1,7 @@
 /target/
 /.settings
+.librarian
+/tmp/
 src/main/frontend/node_modules/
 src/main/resources/static/librarian/dist/
 src/main/frontend/node/
