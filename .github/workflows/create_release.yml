@@ -30,7 +30,7 @@ jobs:
       run: |
          PROJECT_VERSION=`mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive  exec:exec`
          CLEAN_PROJECT_VERSION=`echo "${PROJECT_VERSION%-SNAPSHOT}"`
-         echo "::set-env name=RELEASE_VERSION::${CLEAN_PROJECT_VERSION}"
+         echo "RELEASE_VERSION=${CLEAN_PROJECT_VERSION}" >> $GITHUB_ENV
          echo "Generando release de la versión ${RELEASE_VERSION}"
       
     - name: Prepare & perform release
