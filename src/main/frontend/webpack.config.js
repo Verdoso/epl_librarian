@@ -3,6 +3,7 @@ var webpack = require('webpack')
 
 const APP_PATH = path.resolve(__dirname, '../resources/static/librarian');
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const CompressionPlugin = require("compression-webpack-plugin");
 
 const PATHS = {
   src: path.resolve(__dirname, 'src'),
@@ -15,7 +16,11 @@ module.exports = {
     path.join(PATHS.src, 'main.js'),
   ],
   plugins: [
-  new VueLoaderPlugin()
+    // Filter out the moment locales to reduce bundle size
+    // Locales that should be included MUST be added to the project, otherwise they won't be available for use)
+    // References: https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new VueLoaderPlugin(),
   ],
   output: {
     path: path.resolve(APP_PATH, 'dist'),
@@ -37,6 +42,31 @@ module.exports = {
           'vue-style-loader',
           'css-loader',
           'less-loader'
+        ]
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          'sass-loader'
+        ]
+      },
+      {
+        test: /\.sass$/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              // indentedSyntax: true,
+              // sass-loader version >= 8
+              sassOptions: {
+                indentedSyntax: true
+              }
+            }
+          }
         ]
       },
       {
@@ -93,7 +123,7 @@ if (process.env.NODE_ENV === 'development') {
     }
 }
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV !== 'development') {
   module.exports.devtool = '#source-map'
   module.exports.optimization = {minimize : true}
   // http://vue-loader.vuejs.org/en/workflow/production.html
@@ -103,14 +133,9 @@ if (process.env.NODE_ENV === 'production') {
         NODE_ENV: '"production"'
       }
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      compress: {
-        warnings: false
-      }
-    }),
     new webpack.LoaderOptionsPlugin({
       minimize: true
-    })
+    }),
+    new CompressionPlugin({ include: /\.(js)$/i, deleteOriginalAssets: true }),
   ])
 }

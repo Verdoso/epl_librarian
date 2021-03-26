@@ -306,19 +306,4 @@ public class PreferencesService {
     public boolean canAplyGenerosFavoritos() {
         return !generosPreferidos.isEmpty();
     }
-
-    public void updateAutoresFavoritos(BiConsumer<String, Boolean> updateAction) {
-        log.info("Actualizando autores preferidos");
-        autoresPreferidos.forEach(nombre -> updateAction.accept(nombre, Boolean.TRUE));
-    }
-
-    public void updateIdiomasFavoritos(BiConsumer<String, Boolean> updateAction) {
-        log.info("Actualizando idiomas preferidos");
-        idiomasPreferidos.forEach(nombre -> updateAction.accept(nombre, Boolean.TRUE));
-    }
-
-    public void updateGenerosFavoritos(BiConsumer<String, Boolean> updateAction) {
-        log.info("Actualizando generos preferidos");
-        generosPreferidos.forEach(nombre -> updateAction.accept(nombre, Boolean.TRUE));
-    }
 }
