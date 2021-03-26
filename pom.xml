@@ -4,7 +4,7 @@
 
   <groupId>org.greeneyed</groupId>
   <artifactId>epl_librarian</artifactId>
-  <version>0.0.36</version>
+  <version>0.0.37-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>EPL Librarian</name>
@@ -12,7 +12,7 @@
 
   <scm>
     <developerConnection>scm:git:https://github.com/Verdoso/${project.artifactId}</developerConnection>
-    <tag>v0.0.36</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <dependencyManagement>
