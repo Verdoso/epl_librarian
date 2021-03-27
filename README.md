@@ -27,9 +27,10 @@ Hay que tener en cuenta que:
 ## Integración, opcional, con Calibre
 Si tenemos instalado el software para gestión de libros [Calibre](https://calibre-ebook.com/es) en el mismo ordenador donde ejecutar EPL Librarian y queremos que nos compruebe los libros que tenemos, podemos hacerlo especificándole donde se encuentra la biblioteca de Calibre en nuestro ordenador en las preferencias.
 
-Con el EPL Librarian apagado, editamos el fichero $HOME/.librarian/preferences.properties ( EPL Librarian nos indica la localización exacta en la consola al arrancar ) y añadimos una propiedad ```calibre_home``` indicándonle el camino a la biblioteca (el directorio donde Calibre guarda su fichero metadata.db).
-Por ejemplo, si Calibre guarda los libros en un directorio 'D:/Libros' podríamos añadir a preferences.properties la siguiente linea
-calibre_home=D:/Libros
+Con el EPL Librarian apagado, editamos el fichero $HOME/.librarian/preferences.properties ( EPL Librarian nos indica la localización exacta en la consola al arrancar ) y añadimos una propiedad ```calibre_home``` indicándonle el camino a la biblioteca en formato "properties de Java"(el directorio donde Calibre guarda su fichero metadata.db).
+Por ejemplo, si Calibre guarda los libros en un directorio 'D:\Libros' podríamos añadir a preferences.properties la siguiente linea
+calibre_home=D\:\\Libros
+Es necesario añadir las barras inversas '\' antes de los caracteres ':' y '\' para evitar que haya problemas, ya que esos caracteres son especiales en los ficheros de properties.
 
 Al arrancar EPL Librarian nos indicará que integración con calibre está habilitada, tardará un poco más en arrancar y en la biblioteca aparecera una nueva columna que nos indicará, para cada libro, si se ha encontrado dicho libre en nuestra biblioteca Calibre.
 
