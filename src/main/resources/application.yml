@@ -1,6 +1,8 @@
 server:
   port: 7070
 spring:
+  config:
+    use-legacy-processing: true
   thymeleaf:
     cache: false
     mode: HTML
@@ -9,7 +11,7 @@ management:
       web:
          base-path: /manage
          exposure:
-            include: health,info,env,mappings,loggers,configInspector,configprops,actuators
+            include: health,info,env,mappings,refresh,loggers,configInspector,configprops,actuators
 logging.config: classpath:log4j2-spring.xml
 ---
 spring:
