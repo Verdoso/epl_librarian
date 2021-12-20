@@ -390,7 +390,7 @@
                 </goals>
                 <configuration>
                   <nodeVersion>v12.14.1</nodeVersion>
-                  <npmVersion>6.13.7</npmVersion>
+                  <npmVersion>8.3.0</npmVersion>
                 </configuration>
               </execution>
               <execution>
