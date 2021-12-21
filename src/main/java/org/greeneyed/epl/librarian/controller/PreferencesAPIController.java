@@ -38,23 +38,31 @@ public class PreferencesAPIController {
                 .orElseGet(OK_BUILDER::build);
     }
 
-    @PostMapping(value = "/fecha_base", produces = MediaType.TEXT_HTML_VALUE )
+    @PostMapping(value = "/fecha_base", produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity<String> guardarFechaBase(@RequestParam(name = "fechaBase") long fechaBaseLong) {
         preferencesService
                 .setFechaBase(Instant.ofEpochMilli(fechaBaseLong).atZone(ZoneId.systemDefault()).toLocalDate());
         return OK_BUILDER.build();
     }
 
-    @PostMapping(value = "/autoresFavoritos", produces = MediaType.TEXT_HTML_VALUE )
+    @PostMapping(value = "/descarte", produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity<String> descartarLibro(@RequestParam(name = "id") Integer libroId,
+            @RequestParam(name = "descartado") boolean descartado) {
+        preferencesService.setDescarte(libroId, descartado);
+        bibliotecaService.setDescarte(libroId, descartado);
+        return OK_BUILDER.build();
+    }
+
+    @PostMapping(value = "/autoresFavoritos", produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity<String> guardarAutoresFavoritos(
             @RequestParam(name = "autoresFavoritos") Set<String> autoresFavoritos,
             @RequestParam(name = "autoresNoFavoritos") Set<String> autoresNoFavoritos) {
         preferencesService.actualizarAutoresPreferidos(autoresFavoritos, autoresNoFavoritos);
-        bibliotecaService.actualizaAutoresFavoritos(preferencesService.getAutoresPreferidos());
+        bibliotecaService.actualizaAutoresPreferidos(preferencesService.getAutoresPreferidos());
         return OK_BUILDER.body("OK");
     }
 
-    @PostMapping(value = "/idiomasFavoritos", produces = MediaType.TEXT_HTML_VALUE )
+    @PostMapping(value = "/idiomasFavoritos", produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity<String> guardarIdiomasFavoritos(
             @RequestParam(name = "idiomasFavoritos") Set<String> idiomasFavoritos,
             @RequestParam(name = "idiomasNoFavoritos") Set<String> idiomasNoFavoritos) {
@@ -63,7 +71,7 @@ public class PreferencesAPIController {
         return OK_BUILDER.body("OK");
     }
 
-    @PostMapping(value = "/generosFavoritos", produces = MediaType.TEXT_HTML_VALUE )
+    @PostMapping(value = "/generosFavoritos", produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity<String> guardarGenerosFavoritos(
             @RequestParam(name = "generosFavoritos") Set<String> generosFavoritos,
             @RequestParam(name = "generosNoFavoritos") Set<String> generosNoFavoritos) {

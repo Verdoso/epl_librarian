@@ -198,7 +198,8 @@ public class BibliotecaService {
             log.info("Libros a\u00f1adidos.");
             // Actualizamos segun los datos que tenemos
             calibreService.updateLibros(SEARCH_AND_UDPATE_BOOK);
-            actualizaAutoresFavoritos(preferencesService.getAutoresPreferidos());
+            actualizaAutoresPreferidos(preferencesService.getAutoresPreferidos());
+            actualizaLibrosDescartados(preferencesService.getLibrosDescartados());
             actualizaIdiomasFavoritos(preferencesService.getIdiomasPreferidos());
             actualizaGenerosFavoritos(preferencesService.getGenerosPreferidos());
             //
@@ -321,23 +322,53 @@ public class BibliotecaService {
         return pagina;
     }
 
-    public void actualizaAutoresFavoritos(Set<String> autores) {
+    public void setDescarte(Integer libroId, boolean descartado) {
+        log.info("Actualizando libros descarte...");
+        writeLock.lock();
+        try {
+            try (final ResultSet<Libro> queryResult = libreria.retrieve(in(Libro.LIBRO_ID, libroId))) {
+                queryResult.stream().forEach(libro -> {
+                    libreria.remove(libro);
+                    libro.setDescartado(descartado);
+                    libreria.add(libro);
+                });
+            }
+        } finally {
+            writeLock.unlock();
+        }
+        log.info("...actualizado");
+    }
+
+    public void actualizaLibrosDescartados(Set<Integer> libros) {
+        log.info("Actualizando libros descartados...");
+        writeLock.lock();
+        try {
+            List<Libro> all = libreria.stream()
+                    .peek(libro -> libro.setDescartado(libros.contains(libro.getId())))
+                    .collect(Collectors.toList());
+            libreria.clear();
+            libreria.addAll(all);
+        } finally {
+            writeLock.unlock();
+        }
+        log.info("...actualizados");
+    }
+
+    public void actualizaAutoresPreferidos(Set<String> autores) {
         log.info("Actualizando autores preferidos...");
         writeLock.lock();
         try {
             libreria.stream().forEach(libro -> libro.setAutorFavorito(false));
             Set<String> normalisedAutors = autores.stream().map(Libro::flattenToAscii).collect(Collectors.toSet());
-            try (final ResultSet<Libro> queryResult = libreria
-                    .retrieve(in(Libro.LIBRO_AUTOR, normalisedAutors))) {
+            try (final ResultSet<Libro> queryResult = libreria.retrieve(in(Libro.LIBRO_AUTOR, normalisedAutors))) {
                 queryResult.stream().forEach(libro -> {
-                        libro.setAutorFavorito(true);
+                    libro.setAutorFavorito(true);
                 });
             }
             List<Libro> all = libreria.stream().collect(Collectors.toList());
             libreria.clear();
             libreria.addAll(all);
-        }
-        finally {
+        } finally {
             writeLock.unlock();
         }
         log.info("...actualizados");
@@ -349,17 +380,15 @@ public class BibliotecaService {
         try {
             libreria.stream().forEach(libro -> libro.setIdiomaFavorito(false));
             Set<String> normalisedIdiomas = idiomas.stream().map(Libro::flattenToAscii).collect(Collectors.toSet());
-            try (final ResultSet<Libro> queryResult = libreria
-                    .retrieve(in(Libro.LIBRO_IDIOMA, normalisedIdiomas))) {
+            try (final ResultSet<Libro> queryResult = libreria.retrieve(in(Libro.LIBRO_IDIOMA, normalisedIdiomas))) {
                 queryResult.stream().forEach(libro -> {
-                        libro.setIdiomaFavorito(true);
+                    libro.setIdiomaFavorito(true);
                 });
             }
             List<Libro> all = libreria.stream().collect(Collectors.toList());
             libreria.clear();
             libreria.addAll(all);
-        }
-        finally {
+        } finally {
             writeLock.unlock();
         }
         log.info("...actualizados");
@@ -371,17 +400,15 @@ public class BibliotecaService {
         try {
             libreria.stream().forEach(libro -> libro.setGeneroFavorito(false));
             Set<String> normalisedGeneros = generos.stream().map(Libro::flattenToAscii).collect(Collectors.toSet());
-            try (final ResultSet<Libro> queryResult = libreria
-                    .retrieve(in(Libro.LIBRO_GENERO, normalisedGeneros))) {
+            try (final ResultSet<Libro> queryResult = libreria.retrieve(in(Libro.LIBRO_GENERO, normalisedGeneros))) {
                 queryResult.stream().forEach(libro -> {
-                        libro.setGeneroFavorito(true);
+                    libro.setGeneroFavorito(true);
                 });
             }
             List<Libro> all = libreria.stream().collect(Collectors.toList());
             libreria.clear();
             libreria.addAll(all);
-        }
-        finally {
+        } finally {
             writeLock.unlock();
         }
         log.info("...actualizados");

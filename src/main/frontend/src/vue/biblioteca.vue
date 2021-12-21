@@ -36,7 +36,7 @@
             v-model="soloNoEnPropiedad"
             @input="cambioSoloNoEnPropiedad()"
             v-if="integracioncalibre"
-          >Ocultar los que ya tengo</b-switch>
+          >Ocultar los que tengo/descartados</b-switch>
         </p>
       </b-field>
     </div>
@@ -159,6 +159,28 @@
           :type="props.row.inCalibre ? 'is-success' : 'is-danger'"
           :icon="props.row.inCalibre ? 'check' : 'times'"
         ></b-icon>
+      </b-table-column>
+      <b-table-column
+        field="descartado"
+        label="Descarte"
+        :visible="integracioncalibre"
+        width="5%"
+        v-slot="props"
+      >
+        <b-tooltip
+          :type="!props.row.descartado ? 'is-danger' : 'is-success'"
+          :label="props.row.descartado ? 'Mostrar' : 'Descartar'"
+          >
+          <b-button
+            size="is-small"
+            outlined
+            rounded
+            icon-pack="fa"
+            :type="props.row.descartado ? 'is-danger' : 'is-success'"
+            :icon-right="props.row.descartado ? 'eye-slash' : 'eye'"
+            @click="descartar(props.row)"
+            />
+        </b-tooltip>
       </b-table-column>
       <template #detail="props">
         <article class="media">
@@ -285,13 +307,17 @@ export default {
           data.results.forEach(item => {
             this.data.push(item);
           });
-          this.loading = false;
+          this.$nextTick(() => {
+            this.loading = false;
+          });
         })
         .catch(error => {
-          this.data = [];
-          this.total = 0;
-          throw error;
-          this.loading = false;
+          this.$nextTick(() => {
+            this.data = [];
+            this.total = 0;
+            throw error;
+            this.loading = false;
+          });
         });
     },
     /*
@@ -372,6 +398,36 @@ export default {
     cambioSoloNoEnPropiedad() {
       this.loadAsyncData();
     },
+    descartar(libro) {
+      var formData = new FormData();
+      formData.append("id", libro.id);
+      formData.append("descartado", !libro.descartado);
+      axios
+        .post("/librarian/preferences/descarte", formData, {
+          headers: { "Content-Type": "multipart/form-data" }
+        })
+        .then(response => {
+          libro.descartado = !libro.descartado;
+          this.$buefy.notification.open({
+            type: "is-info",
+            duration: 2000,
+            message: `${libro.titulo} ${libro.descartado? 'descartado' : 'mostrado'}`,
+            hasIcon: true
+          });
+          if (libro.descartado && this.soloNoEnPropiedad) {
+            this.loadAsyncData();
+          }
+        })
+        .catch(error => {
+          this.$buefy.notification.open({
+            type: "is-danger",
+            duration: 2000,
+            message: "Error descartando libro: " + error,
+            hasIcon: true
+          });
+          throw error;
+        });
+    },
     guardarFechaBase() {
       if (this.fechaBase) {
         var formData = new FormData();
@@ -397,7 +453,7 @@ export default {
             this.$buefy.notification.open({
               type: "is-danger",
               duration: 5000,
-              message: "Error almacenando fecha base: " + e,
+              message: "Error almacenando fecha base: " + error,
               hasIcon: true
             });
             throw error;

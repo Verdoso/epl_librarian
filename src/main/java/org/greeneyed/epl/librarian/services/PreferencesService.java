@@ -38,6 +38,7 @@ public class PreferencesService {
     private boolean superPortable;
 
     private static final String IDIOMAS_PREFERIDOS_KEY = "idiomas_preferidos";
+    private static final String LIBROS_DESCARTADOS_KEY = "libros_descartados";
     private static final String AUTORES_PREFERIDOS_KEY = "autores_preferidos";
     private static final String GENEROS_PREFERIDOS_KEY = "generos_preferidos";
 
@@ -56,6 +57,7 @@ public class PreferencesService {
     private final Set<String> idiomasPreferidos = new HashSet<>();
     private final Set<String> autoresPreferidos = new HashSet<>();
     private final Set<String> generosPreferidos = new HashSet<>();
+    private final Set<Integer> librosDescartados = new HashSet<>();
 
     @PostConstruct
     public void postConstruct() {
@@ -77,6 +79,7 @@ public class PreferencesService {
                 InputStreamReader theISW = new InputStreamReader(theFIS)) {
             preferences.load(theISW);
             idiomasPreferidos.addAll(leerIdiomasPreferidos(preferences));
+            librosDescartados.addAll(leerLibrosDescartados(preferences));
             autoresPreferidos.addAll(leerAutoresPreferidos(preferences));
             generosPreferidos.addAll(leerGenerosPreferidos(preferences));
         } catch (Exception e) {
@@ -98,6 +101,25 @@ public class PreferencesService {
             }
         } catch (Exception e) {
             log.error("Error parseando idioma preferidos: {}", e.getMessage());
+            log.trace("Error detallado", e);
+        } finally {
+            readLock.unlock();
+        }
+        return result;
+    }
+
+    private Set<Integer> leerLibrosDescartados(Properties preferences) {
+        readLock.lock();
+        Set<Integer> result = Collections.emptySet();
+        try {
+            if (preferences.containsKey(LIBROS_DESCARTADOS_KEY)) {
+                result = new HashSet<>(Stream.of(preferences.getProperty(LIBROS_DESCARTADOS_KEY).split(","))
+                        .filter(StringUtils::isNotBlank)
+                        .map(Integer::parseInt)
+                        .collect(Collectors.toList()));
+            }
+        } catch (Exception e) {
+            log.error("Error parseando libros descartados: {}", e.getMessage());
             log.trace("Error detallado", e);
         } finally {
             readLock.unlock();
@@ -166,6 +188,26 @@ public class PreferencesService {
             readLock.unlock();
         }
         return Optional.ofNullable(calibre);
+    }
+
+
+    public void setDescarte(Integer libroId, boolean descartado) {
+        writeLock.lock();
+        try {
+            if(descartado) {
+                this.librosDescartados.add(libroId);
+            } else {
+                this.librosDescartados.remove(libroId);
+            }
+            preferences.setProperty(LIBROS_DESCARTADOS_KEY,
+                    this.librosDescartados.stream().map(i -> Integer.toString(i)).collect(Collectors.joining(",")));
+            guardarPreferencias();
+        } catch (Exception e) {
+            log.error("Error parseando libros descartados: {}", e.getMessage());
+            log.trace("Error detallado", e);
+        } finally {
+            writeLock.unlock();
+        }
     }
 
     public void actualizarAutoresPreferidos(Set<String> autoresPreferidosToAdd, Set<String> autoresPreferidosToRemove) {
