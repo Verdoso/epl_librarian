@@ -25,14 +25,14 @@ Hay que tener en cuenta que:
 * Modo '**superportable**'. Si queremos que el programa no cree ningún fichero fuera del directorio del programa, podemos pasarle el flag ```-Dsuperportable=true```. En ese caso, el fichero de preferencias y los ficheros temporales/backup de las descargas se almacenaran el el mismo directorio desde donde se lanza el programa, en los directorios .librariany y tmp. **Ojo** Eso quiere decir que al cambiar de versión del programa, tendremos que copiar las preferencias (directorio .librarian) y los ficheros temporales (directorio tmp) para no perder esos datos.
 
 ## Integración, opcional, con Calibre
-Si tenemos instalado el software para gestión de libros [Calibre](https://calibre-ebook.com/es) en el mismo ordenador donde ejecutar EPL Librarian y queremos que nos compruebe los libros que tenemos, podemos hacerlo especificándole donde se encuentra la biblioteca de Calibre en nuestro ordenador en las preferencias.
+Si tenemos instalado el software para gestión de libros [Calibre](https://calibre-ebook.com/es) en el mismo ordenador donde se ejecuta EPL Librarian y queremos que nos compruebe los libros que tenemos, podemos hacerlo especificándole donde se encuentra la biblioteca de Calibre en nuestro ordenador, en las preferencias, de la siguiente forma:
 
 Con el EPL Librarian apagado, editamos el fichero $HOME/.librarian/preferences.properties ( EPL Librarian nos indica la localización exacta en la consola al arrancar ) y añadimos una propiedad ```calibre_home``` indicándonle el camino a la biblioteca en formato "properties de Java"(el directorio donde Calibre guarda su fichero metadata.db).
 Por ejemplo, si Calibre guarda los libros en un directorio 'D:\Libros' podríamos añadir a preferences.properties la siguiente linea
 calibre_home=D\:\\Libros
 Es necesario añadir las barras inversas '\' antes de los caracteres ':' y '\' para evitar que haya problemas, ya que esos caracteres son especiales en los ficheros de properties.
 
-Al arrancar EPL Librarian nos indicará que integración con calibre está habilitada, tardará un poco más en arrancar y en la biblioteca aparecera una nueva columna que nos indicará, para cada libro, si se ha encontrado dicho libre en nuestra biblioteca Calibre.
+Al arrancar EPL Librarian nos indicará que integración con calibre está habilitada, tardará un poco más en arrancar y en la biblioteca aparecera unas nuevas columnas que nos indicarán, para cada libro, si se ha encontrado dicho libre en nuestra biblioteca Calibre y si ese libro lo "descartamos". También nos aparecerá un filtro nuevo para ocultar los libros que ya tengamos en nuestra biblioteca de Calibre y/o los que hayamos descartado. Para descartar o habilitar de nuevo un libro basta con hacer click en el simbolo del ojo en la fila correspondiente. De esta forma es muy sencillo saber si tenemos todos los libros que nos interesan de nuestros autores favoritos, simplemente marcando los filtros de "autores favoritos", "idiomas favoritos" y "ocultar libros que tenemos y los descartados".
 
 La comprobación mira el título exacto del libro y sus autores, por lo que puede ser que no encuentre algún libro que no tenga exactamente el mismo título (p.e. 'El Camel Club' vs 'Camel Club') o que tenga alguna errata en el nombre (p.e. 'James S.A. Corey' vs 'James S. A. Corey'). Se ha optado por quedarse corto y decir que hay libros que no tenemos, por pequeñas diferencias en los datos, que posibilitar los errores al reves y dar por hecho que tenemos ciertos libros por ser demasiado generosos en las comprobaciones.
 
@@ -40,11 +40,11 @@ La comprobación mira el título exacto del libro y sus autores, por lo que pued
 El programa ofrece varios listados
 
 ### Listado principal (libros)
-En este listado se muestran los datos básicos de los libros y se puede filtrar y ordenar por distintos criterios (título, colección, autor, idioma, género). En este listado se puede escoger una fecha (indicada por "Considerar novedades libros posteriores a") para que únicamente se muestres los libros disponibles en ePubLlibre a partir de esa fecha. Para que el filtro se lleve a cabo hay que activar el interruptor "Solo novedades". Si le damos al botón de guardar almacenará la fecha y la recordará para posteriores arranques. Por otro lado, si hemos marcado como favoritos algunos idiomas, generos o autores, podemos activar los filtros para que solo se muestren los libros que cumplan esos criterios.
+En este listado se muestran los datos básicos de los libros y se puede filtrar y ordenar por distintos criterios (título, colección, autor, idioma, género). En este listado se puede escoger una fecha (indicada por "Considerar novedades libros posteriores a") para que únicamente se muestres los libros disponibles en ePubLlibre a partir de esa fecha. Para que el filtro se lleve a cabo hay que activar el interruptor "Solo novedades". Si le damos al botón de guardar almacenará la fecha y la recordará para posteriores arranques. Por otro lado, si hemos marcado como favoritos algunos idiomas, generos o autores, podemos activar los filtros para que solo se muestren los libros que cumplan esos criterios. Si tenemos activa la integración con calibre también tendremos el filtro de ocultar los libros que ya tenemos o que hemos descartado, y veremos las columnas correspondientes a esos valores.
 
 ![Imagen de la página principal](https://raw.githubusercontent.com/Verdoso/epl_librarian/master/docs/Screen_Principal.PNG)
 
-Podemos ampliar la información de cada libro, haciendo clic en la marca al lado del título, y así podremos ver más detalles del libro y el enlace magnet ofrecido por EPL.
+Podemos ampliar la información de cada libro, haciendo clic en la marca al lado del título, y así podremos ver más detalles del libro, como la sinopsis, la portada, un enlace a la página del libro en EPL y los enlaces magnet ofrecidos por EPL.
 
 ![Imagen del detalle de un libro](https://raw.githubusercontent.com/Verdoso/epl_librarian/master/docs/Screen_Detalle.PNG)
 
