@@ -47,7 +47,7 @@ public class PreferencesAPIController {
 
     @PostMapping(value = "/descarte", produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity<String> descartarLibro(@RequestParam(name = "id") Integer libroId,
-            @RequestParam(name = "descartado") boolean descartado) {
+            @RequestParam boolean descartado) {
         preferencesService.setDescarte(libroId, descartado);
         bibliotecaService.setDescarte(libroId, descartado);
         return OK_BUILDER.build();
@@ -55,8 +55,8 @@ public class PreferencesAPIController {
 
     @PostMapping(value = "/autoresFavoritos", produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity<String> guardarAutoresFavoritos(
-            @RequestParam(name = "autoresFavoritos") Set<String> autoresFavoritos,
-            @RequestParam(name = "autoresNoFavoritos") Set<String> autoresNoFavoritos) {
+            @RequestParam Set<String> autoresFavoritos,
+            @RequestParam Set<String> autoresNoFavoritos) {
         preferencesService.actualizarAutoresPreferidos(autoresFavoritos, autoresNoFavoritos);
         bibliotecaService.actualizaAutoresPreferidos(preferencesService.getAutoresPreferidos());
         return OK_BUILDER.body("OK");
@@ -64,8 +64,8 @@ public class PreferencesAPIController {
 
     @PostMapping(value = "/idiomasFavoritos", produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity<String> guardarIdiomasFavoritos(
-            @RequestParam(name = "idiomasFavoritos") Set<String> idiomasFavoritos,
-            @RequestParam(name = "idiomasNoFavoritos") Set<String> idiomasNoFavoritos) {
+            @RequestParam Set<String> idiomasFavoritos,
+            @RequestParam Set<String> idiomasNoFavoritos) {
         preferencesService.actualizarIdiomasPreferidos(idiomasFavoritos, idiomasNoFavoritos);
         bibliotecaService.actualizaIdiomasFavoritos(preferencesService.getIdiomasPreferidos());
         return OK_BUILDER.body("OK");
@@ -73,8 +73,8 @@ public class PreferencesAPIController {
 
     @PostMapping(value = "/generosFavoritos", produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity<String> guardarGenerosFavoritos(
-            @RequestParam(name = "generosFavoritos") Set<String> generosFavoritos,
-            @RequestParam(name = "generosNoFavoritos") Set<String> generosNoFavoritos) {
+            @RequestParam Set<String> generosFavoritos,
+            @RequestParam Set<String> generosNoFavoritos) {
         preferencesService.actualizarGenerosPreferidos(generosFavoritos, generosNoFavoritos);
         bibliotecaService.actualizaGenerosFavoritos(preferencesService.getGenerosPreferidos());
         return OK_BUILDER.body("OK");
