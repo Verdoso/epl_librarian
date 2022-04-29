@@ -1,7 +1,7 @@
 <template>
   <section>
     <div id="fecha_base">
-      <b-field label="Son novedad posteriores a" grouped>
+      <b-field label="Son novedad posteriores a" grouped group-multiline>
         <b-datepicker
           placeholder="Selecciona una fecha para filtrar"
           icon="calendar-today"
@@ -17,8 +17,8 @@
             <span>hoy</span>
           </button>
         </b-datepicker>
+        <b-button class="button is-primary" @click="guardarFechaBase()">guardar</b-button>
         <p class="control">
-          <b-button class="button is-primary" @click="guardarFechaBase()">guardar</b-button>
           <b-switch v-model="soloNovedades" @input="cambioNovedades()">Solo novedades</b-switch>
           <b-switch
             v-model="soloAutoresFavoritos"
@@ -39,7 +39,9 @@
           >Ocultar los que tengo/descartados</b-switch>
         </p>
       </b-field>
+      
     </div>
+        
     <b-table
       ref="table"
       :data="data"
@@ -48,6 +50,7 @@
       :per-page="perPage"
       :default-sort-direction="defaultSortOrder"
       :default-sort="[sortField, sortOrder]"
+      :page-input="true"
       detailed
       detail-key="id"
       paginated
@@ -550,5 +553,23 @@ export default {
 <style>
 #fecha_base label {
   padding-right: 0.5em;
+}
+
+#fecha_base {
+  margin-bottom: 1em;
+}
+
+#pagina {
+  text-align: center;
+  width: 5em;
+}
+
+p.control {
+  padding-top: 0.25em;
+  margin-left: 1em;
+}
+
+#paginacion .field-label {
+  margin-right: 0.5em;
 }
 </style>
