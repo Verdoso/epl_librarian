@@ -58,3 +58,7 @@ En esta sección podemos consultar los géneros bajo los que están clasificados
 
 ### Listado ordenable/filtrable de idiomas
 En esta sección podemos consultar los idiomas de los libros del catalogo, podemos marcarlos como favoritos y podemos seleccionar uno en concreto (doblec clic) para añadirlo como filtro en la página principal. Funciona exactamente igual a los listados anteriores de autores y géneros.
+
+### Opción de salto en la paginación
+A partir de la version 0.0.41, en el listado de libros se puede saltar directamente a una página introduciendo el número deseado en el campo al lado de los botones de "siguiente" y "anterior" de la paginación.
+![Imagen de la opción de salto de página](https://raw.githubusercontent.com/Verdoso/epl_librarian/master/docs/InputGoTo.PNG)
