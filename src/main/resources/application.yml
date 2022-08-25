@@ -1,8 +1,8 @@
 server:
   port: 7070
 spring:
-  config:
-    use-legacy-processing: true
+  application:
+    name: librarian
   thymeleaf:
     cache: false
     mode: HTML
@@ -14,7 +14,5 @@ management:
             include: health,info,env,mappings,refresh,loggers,configInspector,configprops,actuators
 logging.config: classpath:log4j2-spring.xml
 ---
-spring:
-   profiles: devel
+spring.config.activate.on-profile: devel
 logging.config: classpath:log4j2-spring-devel.xml
-  
