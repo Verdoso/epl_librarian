@@ -12,9 +12,9 @@ const PATHS = {
 }
 
 module.exports = {
-  entry: [
-    path.join(PATHS.src, 'main.js'),
-  ],
+  entry: {    
+    'main': path.join(PATHS.src, 'main.js')  
+  },
   plugins: [
     // Filter out the moment locales to reduce bundle size
     // Locales that should be included MUST be added to the project, otherwise they won't be available for use)
@@ -25,7 +25,7 @@ module.exports = {
   output: {
     path: path.resolve(APP_PATH, 'dist'),
     publicPath: '/librarian/dist/',
-    filename: 'build.js'
+    filename: '[name]_build.js'
   },
   module: {
     rules: [
