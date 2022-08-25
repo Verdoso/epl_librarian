@@ -25,58 +25,58 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 public class PreferencesAPIController {
 
-    private static final BodyBuilder OK_BUILDER = ResponseEntity.ok();
+  private static final BodyBuilder OK_BUILDER = ResponseEntity.ok();
 
-    private final PreferencesService preferencesService;
-    private final BibliotecaService bibliotecaService;
+  private final PreferencesService preferencesService;
+  private final BibliotecaService bibliotecaService;
 
-    @GetMapping(value = "/fecha_base")
-    public ResponseEntity<Long> fechaBase() {
-        return preferencesService.getFechaBase()
-                .map(ldt -> ldt.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli())
-                .map(ResponseEntity::ok)
-                .orElseGet(OK_BUILDER::build);
-    }
+  @GetMapping(value = "/fecha_base")
+  public ResponseEntity<Long> fechaBase() {
+    return preferencesService.getFechaBase()
+        .map(ldt -> ldt.atStartOfDay(ZoneId.systemDefault())
+            .toInstant()
+            .toEpochMilli())
+        .map(ResponseEntity::ok)
+        .orElseGet(OK_BUILDER::build);
+  }
 
-    @PostMapping(value = "/fecha_base", produces = MediaType.TEXT_HTML_VALUE)
-    public ResponseEntity<String> guardarFechaBase(@RequestParam(name = "fechaBase") long fechaBaseLong) {
-        preferencesService
-                .setFechaBase(Instant.ofEpochMilli(fechaBaseLong).atZone(ZoneId.systemDefault()).toLocalDate());
-        return OK_BUILDER.build();
-    }
+  @PostMapping(value = "/fecha_base", produces = MediaType.TEXT_HTML_VALUE)
+  public ResponseEntity<String> guardarFechaBase(@RequestParam(name = "fechaBase") long fechaBaseLong) {
+    preferencesService.setFechaBase(Instant.ofEpochMilli(fechaBaseLong)
+        .atZone(ZoneId.systemDefault())
+        .toLocalDate());
+    return OK_BUILDER.build();
+  }
 
-    @PostMapping(value = "/descarte", produces = MediaType.TEXT_HTML_VALUE)
-    public ResponseEntity<String> descartarLibro(@RequestParam(name = "id") Integer libroId,
-            @RequestParam boolean descartado) {
-        preferencesService.setDescarte(libroId, descartado);
-        bibliotecaService.setDescarte(libroId, descartado);
-        return OK_BUILDER.build();
-    }
+  @PostMapping(value = "/descarte", produces = MediaType.TEXT_HTML_VALUE)
+  public ResponseEntity<String> descartarLibro(@RequestParam(name = "id") Integer libroId,
+      @RequestParam boolean descartado) {
+    preferencesService.setDescarte(libroId, descartado);
+    bibliotecaService.setDescarte(libroId, descartado);
+    return OK_BUILDER.build();
+  }
 
-    @PostMapping(value = "/autoresFavoritos", produces = MediaType.TEXT_HTML_VALUE)
-    public ResponseEntity<String> guardarAutoresFavoritos(
-            @RequestParam Set<String> autoresFavoritos,
-            @RequestParam Set<String> autoresNoFavoritos) {
-        preferencesService.actualizarAutoresPreferidos(autoresFavoritos, autoresNoFavoritos);
-        bibliotecaService.actualizaAutoresPreferidos(preferencesService.getAutoresPreferidos());
-        return OK_BUILDER.body("OK");
-    }
+  @PostMapping(value = "/autoresFavoritos", produces = MediaType.TEXT_HTML_VALUE)
+  public ResponseEntity<String> guardarAutoresFavoritos(@RequestParam Set<String> autoresFavoritos,
+      @RequestParam Set<String> autoresNoFavoritos) {
+    preferencesService.actualizarAutoresPreferidos(autoresFavoritos, autoresNoFavoritos);
+    bibliotecaService.actualizaAutoresPreferidos(preferencesService.getAutoresPreferidos());
+    return OK_BUILDER.body("OK");
+  }
 
-    @PostMapping(value = "/idiomasFavoritos", produces = MediaType.TEXT_HTML_VALUE)
-    public ResponseEntity<String> guardarIdiomasFavoritos(
-            @RequestParam Set<String> idiomasFavoritos,
-            @RequestParam Set<String> idiomasNoFavoritos) {
-        preferencesService.actualizarIdiomasPreferidos(idiomasFavoritos, idiomasNoFavoritos);
-        bibliotecaService.actualizaIdiomasFavoritos(preferencesService.getIdiomasPreferidos());
-        return OK_BUILDER.body("OK");
-    }
+  @PostMapping(value = "/idiomasFavoritos", produces = MediaType.TEXT_HTML_VALUE)
+  public ResponseEntity<String> guardarIdiomasFavoritos(@RequestParam Set<String> idiomasFavoritos,
+      @RequestParam Set<String> idiomasNoFavoritos) {
+    preferencesService.actualizarIdiomasPreferidos(idiomasFavoritos, idiomasNoFavoritos);
+    bibliotecaService.actualizaIdiomasFavoritos(preferencesService.getIdiomasPreferidos());
+    return OK_BUILDER.body("OK");
+  }
 
-    @PostMapping(value = "/generosFavoritos", produces = MediaType.TEXT_HTML_VALUE)
-    public ResponseEntity<String> guardarGenerosFavoritos(
-            @RequestParam Set<String> generosFavoritos,
-            @RequestParam Set<String> generosNoFavoritos) {
-        preferencesService.actualizarGenerosPreferidos(generosFavoritos, generosNoFavoritos);
-        bibliotecaService.actualizaGenerosFavoritos(preferencesService.getGenerosPreferidos());
-        return OK_BUILDER.body("OK");
-    }
+  @PostMapping(value = "/generosFavoritos", produces = MediaType.TEXT_HTML_VALUE)
+  public ResponseEntity<String> guardarGenerosFavoritos(@RequestParam Set<String> generosFavoritos,
+      @RequestParam Set<String> generosNoFavoritos) {
+    preferencesService.actualizarGenerosPreferidos(generosFavoritos, generosNoFavoritos);
+    bibliotecaService.actualizaGenerosFavoritos(preferencesService.getGenerosPreferidos());
+    return OK_BUILDER.body("OK");
+  }
 }
