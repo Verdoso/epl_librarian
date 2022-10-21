@@ -13,7 +13,7 @@ for /f "delims=. tokens=1-3" %%v in ("%JAVAVER%") do set "jver=%%v.%%w"
 ECHO Java instalado= %jver%
 
 if %jver% LSS 17 ECHO La versión minima de Java soportada es la 17. No se puede ejecutar el programa. && PAUSE && EXIT /B
-ECHO Java instalado compatible!
+ECHO Java instalado compatible (%jver%)!
 
 ECHO Ejecutando...
 @ECHO ON
