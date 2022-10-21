@@ -41,13 +41,13 @@
    </style>
 </head>
 
-<body>
+<body class="sidebar-toggled">
    <div id="loader" class="lds-dual-ring"></div>
    <div id="app" style="display: none">
       <div id="wrapper">
          <header th:replace="~{fragments/navbar :: navbar}"></header>
          <div class="d-md-flex">
-            <div class="sidebar" role="navigation">
+            <div class="sidebar toggled" role="navigation">
                <div class="sidebar-nav collapse navbar-collapse show" id="side-menu-wrapper">
                   <ul class="nav navbar-nav navbar-collapse flex-column side-nav list-group" id="side-menu"
                      th:replace="fragments/user-sidebar :: user-sidebar">

@@ -1,6 +1,6 @@
 <template>
     <li href="#" :class="'list-group-item' + (this.$store.state.currentTab == targetSection ?' active' : '')" :aria-expanded="(this.$store.state.currentTab == targetSection ? 'true' : 'false')">
-        <a @click.stop="selectOption"><i :class="'fa fa-' + icon + ' fa-fw'"></i> {{ label }}</a>
+        <a @click.stop="selectOption" :title="label"><i :class="'fa fa-' + icon + ' fa-fw'"></i><span class="label">{{ label }}</span></a>
     </li>
 </template>
 
