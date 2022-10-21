@@ -9,7 +9,7 @@ Repositorio para una mini-aplicación para consultar localmente el catálogo de 
 Simplemente descargar el fichero zip, descomprimirlo en un directorio sin espacios y ejecutar el fichero .cmd o .sh dependiendo de si estamos en Windows o \*nix. También podemos ejecutarlo directamente en un terminal con el comando java -jar epl_librarian-version.jar. Al acabar de preparar el catalogo, debería abrirse automáticamente una ventana del navegador apuntando a la direccion http://localhost:7070/librarian/. Ojo que si hacemos doble-click en Windows es posible que nos arranque la aplicación en segundo plano y para matarla tengamos que usar el botón "Cerrar" de la aplicación (arriba a la derecha) o usar el "Administrador de tareas" de Windows.
 
 ### Requisitos
-* Tener instalado Java 8 o superior
+* Tener instalado Java 17 o superior (Por ejemplo, del proyecto abierto y gratuito Temurin https://adoptium.net/es/temurin/releases)
 * Tener configurado el comando java en el path (lo podemos comprobar ejecutando java -version en un terminal)
 
 ## Actualizaciones de ePubLlibre
@@ -62,3 +62,6 @@ En esta sección podemos consultar los idiomas de los libros del catalogo, podem
 ### Opción de salto en la paginación
 A partir de la version 0.0.41, en el listado de libros se puede saltar directamente a una página introduciendo el número deseado en el campo al lado de los botones de "siguiente" y "anterior" de la paginación.
 ![Imagen de la opción de salto de página](https://raw.githubusercontent.com/Verdoso/epl_librarian/master/docs/InputGoTo.PNG)
+
+### Opciones de minimización de la interfaz
+Se han añadido opciones para poder minimizar la parte de los menús y filtros de la interfaz y recogerlo todo y dejar el máximo espacio a la tabla de consulta de libros. 
