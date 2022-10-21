@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section class="summary">
         <table class="brief_summary" v-if="this.sumario">
             <caption>
             Sumario <small>- {{ Intl.DateTimeFormat('es', {timeStyle: "short",dateStyle: "medium"}).format(this.fechaActualizacion) }}</small>

@@ -1,6 +1,9 @@
 <template>
   <section>
     <div id="fecha_base">
+      <button class="border-0" id="filterToggle" @click="toggleFilter()">
+        <i class="fa fa-fw"></i>
+       </button>      
       <b-field label="Son novedad posteriores a" grouped group-multiline>
         <b-datepicker
           placeholder="Selecciona una fecha para filtrar"
@@ -57,7 +60,7 @@
       backend-pagination
       backend-sorting
       backend-filtering
-      pagination-position="top"
+      pagination-position="both"
       aria-next-label="Next page"
       aria-previous-label="Previous page"
       aria-page-label="Page"
@@ -431,6 +434,9 @@ export default {
           throw error;
         });
     },
+    toggleFilter() {
+      $("#fecha_base").toggleClass("toggled");
+    },
     guardarFechaBase() {
       if (this.fechaBase) {
         var formData = new FormData();
@@ -557,6 +563,8 @@ export default {
 
 #fecha_base {
   margin-bottom: 1em;
+  padding-bottom: 1.5em;
+  border-bottom: thin solid lightgray;
 }
 
 #pagina {
@@ -571,5 +579,28 @@ p.control {
 
 #paginacion .field-label {
   margin-right: 0.5em;
+}
+
+#fecha_base.toggled {
+  border-bottom-style: dashed;
+  padding-bottom: 2em;
+}
+
+#fecha_base.toggled div.field {
+  display: none;
+}
+
+button#filterToggle I.fa:before {
+    content: "\f066";
+}
+
+#fecha_base.toggled button#filterToggle I.fa:before {
+    content: "\f065";
+}
+
+button#filterToggle {
+ float: right;
+ background: none;
+ outline: none;
 }
 </style>

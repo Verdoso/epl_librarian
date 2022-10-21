@@ -829,3 +829,47 @@ UL.campus_list li {
 .navbar-nav.navbar-top-links .dropdown-menu .dropdown-item {
     cursor: pointer;
 }
+
+/*
+div.sidebar table.brief_summary {
+  background: red;
+}
+*/
+
+LI.list-group-item SPAN.label {
+  display: inline-block;
+  padding-left: .5em;
+}
+
+div.sidebar.toggled SECTION.summary {
+  display: none;
+}
+
+div.sidebar.toggled LI.list-group-item SPAN.label {
+  display: none;
+}
+
+div.sidebar.toggled LI.list-group-item I.fa {
+  font-size: 2em;
+}
+
+div.sidebar.toggled {
+    width: 75px;
+}
+
+button#sidebarToggle I.fa:before {
+    content: "\f053";
+    margin-right: 0.25rem;
+}
+
+div.sidebar.toggled button#sidebarToggle I.fa:before {
+    content: "\f054";
+    margin-right: 0rem;
+}
+
+button#sidebarToggle {
+    margin: 0.5em auto;
+    outline: none;
+    height: 2em;
+    border: thin solid lightgray!important;    
+}

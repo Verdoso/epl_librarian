@@ -25,15 +25,15 @@ public class GzzipedJavaScriptServletConfiguration implements WebServerFactoryCu
     factory.setMimeMappings(mappings);
   }
 
-    @Bean
-    FilterRegistrationBean<ContentEncodingGzipFilter> contentEncodingGzipFilterFilterRegistration() {
-        FilterRegistrationBean<ContentEncodingGzipFilter> registration = new FilterRegistrationBean<>();
-        registration.setFilter(new ContentEncodingGzipFilter());
-        registration.addUrlPatterns("*.js.gz");
-        registration.setName("ContentEncodingGzipFilter");
-        registration.setOrder(1);
-        return registration;
-    }
+  @Bean
+  FilterRegistrationBean<ContentEncodingGzipFilter> contentEncodingGzipFilterFilterRegistration() {
+    FilterRegistrationBean<ContentEncodingGzipFilter> registration = new FilterRegistrationBean<>();
+    registration.setFilter(new ContentEncodingGzipFilter());
+    registration.addUrlPatterns("*.js.gz");
+    registration.setName("ContentEncodingGzipFilter");
+    registration.setOrder(1);
+    return registration;
+  }
 
   public static class ContentEncodingGzipFilter implements Filter {
     @Override

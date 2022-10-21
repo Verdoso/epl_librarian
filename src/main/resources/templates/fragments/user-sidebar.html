@@ -6,6 +6,9 @@
 <body>
     <!-- User's side bar -->
     <ul th:fragment="user-sidebar" class="nav" id="user-side-menu">
+        <button class="rounded-circle border-0" id="sidebarToggle">
+          <i class="fa fa-fw"></i>
+         </button>
         <navigation-option label="Biblioteca" target-section="biblioteca" icon="book"></navigation-option>
         <navigation-option label="Autores" target-section="autores" icon="address-card-o"></navigation-option>
         <navigation-option label="Generos" target-section="generos" icon="sitemap"></navigation-option>
