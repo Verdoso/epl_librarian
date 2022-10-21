@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.greeneyed</groupId>
   <artifactId>epl_librarian</artifactId>
-  <version>1.17.1-SNAPSHOT</version>
+  <version>1.17.2-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>EPL Librarian</name>
   <description>EPL Librarian</description>
