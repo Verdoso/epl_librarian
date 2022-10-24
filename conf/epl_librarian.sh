@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if type -p javas > /dev/null
+if type -p java > /dev/null
 then
     echo "¡Java detectado!"
     _java=java
