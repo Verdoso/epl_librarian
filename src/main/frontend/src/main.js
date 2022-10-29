@@ -27,17 +27,19 @@ import biblioteca from './vue/biblioteca.vue';
 import autores from './vue/autores.vue';
 import generos from './vue/generos.vue';
 import idiomas from './vue/idiomas.vue';
+import graficos from './vue/graficos.vue';
 
 Vue.component('sumario-biblioteca', sumarioBiblioteca)
 Vue.component('biblioteca', biblioteca)
 Vue.component('autores', autores)
 Vue.component('generos', generos)
 Vue.component('idiomas', idiomas)
+Vue.component('graficos', graficos)
 Vue.component('navigation-option', navigationOption)
 
 const store = new Vuex.Store({
   state: {
-  currentTab: 'biblioteca',
+  currentTab: 'graficos',
   lastupdate: null,
   autorfilter: '',
   generofilter: '',

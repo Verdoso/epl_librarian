@@ -142,7 +142,7 @@ public class BibliotecaService {
 	@Value("${git.build.version}")
 	private String buildVersion;
 
-	private LocalDateTime fechaActualizacion = null;
+	private LocalDateTime fechaActualizacion = LocalDateTime.now();
 
 	private final MapperService mapperService;
 	private final PreferencesService preferencesService;

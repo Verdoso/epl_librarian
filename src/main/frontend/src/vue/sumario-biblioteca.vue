@@ -7,25 +7,25 @@
             <tr>
             <th>Libros</th>
             <td align="right">
-                {{ Intl.NumberFormat('es').format(this.sumario.libros) }}
+                {{ Intl.NumberFormat('ca').format(this.sumario.libros) }}
             </td>
             </tr>
             <tr>
             <th>Autores</th>
             <td align="right">
-                {{ Intl.NumberFormat('es').format(this.sumario.autores) }}
+                {{ Intl.NumberFormat('ca').format(this.sumario.autores) }}
             </td>
             </tr>
             <tr>
             <th>Idiomas</th>
             <td align="right">
-                {{ Intl.NumberFormat('es').format(this.sumario.idiomas) }}
+                {{ Intl.NumberFormat('ca').format(this.sumario.idiomas) }}
             </td>
             </tr>
             <tr>
             <th>Generos</th>
             <td align="right">
-                {{ Intl.NumberFormat('es').format(this.sumario.generos) }}
+                {{ Intl.NumberFormat('ca').format(this.sumario.generos) }}
             </td>
             </tr>
         </table>
