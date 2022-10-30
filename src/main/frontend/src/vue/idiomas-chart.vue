@@ -94,7 +94,7 @@ export default {
                     var percentage = parseFloat((value/total*100).toFixed(2));
     
                     return {
-                      text: label + ': ' + Intl.NumberFormat('ca').format(value)  + ' (' + percentage + '%)',
+                      text: label + ': ' + Intl.NumberFormat('ca').format(value)  + ' (' + percentage + ' %)',
                       fillStyle: style.backgroundColor,
                       strokeStyle: style.borderColor,
                       lineWidth: style.borderWidth,
@@ -129,7 +129,7 @@ export default {
                   });
                   var currentValue = context.parsed;
                   var percentage = parseFloat((currentValue/total*100).toFixed(2));
-                  return label + ' (' + percentage + '%)';
+                  return label + ' (' + percentage + ' %)';
                 })
               }
             }
