@@ -1,15 +1,20 @@
 <template>
-  <Bar
-    :chart-options="chartOptions"
-    :chart-data="chartData"
-    :chart-id="chartId"
-    :dataset-id-key="datasetIdKey"
-    :plugins="plugins"
-    :css-classes="cssClasses"
-    :styles="styles"
-    :width="width"
-    :height="height"
-  />
+  <section>
+    <p class="control" v-if="this.$store.state.calibreIntegration">
+      <b-switch v-model="calibre" @input="loadAsyncData()">Mi biblioteca calibre</b-switch>
+    </p>
+    <Bar
+      :chart-options="chartOptions"
+      :chart-data="chartData"
+      :chart-id="chartId"
+      :dataset-id-key="datasetIdKey"
+      :plugins="plugins"
+      :css-classes="cssClasses"
+      :styles="styles"
+      :width="width"
+      :height="height"
+    />
+  </section>
 </template>
 
 <script>
@@ -53,6 +58,7 @@ export default {
   }
   , data() {
     return {
+      calibre: false,
       chartData: {
         labels: [],
         datasets: [
@@ -100,32 +106,37 @@ export default {
     };
   },
   methods: {
+    loadAsyncData() {
+      const params = [
+        `orden=POR_LIBROS`,
+        `numero_pagina=1`,
+        `desc=true`,
+        `por_pagina=30`,
+        `favoritos_autores=false`
+      ].join("&");
+      let url = this.calibre ? 'top_autores_propios' : '/librarian/autores';
+      axios.get(`${url}?${params}`)
+              .then(({ data }) => {
+                this.chartData.labels.splice(0,this.chartData.labels.length);
+                this.chartData.datasets[0].data.splice(0,this.chartData.datasets[0].data.length);
+                data.results.forEach(item => {
+                  if(item.nombre !== 'AA. VV.') {
+                    this.chartData.labels.push(item.nombre)
+                    this.chartData.datasets[0].data.push(item.libros)
+                  }
+                });
+              })
+              .catch(error => {
+                this.$nextTick(() => {
+                  throw error;
+                });
+              });
+    }
   },
   watch: {
   },
   mounted() {
-    const params = [
-      `orden=POR_LIBROS`,
-      `numero_pagina=1`,
-      `desc=true`,
-      `por_pagina=30`,
-      `favoritos_autores=false`
-    ].join("&");
-    axios.get(`/librarian/autores?${params}`)
-            .then(({ data }) => {
-              data.results.forEach(item => {
-                if(item.nombre !== 'AA. VV.') {
-                  this.chartData.labels.push(item.nombre)
-                  this.chartData.datasets[0].data.push(item.libros)
-                }
-              });
-            })
-            .catch(error => {
-              this.$nextTick(() => {
-                throw error;
-              });
-            })
-            ;  
+    this.loadAsyncData();
   }
 };
 </script>

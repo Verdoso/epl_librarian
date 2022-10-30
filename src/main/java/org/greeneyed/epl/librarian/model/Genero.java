@@ -12,25 +12,31 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Genero implements PuedeSerFavorito {
-  private static final String GENERO_ID_PARAM = "generoID";
-  private static final String GENERO_NOMBRE_PARAM = "generoNOMBRE";
-  private static final String GENERO_LIBROS_PARAM = "generoLIBROS";
+	private static final String GENERO_ID_PARAM = "generoID";
+	private static final String GENERO_NOMBRE_PARAM = "generoNOMBRE";
+	private static final String GENERO_LIBROS_PARAM = "generoLIBROS";
 
-  public static final SimpleAttribute<Genero, String> GENERO_ID = attribute(Genero.class, String.class, GENERO_ID_PARAM, Genero::getNombre);
+	public static final SimpleAttribute<Genero, String> GENERO_ID = attribute(Genero.class, String.class,
+			GENERO_ID_PARAM, Genero::getNombre);
 
-  public static final SimpleAttribute<Genero, String> GENERO_NOMBRE = attribute(Genero.class, String.class, GENERO_NOMBRE_PARAM,
-      Genero::getNombreNormalizado);
+	public static final SimpleAttribute<Genero, String> GENERO_NOMBRE = attribute(Genero.class, String.class,
+			GENERO_NOMBRE_PARAM, Genero::getNombreNormalizado);
 
-  public static final SimpleAttribute<Genero, Integer> GENERO_LIBROS = attribute(Genero.class, Integer.class, GENERO_LIBROS_PARAM, Genero::getLibros);
+	public static final SimpleAttribute<Genero, Integer> GENERO_LIBROS = attribute(Genero.class, Integer.class,
+			GENERO_LIBROS_PARAM, Genero::getLibros);
 
-  @EqualsAndHashCode.Include
-  private final String nombre;
+	@EqualsAndHashCode.Include
+	private final String nombre;
 
-  private final int libros;
+	private final int libros;
 
-  private boolean favorito = false;
+	private boolean favorito = false;
 
-  public String getNombreNormalizado() {
-    return Libro.flattenToAscii(nombre);
-  }
+	public boolean tieneLibros() {
+		return libros > 0;
+	}
+
+	public String getNombreNormalizado() {
+		return Libro.flattenToAscii(nombre);
+	}
 }

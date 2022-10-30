@@ -1,10 +1,5 @@
 <template>
   <section>
-    <div>
-      <p>
-        Gráficos sobre los libros de EPL en la biblioteca Calibre configurada 
-      </p>
-    </div>
     <b-tabs v-model="activeTab" position="is-centered" expanded size="is-medium" type="is-boxed">
         <b-tab-item label="Autores" icon="address-card-o" icon-pack="fa">
           <autores-chart />

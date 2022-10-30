@@ -1,5 +1,6 @@
 package org.greeneyed.epl.librarian.services;
 
+import static com.googlecode.cqengine.query.QueryFactory.and;
 import static com.googlecode.cqengine.query.QueryFactory.ascending;
 import static com.googlecode.cqengine.query.QueryFactory.contains;
 import static com.googlecode.cqengine.query.QueryFactory.descending;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -58,6 +60,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 public class BibliotecaService {
+	private static final Predicate<? super Autor> AUTOR_INDETERMINADO = autor -> "AA. VV.".equals(autor.getNombre());
 
 	public static interface ElementOrdering<T> {
 		QueryOptions getQueryOptionsAscending();
@@ -219,7 +222,7 @@ public class BibliotecaService {
 							return new Autor(nombre, queryResult.size());
 						}
 					})
-					.collect(Collectors.toList()));
+					.toList());
 			//
 			log.info("Autores recopilados.");
 			log.info("Recopilando generos...");
@@ -289,7 +292,7 @@ public class BibliotecaService {
 			pagina.setResults(queryResult.stream()
 					.skip((busquedaLibro.getNumeroPagina() - 1) * (long) busquedaLibro.getPorPagina())
 					.limit(busquedaLibro.getPorPagina())
-					.collect(Collectors.toList()));
+					.toList());
 		} finally {
 			readLock.unlock();
 		}
@@ -449,4 +452,53 @@ public class BibliotecaService {
 		}
 		libreria.update(aModificar, aModificar);
 	};
+
+	public Pagina<Autor> getTopAutores(int porPagina) {
+		List<Autor> topAutores = autores.stream()
+				.filter(AUTOR_INDETERMINADO.negate())
+				.map(autor -> {
+			try (final ResultSet<Libro> queryResult = libreria
+					.retrieve(and(in(Libro.LIBRO_AUTORES, Libro.flattenToAscii(autor.getNombre())),
+							equal(Libro.LIBRO_EN_CALIBRE, Boolean.TRUE)))) {
+				return new Autor(autor.getNombre(), queryResult.size());
+			}
+		})
+				.sorted(Comparator.comparing(Autor::getLibros).thenComparing(Autor::getNombre).reversed())
+				.filter(Autor::tieneLibros)
+				.limit(porPagina)
+				.toList();
+		return new Pagina<Autor>(topAutores,topAutores.size());
+	}
+	
+	public Pagina<Idioma> getTopIdiomas(int porPagina) {
+		List<Idioma> topIdiomas = idiomas.stream()
+				.map(idioma -> {
+					try (final ResultSet<Libro> queryResult = libreria
+							.retrieve(and(equal(Libro.LIBRO_IDIOMA, Libro.flattenToAscii(idioma.getNombre())),
+									equal(Libro.LIBRO_EN_CALIBRE, Boolean.TRUE)))) {
+						return new Idioma(idioma.getNombre(), queryResult.size());
+					}
+				})
+				.sorted(Comparator.comparing(Idioma::getLibros).thenComparing(Idioma::getNombre).reversed())
+				.filter(Idioma::tieneLibros)
+				.limit(porPagina)
+				.toList();
+		return new Pagina<Idioma>(topIdiomas,topIdiomas.size());
+	}
+	
+	public Pagina<Genero> getTopGeneros(int porPagina) {
+		List<Genero> topGeneros = generos.stream()
+				.map(genero -> {
+					try (final ResultSet<Libro> queryResult = libreria
+							.retrieve(and(in(Libro.LIBRO_GENEROS, Libro.flattenToAscii(genero.getNombre())),
+									equal(Libro.LIBRO_EN_CALIBRE, Boolean.TRUE)))) {
+						return new Genero(genero.getNombre(), queryResult.size());
+					}
+				})
+				.sorted(Comparator.comparing(Genero::getLibros).thenComparing(Genero::getNombre).reversed())
+				.filter(Genero::tieneLibros)
+				.limit(porPagina)
+				.toList();
+		return new Pagina<Genero>(topGeneros,topGeneros.size());
+	}
 }

@@ -1,15 +1,20 @@
 <template>
-  <Doughnut
-    :chart-options="chartOptions"
-    :chart-data="chartData"
-    :chart-id="chartId"
-    :dataset-id-key="datasetIdKey"
-    :plugins="plugins"
-    :css-classes="cssClasses"
-    :styles="styles"
-    :width="width"
-    :height="height"
-  />
+  <section>
+    <p class="control" v-if="this.$store.state.calibreIntegration">
+      <b-switch v-model="calibre" @input="loadAsyncData()">Mi biblioteca calibre</b-switch>
+    </p>
+    <Doughnut
+      :chart-options="chartOptions"
+      :chart-data="chartData"
+      :chart-id="chartId"
+      :dataset-id-key="datasetIdKey"
+      :plugins="plugins"
+      :css-classes="cssClasses"
+      :styles="styles"
+      :width="width"
+      :height="height"
+    />
+  </section>
 </template>
 
 <script>
@@ -54,6 +59,7 @@ export default {
   }
   , data() {
     return {
+      calibre: false,
       chartData: {
         labels: [],
         datasets: [
@@ -71,7 +77,6 @@ export default {
               enabled: true,
               callbacks: {
                 label: ((context) => {
-                  console.log(context);
                   let label = context.label || '';
   
                   if (label) {
@@ -80,7 +85,14 @@ export default {
                   if (context.parsed !== null) {
                      label += Intl.NumberFormat('ca').format(context.parsed);
                   }
-                  return label;
+
+                  var dataset = context.dataset;
+                  var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+                    return previousValue + currentValue;
+                  });
+                  var currentValue = context.parsed;
+                  var percentage = parseFloat((currentValue/total*100).toFixed(2));
+                  return label + ' (' + percentage + '%)';
                 })
               }
             }
@@ -89,30 +101,35 @@ export default {
     };
   },
   methods: {
+    loadAsyncData() {
+      const params = [
+        `orden=POR_LIBROS`,
+        `numero_pagina=1`,
+        `desc=true`,
+        `por_pagina=20`,
+        `favoritos_idiomas=false`
+      ].join("&");
+      let url = this.calibre ? 'top_idiomas_propios' : '/librarian/idiomas';
+      axios.get(`${url}?${params}`)
+              .then(({ data }) => {
+                this.chartData.labels.splice(0,this.chartData.labels.length);
+                this.chartData.datasets[0].data.splice(0,this.chartData.datasets[0].data.length);
+                data.results.forEach(item => {
+                  this.chartData.labels.push(item.nombre)
+                  this.chartData.datasets[0].data.push(item.libros)
+                });
+              })
+              .catch(error => {
+                this.$nextTick(() => {
+                  throw error;
+                });
+              });
+    }  
   },
   watch: {
   },
   mounted() {
-    const params = [
-      `orden=POR_LIBROS`,
-      `numero_pagina=1`,
-      `desc=true`,
-      `por_pagina=20`,
-      `favoritos_idiomas=false`
-    ].join("&");
-    axios.get(`/librarian/idiomas?${params}`)
-            .then(({ data }) => {
-              data.results.forEach(item => {
-                this.chartData.labels.push(item.nombre)
-                this.chartData.datasets[0].data.push(item.libros)
-              });
-            })
-            .catch(error => {
-              this.$nextTick(() => {
-                throw error;
-              });
-            })
-            ;  
+    this.loadAsyncData();
   }
 };
 </script>

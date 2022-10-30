@@ -75,9 +75,6 @@ export default {
     };
   },
   methods: {
-    /*
-     * Load async data
-     */
     loadAsyncData() {
       const params = [
         `orden=${this.sortField}`,
