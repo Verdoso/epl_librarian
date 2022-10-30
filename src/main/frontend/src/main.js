@@ -39,7 +39,7 @@ Vue.component('navigation-option', navigationOption)
 
 const store = new Vuex.Store({
   state: {
-  currentTab: 'graficos',
+  currentTab: 'biblioteca',
   lastupdate: null,
   autorfilter: '',
   generofilter: '',
