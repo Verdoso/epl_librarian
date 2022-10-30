@@ -38,14 +38,14 @@ export default {
     },
     width: {
       type: Number,
-      default: 400
+      default: 800
     },
     height: {
       type: Number,
-      default: 150
+      default: 500
     },
     cssClasses: {
-      default: '',
+      default: 'idiomas_doughnut',
       type: String
     },
     styles: {
@@ -70,10 +70,47 @@ export default {
         ]
       }
       , chartOptions: {
-        responsive: true
+        responsive: false
+        , aspectRatio: 5
         , maintainAspectRatio: false
         , plugins: {
-          tooltip: {
+          legend: {
+            position: 'right'
+            , labels: {
+              generateLabels: ((chart) => {
+                const data = chart.data;
+                if (data.labels.length && data.datasets.length) {
+                  const {labels: {pointStyle}} = chart.legend.options;
+    
+                  return data.labels.map((label, i) => {
+                    const meta = chart.getDatasetMeta(0);
+                    const style = meta.controller.getStyle(i);
+                    
+                    var total = chart.config.data.datasets[0].data.reduce(function(previousValue, currentValue, currentIndex, array) {
+                      return previousValue + currentValue;
+                    });
+                    
+                    var value = chart.config.data.datasets[0].data[i];
+                    var percentage = parseFloat((value/total*100).toFixed(2));
+    
+                    return {
+                      text: label + ': ' + Intl.NumberFormat('ca').format(value)  + ' (' + percentage + '%)',
+                      fillStyle: style.backgroundColor,
+                      strokeStyle: style.borderColor,
+                      lineWidth: style.borderWidth,
+                      pointStyle: pointStyle,
+                      hidden: !chart.getDataVisibility(i),
+    
+                      // Extra data used for toggling the correct item
+                      index: i
+                    };
+                  });
+                }
+                return [];
+              })
+            }
+          }
+          , tooltip: {
               enabled: true,
               callbacks: {
                 label: ((context) => {
