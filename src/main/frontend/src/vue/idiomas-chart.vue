@@ -22,7 +22,9 @@ import Vue from "vue";
 import axios from "axios";
 import { Doughnut } from 'vue-chartjs/legacy'
 import Chart from 'chart.js/auto';
-import colors from 'nice-color-palettes'
+import ColorHash from 'color-hash'
+
+const colorHash = new ColorHash()
 
 
 export default {
@@ -65,7 +67,7 @@ export default {
         datasets: [
           {
             data: []
-            , backgroundColor: colors[8].concat(colors[10]).concat(colors[11]).concat(colors[4])
+            , backgroundColor: []
           }
         ]
       }
@@ -151,9 +153,11 @@ export default {
               .then(({ data }) => {
                 this.chartData.labels.splice(0,this.chartData.labels.length);
                 this.chartData.datasets[0].data.splice(0,this.chartData.datasets[0].data.length);
+                this.chartData.datasets[0].backgroundColor.splice(0,this.chartData.datasets[0].backgroundColor.length);
                 data.results.forEach(item => {
                   this.chartData.labels.push(item.nombre)
                   this.chartData.datasets[0].data.push(item.libros)
+                  this.chartData.datasets[0].backgroundColor.push(colorHash.hex(item.nombre))
                 });
               })
               .catch(error => {
