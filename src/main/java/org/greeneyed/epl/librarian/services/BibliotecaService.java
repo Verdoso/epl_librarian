@@ -380,7 +380,7 @@ public class BibliotecaService {
       Set<String> normalisedAutors = autores.stream()
           .map(Libro::flattenToAscii)
           .collect(Collectors.toSet());
-      try (final ResultSet<Libro> queryResult = libreria.retrieve(in(Libro.LIBRO_AUTOR, normalisedAutors))) {
+      try (final ResultSet<Libro> queryResult = libreria.retrieve(in(Libro.LIBRO_AUTORES, normalisedAutors))) {
         queryResult.stream()
             .forEach(libro -> {
               libro.setAutorFavorito(true);
