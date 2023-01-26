@@ -49,24 +49,13 @@ jobs:
 
     - name: Create Release
       id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v1
       with:
         tag_name: Release_Tag_v.${{ env.RELEASE_VERSION }}
-        release_name: Release ${{ env.RELEASE_VERSION }}
-        body: Test body
+        name: Release ${{ env.RELEASE_VERSION }}
         draft: false
         prerelease: false
-
-    - name: Upload Release Asset
-      id: upload-release-asset 
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./target/epl_librarian-${{ env.RELEASE_VERSION }}.zip
-        asset_name: epl_librarian-${{ env.RELEASE_VERSION }}.zip
-        asset_content_type: application/zip
-    
+        generate_release_notes: true
+        token: "${{ secrets.GITHUB_TOKEN }}"
+        files: |
+          ./target/epl_librarian-${{ env.RELEASE_VERSION }}.zip    
