@@ -23,6 +23,7 @@ import axios from "axios";
 import { Bar } from 'vue-chartjs/legacy'
 import Chart from 'chart.js/auto';
 import ColorHash from 'color-hash'
+import { EventBus } from '../event-bus';
 
 const colorHash = new ColorHash()
 
@@ -139,6 +140,11 @@ export default {
   },
   mounted() {
     this.loadAsyncData();
+    EventBus.$on('updatedCalibre', () => {
+      if(this.calibre){
+        this.loadAsyncData();
+      }
+    });    
   }
 };
 </script>

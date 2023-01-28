@@ -31,15 +31,18 @@
         </table>
         <span></span>
         <div class="brief_summary">
-            <button
-                :class="this.$store.state.calibreIntegration ? 'button is-link' : 'button is-light'">
+            <b-button
+                :class="this.$store.state.calibreIntegration ? 'button is-link' : 'button is-light'"
+                :loading="actualizando"
+                @click="actualizar()"
+                >
                 <b-icon
                     pack="fa"
                     :icon="this.$store.state.calibreIntegration ? 'check' : 'times'"
                 ></b-icon>
                 <span>Integración con Calibre</span>
                 {{  }}
-            </button>
+            </b-button>
         </div>
     </section>
 </template>
@@ -48,6 +51,7 @@
 import Vue from "vue";
 import axios from "axios";
 import Vuex from "vuex";
+import { EventBus } from '../event-bus';
 
 Vue.use(Vuex);
 
@@ -55,7 +59,8 @@ export default {
         data () {
             return {
                 sumario: null,
-                fechaActualizacion: null
+                fechaActualizacion: null,
+                actualizando: false
             }
         },
         mounted() {
@@ -76,6 +81,35 @@ export default {
              })
              console.error(e)
          });
+        },
+        methods: {
+          actualizar() {
+            this.actualizando = true;
+            axios.get('/librarian/updateCalibre')
+                    .then(({ data }) => {
+                      this.actualizando = false;
+                      EventBus.$emit('updatedCalibre', 'Correct');
+                      this.$buefy.notification.open({
+                         type: 'is-info'
+                         , duration: 3000
+                         , message:'Sincronización con Calibre finalizada correctamente.'
+                         , hasIcon: true
+                      });
+                    })
+                    .catch(error => {
+                      this.actualizando = false;
+                      EventBus.$emit('updatedCalibre', 'Error');
+                      this.$buefy.notification.open({
+                         type: 'is-error'
+                         , duration: 3000
+                         , message:'Error sincronizando con Calibre.'
+                         , hasIcon: true
+                      });
+                      this.$nextTick(() => {
+                        throw error;
+                      });
+                    });
+          }
         },
     }
 </script>

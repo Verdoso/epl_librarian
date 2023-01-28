@@ -245,6 +245,7 @@ import Vue from "vue";
 import axios from "axios";
 import Vuex from "vuex";
 import Bottleneck from "bottleneck";
+import { EventBus } from '../event-bus';
 
 Vue.use(Vuex);
 
@@ -552,6 +553,9 @@ export default {
       .catch(error => {
         throw error;
       });
+    EventBus.$on('updatedCalibre', () => {
+      this.loadAsyncData();
+    });    
   }
 };
 </script>
