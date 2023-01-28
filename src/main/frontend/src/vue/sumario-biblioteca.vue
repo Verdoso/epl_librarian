@@ -84,31 +84,33 @@ export default {
         },
         methods: {
           actualizar() {
-            this.actualizando = true;
-            axios.get('/librarian/updateCalibre')
-                    .then(({ data }) => {
-                      this.actualizando = false;
-                      EventBus.$emit('updatedCalibre', 'Correct');
-                      this.$buefy.notification.open({
-                         type: 'is-info'
-                         , duration: 3000
-                         , message:'Sincronización con Calibre finalizada correctamente.'
-                         , hasIcon: true
+            if(this.$store.state.calibreIntegration) {
+              this.actualizando = true;
+              axios.get('/librarian/updateCalibre')
+                      .then(({ data }) => {
+                        this.actualizando = false;
+                        EventBus.$emit('updatedCalibre', 'Correct');
+                        this.$buefy.notification.open({
+                           type: 'is-info'
+                           , duration: 3000
+                           , message:'Sincronización con Calibre finalizada correctamente.'
+                           , hasIcon: true
+                        });
+                      })
+                      .catch(error => {
+                        this.actualizando = false;
+                        EventBus.$emit('updatedCalibre', 'Error');
+                        this.$buefy.notification.open({
+                           type: 'is-error'
+                           , duration: 3000
+                           , message:'Error sincronizando con Calibre.'
+                           , hasIcon: true
+                        });
+                        this.$nextTick(() => {
+                          throw error;
+                        });
                       });
-                    })
-                    .catch(error => {
-                      this.actualizando = false;
-                      EventBus.$emit('updatedCalibre', 'Error');
-                      this.$buefy.notification.open({
-                         type: 'is-error'
-                         , duration: 3000
-                         , message:'Error sincronizando con Calibre.'
-                         , hasIcon: true
-                      });
-                      this.$nextTick(() => {
-                        throw error;
-                      });
-                    });
+            }
           }
         },
     }
