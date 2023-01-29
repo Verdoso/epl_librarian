@@ -38,7 +38,9 @@ La comprobación mira el título exacto del libro y sus autores, por lo que pued
 
 ### Actualización de los datos de Calibre
 El programa sincroniza automáticamente los datos de Calibre al arrancar. Además, es posible actualizar los datos mientras el prorgrama está en marcha haciendo click con el ratón sobre el botón de "Integración con Calibre":
+
 ![Botón que indica la integración con Calibre](https://raw.githubusercontent.com/Verdoso/epl_librarian/master/docs/IntegracionCalibre.png)
+
 Esta funcionalidad es útil cuando estamos añadiendo al Calibre libros que nos faltán y queremos actualizar los resultados del filtro "Ocultar los que tengo/descartados".
 
 ## Funcionamiento
