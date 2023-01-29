@@ -32,15 +32,20 @@ Por ejemplo, si Calibre guarda los libros en un directorio 'D:\Libros' podríamo
 calibre_home=D\:\\Libros
 Es necesario añadir las barras inversas '\' antes de los caracteres ':' y '\' para evitar que haya problemas, ya que esos caracteres son especiales en los ficheros de properties.
 
-Al arrancar EPL Librarian nos indicará que integración con calibre está habilitada, tardará un poco más en arrancar y en la biblioteca aparecera unas nuevas columnas que nos indicarán, para cada libro, si se ha encontrado dicho libre en nuestra biblioteca Calibre y si ese libro lo "descartamos". También nos aparecerá un filtro nuevo para ocultar los libros que ya tengamos en nuestra biblioteca de Calibre y/o los que hayamos descartado. Para descartar o habilitar de nuevo un libro basta con hacer click en el simbolo del ojo en la fila correspondiente. De esta forma es muy sencillo saber si tenemos todos los libros que nos interesan de nuestros autores favoritos, simplemente marcando los filtros de "autores favoritos", "idiomas favoritos" y "ocultar libros que tenemos y los descartados".
+Al arrancar EPL Librarian nos indicará que integración con Calibre está habilitada, tardará un poco más en arrancar y en la biblioteca aparecera unas nuevas columnas que nos indicarán, para cada libro, si se ha encontrado dicho libre en nuestra biblioteca Calibre y si ese libro lo "descartamos". También nos aparecerá un filtro nuevo para ocultar los libros que ya tengamos en nuestra biblioteca de Calibre y/o los que hayamos descartado. Para descartar o habilitar de nuevo un libro basta con hacer click en el simbolo del ojo en la fila correspondiente. De esta forma es muy sencillo saber si tenemos todos los libros que nos interesan de nuestros autores favoritos, simplemente marcando los filtros de "autores favoritos", "idiomas favoritos" y "ocultar libros que tenemos y los descartados".
 
 La comprobación mira el título exacto del libro y sus autores, por lo que puede ser que no encuentre algún libro que no tenga exactamente el mismo título (p.e. 'El Camel Club' vs 'Camel Club') o que tenga alguna errata en el nombre (p.e. 'James S.A. Corey' vs 'James S. A. Corey'). Se ha optado por quedarse corto y decir que hay libros que no tenemos, por pequeñas diferencias en los datos, que posibilitar los errores al reves y dar por hecho que tenemos ciertos libros por ser demasiado generosos en las comprobaciones.
+
+### Actualización de los datos de Calibre
+El programa sincroniza automáticamente los datos de Calibre al arrancar. Además, es posible actualizar los datos mientras el prorgrama está en marcha haciendo click con el ratón sobre el botón de "Integración con Calibre":
+![Botón que indica la integración con Calibre](https://raw.githubusercontent.com/Verdoso/epl_librarian/master/docs/IntegracionCalibre.PNG)
+Esta funcionalidad es útil cuando estamos añadiendo al Calibre libros que nos faltán y queremos actualizar los resultados del filtro "Ocultar los que tengo/descartados".
 
 ## Funcionamiento
 El programa ofrece varios listados
 
 ### Listado principal (libros)
-En este listado se muestran los datos básicos de los libros y se puede filtrar y ordenar por distintos criterios (título, colección, autor, idioma, género). En este listado se puede escoger una fecha (indicada por "Considerar novedades libros posteriores a") para que únicamente se muestres los libros disponibles en ePubLlibre a partir de esa fecha. Para que el filtro se lleve a cabo hay que activar el interruptor "Solo novedades". Si le damos al botón de guardar almacenará la fecha y la recordará para posteriores arranques. Por otro lado, si hemos marcado como favoritos algunos idiomas, generos o autores, podemos activar los filtros para que solo se muestren los libros que cumplan esos criterios. Si tenemos activa la integración con calibre también tendremos el filtro de ocultar los libros que ya tenemos o que hemos descartado, y veremos las columnas correspondientes a esos valores.
+En este listado se muestran los datos básicos de los libros y se puede filtrar y ordenar por distintos criterios (título, colección, autor, idioma, género). En este listado se puede escoger una fecha (indicada por "Considerar novedades libros posteriores a") para que únicamente se muestres los libros disponibles en ePubLlibre a partir de esa fecha. Para que el filtro se lleve a cabo hay que activar el interruptor "Solo novedades". Si le damos al botón de guardar almacenará la fecha y la recordará para posteriores arranques. Por otro lado, si hemos marcado como favoritos algunos idiomas, generos o autores, podemos activar los filtros para que solo se muestren los libros que cumplan esos criterios. Si tenemos activa la integración con Calibre también tendremos el filtro de ocultar los libros que ya tenemos o que hemos descartado, y veremos las columnas correspondientes a esos valores.
 
 ![Imagen de la página principal](https://raw.githubusercontent.com/Verdoso/epl_librarian/master/docs/Screen_Principal.PNG)
 
@@ -61,7 +66,7 @@ En esta sección podemos consultar los idiomas de los libros del catalogo, podem
 
 ### Sección de gráficos
 En esta sección podemos encontrar unos gráficos sobre la distribución de autores, géneros e idiomas. En el caso de autores y géneros solo se muestran los más populares, dado el volumen de datos. El gráfico de doughnut de idiomas es interactivo y podemos habilitar/deshabilitar idiomas para poder ver el resto de idiomas más claramente.
-En caso de tener la integración con Calibre habilitada, podremos optar por ver los mismo gráficos pero solo de los libros de EPL que tenemos en nuestra libreria de Calibre a través del check (Mi biblioteca calibre).
+En caso de tener la integración con Calibre habilitada, podremos optar por ver los mismo gráficos pero solo de los libros de EPL que tenemos en nuestra libreria de Calibre a través del check (Mi biblioteca Calibre).
 ![Imagen de la sección de gráficos - gráfico de autores](https://raw.githubusercontent.com/Verdoso/epl_librarian/master/docs/seccion_graficos.jpg)
 
 ### Opción de salto en la paginación
