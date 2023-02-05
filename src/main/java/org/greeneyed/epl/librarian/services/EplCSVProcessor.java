@@ -218,7 +218,7 @@ public class EplCSVProcessor {
             return new UpdateSpec(fechaActualizacion, librosCSVs);
           })
           .orElse(UpdateSpec.NO_SPEC);
-      // Borradmos los ficheros de backup que no sean el ultimo
+      // Borramos los ficheros de backup que no sean el ultimo
       backupFiles().sorted(Comparator.comparing(File::lastModified)
           .reversed())
           .skip(1)
