@@ -23,13 +23,13 @@ jobs:
         include:
 #          - os: ubuntu-latest
 #            executable-suffix: ''
-#            native-build-args: '-J-Xmx10g -Duser.country=ES -Duser.language=es'
+#            native-build-args: '-J-Xmx10g -J-Duser.country=ES -J-Duser.language=es'
 #          - os: macos-latest
 #            executable-suffix: ''
-#            native-build-args: '-J-Xmx10g -Duser.country=ES -Duser.language=es'
+#            native-build-args: '-J-Xmx10g -J-Duser.country=ES -J-Duser.language=es'
           - os: windows-2019
             executable-suffix: '.exe'
-            native-build-args: '-J-Xmx10g -Duser.country=ES -Duser.language=es'
+            native-build-args: '-J-Xmx10g -J-Duser.country=ES -J-Duser.language=es'
     steps:
       # OS customizations that allow the builds to succeed on Linux and Windows.
       # Using hash for better security due to third party actions.
@@ -53,6 +53,8 @@ jobs:
         shell: pwsh
                 
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.release.tag_name }}
 
       - name: Cache Maven dependencies
         uses: actions/cache@v3
