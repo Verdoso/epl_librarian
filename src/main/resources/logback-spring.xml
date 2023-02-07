@@ -1,0 +1,31 @@
+<configuration>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} %-6level- %C{0} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>./epl_librarian.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>./epl_librarian-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			<maxFileSize>5MB</maxFileSize>
+			<maxHistory>10</maxHistory>
+			<totalSizeCap>10GB</totalSizeCap>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<root level="WARN">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</root>
+
+	<Logger name="org.apache.http.client.protocol.ResponseProcessCookies" level="ERROR" />
+	<Logger name="org.springframework" level="WARN" />
+	<Logger name="org.greeneyed" level="INFO" />
+
+</configuration>
