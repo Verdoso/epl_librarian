@@ -27,7 +27,7 @@ jobs:
 
     - name: Find out version
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
       run: |
          PROJECT_VERSION=`mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive  exec:exec`
          CLEAN_PROJECT_VERSION=`echo "${PROJECT_VERSION%-SNAPSHOT}"`
@@ -36,7 +36,7 @@ jobs:
       
     - name: Prepare & perform release
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
       run: |
         mvn --batch-mode release:prepare -Pdeployment -Dusername=$GITHUB_ACTOR -Dpassword=$GITHUB_TOKEN
         mvn --batch-mode release:perform -Pdeployment
@@ -50,6 +50,6 @@ jobs:
         draft: false
         prerelease: false
         generate_release_notes: true
-        token: "${{ secrets.GITHUB_TOKEN }}"
+        token: "${{ secrets.ACTION_TOKEN }}"
         files: |
           ./target/epl_librarian-${{ env.RELEASE_VERSION }}.zip    
