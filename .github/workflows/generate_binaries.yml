@@ -3,9 +3,9 @@
 name: Generate binaries
 
 on: 
-  workflow_dispatch:
   release:
-    types: [published]      
+    types: [released]      
+  workflow_dispatch:
 jobs:
   build:
     name: Generate executable - ${{ matrix.os }}
