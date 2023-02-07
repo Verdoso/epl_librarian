@@ -84,7 +84,7 @@ jobs:
       - name: Build ${{ steps.executable.outputs.name }} native image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn -B -DskipTests -Dnative-image-name=${{ steps.executable.outputs.name }} -Dnative-build-args=${{ matrix.native-build-args }} -Pnative native:compile
+        run: mvn -B -DskipTests -Dassembly.skipAssembly=true -Dnative-image-name=${{ steps.executable.outputs.name }} -Dnative-build-args=${{ matrix.native-build-args }} -Pnative native:compile
 
       - name: Archive binary
         uses: actions/upload-artifact@v3
