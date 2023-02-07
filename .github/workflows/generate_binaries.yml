@@ -36,7 +36,7 @@ jobs:
       - name: Set up swap space
         if: runner.os == 'Linux'
         # v1.0 (49819abfb41bd9b44fb781159c033dba90353a7c)
-        uses: pierotofy/set-swap-space@1.0
+        uses: pierotofy/set-swap-space@v1.0
         with:
           swap-size-gb: 10
       - name:
