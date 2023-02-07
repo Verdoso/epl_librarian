@@ -1,0 +1,84 @@
+# This workflow will create new binaries when a release is created, and it attaches them to the release 
+
+name: Generate binaries
+
+on: 
+  workflow_dispatch:
+  release:
+    types: [published]      
+jobs:
+  build:
+    name: Generate executable - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+#        os: [ubuntu-latest, macos-latest, windows-2019]
+        os: [windows-2019]
+        graalvm-version: ['22.3.1']
+        java-version: ['17']
+        include:
+#          - os: ubuntu-latest
+#            executable-suffix: ''
+#            native-build-args: --verbose -J-Xmx1g
+#          - os: macos-latest
+#            executable-suffix: ''
+#            native-build-args: --verbose -J-Xmx1g
+          - os: windows-2019
+            executable-suffix: '.exe'
+            native-build-args: --verbose -J-Xmx1g
+    steps:
+      # OS customizations that allow the builds to succeed on Linux and Windows.
+      # Using hash for better security due to third party actions.
+      - name: Set up swap space
+        if: runner.os == 'Linux'
+        # v1.0 (49819abfb41bd9b44fb781159c033dba90353a7c)
+        uses: pierotofy/set-swap-space@1.0
+        with:
+          swap-size-gb: 10
+      - name:
+          Configure pagefile
+        uses: al-cheb/configure-pagefile-action@v1.3
+        if: runner.os == 'Windows'
+        with:
+          minimum-size: 10GB
+          maximum-size: 12GB
+      - name: Set up pagefile
+        if: runner.os == 'Windows'
+        run: |
+          (Get-CimInstance Win32_PageFileUsage).AllocatedBaseSize
+        shell: pwsh
+                
+      - uses: actions/checkout@v3
+      
+      - id: executable
+        run: echo "::set-output name=name::epl_librarian-${{ runner.os }}-${{ github.event.release.tag_name || 'snapshot' }}-x86_64"
+
+      - name: Set up GraalVM (Java ${{ matrix.java-version }})
+        uses: graalvm/setup-graalvm@v1
+        with:
+          version: '${{ matrix.graalvm-version }}'
+          java-version: '${{ matrix.java-version }}'
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven
+
+      - name: Build ${{ steps.executable.outputs.name }} native image
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: mvn -DskipTests -Dnative-image-name=${{ steps.executable.outputs.name }} -Dnative-build-args=${{ matrix.native-build-args }} -Pnative native:compile
+
+      - name: Archive binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.executable.outputs.name }}
+          path: target/${{ steps.executable.outputs.name }}${{ matrix.executable-suffix }}

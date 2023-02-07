@@ -1,0 +1,26 @@
+{
+  "types":[
+    {
+      "name":"byte[]"
+    },
+    {
+      "name":"java.lang.Integer"
+    },
+    {
+      "name":"java.lang.Number"
+    },
+    {
+      "name":"java.math.BigDecimal"
+    },
+    {
+      "name":"java.math.BigInteger"
+    },
+    {
+      "name":"org.greeneyed.epl.librarian.services.EplCSVProcessor$LibroCSV"
+    }
+  ],
+  "lambdaCapturingTypes":[
+  ],
+  "proxies":[
+  ]
+}

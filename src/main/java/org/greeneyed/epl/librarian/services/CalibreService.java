@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

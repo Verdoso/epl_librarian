@@ -53,22 +53,22 @@ public class LibrarianAPIController {
 
   @GetMapping(value = "/updateCalibre")
   public ResponseEntity<String> updateCalibre() {
-	  bibliotecaService.updateCalibre(true);
+    bibliotecaService.updateCalibre(true);
     return ResponseEntity.ok("OK");
   }
-  
+
   @GetMapping(value = "/exit")
   public ResponseEntity<String> exit() {
-	  new Thread(() -> {
-		  try {
-			  Thread.sleep(2_000);
-			  log.warn("Cerrando aplicación...");
-			  SpringApplication.exit(applicationContext, () -> 0);
-		  } catch (InterruptedException e) {
-			  log.error("Error esperando para cerrar la app");
-		  }
-	  }).start();
-	  return ResponseEntity.ok("OK");
+    new Thread(() -> {
+      try {
+        Thread.sleep(2_000);
+        log.warn("Cerrando aplicación...");
+        SpringApplication.exit(applicationContext, () -> 0);
+      } catch (InterruptedException e) {
+        log.error("Error esperando para cerrar la app");
+      }
+    }).start();
+    return ResponseEntity.ok("OK");
   }
 
   @GetMapping(value = "/libros")
