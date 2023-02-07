@@ -3,13 +3,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.greeneyed</groupId>
   <artifactId>epl_librarian</artifactId>
-  <version>1.17.12</version>
+  <version>1.17.13-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>EPL Librarian</name>
   <description>EPL Librarian</description>
   <scm>
     <developerConnection>scm:git:https://github.com/Verdoso/${project.artifactId}</developerConnection>
-    <tag>v1.17.12</tag>
+    <tag>HEAD</tag>
   </scm>
   <parent>
     <groupId>org.springframework.boot</groupId>
