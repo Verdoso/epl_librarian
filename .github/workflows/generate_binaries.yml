@@ -23,13 +23,13 @@ jobs:
         include:
 #          - os: ubuntu-latest
 #            executable-suffix: ''
-#            native-build-args: -J-Xmx10g
+#            native-build-args: '-J-Xmx10g -Duser.country=ES -Duser.language=es'
 #          - os: macos-latest
 #            executable-suffix: ''
-#            native-build-args: -J-Xmx10g
+#            native-build-args: '-J-Xmx10g -Duser.country=ES -Duser.language=es'
           - os: windows-2019
             executable-suffix: '.exe'
-            native-build-args: -J-Xmx10g
+            native-build-args: '-J-Xmx10g -Duser.country=ES -Duser.language=es'
     steps:
       # OS customizations that allow the builds to succeed on Linux and Windows.
       # Using hash for better security due to third party actions.
@@ -84,7 +84,7 @@ jobs:
       - name: Build ${{ steps.executable.outputs.name }} native image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -DskipTests -Dassembly.skipAssembly=true -Dnative-image-name=${{ steps.executable.outputs.name }} -Dnative-build-args=${{ matrix.native-build-args }} -Pnative native:compile
+        run: mvn  -Duser.country=ES -Duser.language=es -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -DskipTests -Dassembly.skipAssembly=true -Dnative-image-name=${{ steps.executable.outputs.name }} -Dnative-build-args=${{ matrix.native-build-args }} -Pnative native:compile
 
       - name: Archive binary
         uses: actions/upload-artifact@v3
