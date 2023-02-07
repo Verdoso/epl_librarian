@@ -12,7 +12,7 @@ management:
          base-path: /manage
          exposure:
             include: health,info,env,mappings,refresh,loggers,configInspector,configprops,actuators
-logging.config: classpath:log4j2-spring.xml
+logging.config: classpath:logback-spring.xml
 ---
 spring.config.activate.on-profile: devel
-logging.config: classpath:log4j2-spring-devel.xml
+logging.config: classpath:logback-spring-devel.xml
