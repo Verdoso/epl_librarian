@@ -1,6 +1,6 @@
-# This workflow will create a new release when it is called
+# This workflow will push a new version when it is called
 
-name: Create release
+name: Push new version
 
 on: 
   workflow_dispatch:
@@ -40,20 +40,3 @@ jobs:
       run: |
         mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn release:prepare -Pdeployment -Dusername=$GITHUB_ACTOR -Dpassword=$GITHUB_TOKEN
         mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn release:perform -Pdeployment
-
-    - name: Checkout tag before creating release
-      run: |
-        git checkout v${{ env.RELEASE_VERSION }}
-      
-    - name: Create Release
-      id: create_release
-      uses: softprops/action-gh-release@v1
-      with:
-        tag_name: Release_Tag_v${{ env.RELEASE_VERSION }}
-        name: Release ${{ env.RELEASE_VERSION }}
-        draft: false
-        prerelease: false
-        generate_release_notes: true
-        token: "${{ secrets.ACTION_TOKEN }}"
-        files: |
-          ./target/epl_librarian-${{ env.RELEASE_VERSION }}.zip    
