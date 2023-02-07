@@ -30,31 +30,10 @@ jobs:
           - os: windows-2019
             executable-suffix: '.exe'
             native-build-args: '-J-Xmx10g'
-    steps:
-      # OS customizations that allow the builds to succeed on Linux and Windows.
-      # Using hash for better security due to third party actions.
-      - name: Set up swap space
-        if: runner.os == 'Linux'
-        # v1.0 (49819abfb41bd9b44fb781159c033dba90353a7c)
-        uses: pierotofy/set-swap-space@v1.0
-        with:
-          swap-size-gb: 10
-      - name:
-          Configure pagefile
-        uses: al-cheb/configure-pagefile-action@v1.3
-        if: runner.os == 'Windows'
-        with:
-          minimum-size: 10GB
-          maximum-size: 12GB
-      - name: Set up pagefile
-        if: runner.os == 'Windows'
-        run: |
-          (Get-CimInstance Win32_PageFileUsage).AllocatedBaseSize
-        shell: pwsh
-                
+    steps:              
       - uses: actions/checkout@v3
         with:
-          ref: Release_Tag_v.1.17.15
+          ref: 'Release_Tag_v.1.17.15'
 
       - name: Cache Maven dependencies
         uses: actions/cache@v3
