@@ -65,7 +65,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-           PROJECT_VERSION=`mvn -B -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive  exec:exec`
+           PROJECT_VERSION=`mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive  exec:exec`
            CLEAN_PROJECT_VERSION=`echo "${PROJECT_VERSION%-SNAPSHOT}"`
            echo "RELEASE_VERSION=${CLEAN_PROJECT_VERSION}" >> $GITHUB_ENV
            echo "Generando release de la versión ${RELEASE_VERSION}"
@@ -84,7 +84,7 @@ jobs:
       - name: Build ${{ steps.executable.outputs.name }} native image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn -B -DskipTests -Dassembly.skipAssembly=true -Dnative-image-name=${{ steps.executable.outputs.name }} -Dnative-build-args=${{ matrix.native-build-args }} -Pnative native:compile
+        run: mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -DskipTests -Dassembly.skipAssembly=true -Dnative-image-name=${{ steps.executable.outputs.name }} -Dnative-build-args=${{ matrix.native-build-args }} -Pnative native:compile
 
       - name: Archive binary
         uses: actions/upload-artifact@v3
