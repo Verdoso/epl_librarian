@@ -10,3 +10,4 @@ src/main/resources/static/librarian/dist/
 src/main/frontend/node/
 /.apt_generated/
 /.apt_generated_tests/
+/*.log
