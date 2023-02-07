@@ -37,7 +37,7 @@ jobs:
 
       - name: Checkout release tag
         run: |
-          git checkout 'v.1.17.15'
+          git checkout 'v1.17.15'
 
       - name: Cache Maven dependencies
         uses: actions/cache@v3
