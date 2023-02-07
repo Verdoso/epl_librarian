@@ -56,6 +56,9 @@
       "pattern":"\\Qorg/eclipse/jetty/http/encoding.properties\\E"
     }, 
     {
+      "pattern":"\\Qopencsv.properties\\E"
+    }, 
+    {
       "pattern":"\\Qorg/eclipse/jetty/http/mime.properties\\E"
     }, 
     {
