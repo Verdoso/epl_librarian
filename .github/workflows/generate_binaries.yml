@@ -23,13 +23,13 @@ jobs:
         include:
 #          - os: ubuntu-latest
 #            executable-suffix: ''
-#            native-build-args: --verbose -J-Xmx1g
+#            native-build-args: -Xmx1g
 #          - os: macos-latest
 #            executable-suffix: ''
-#            native-build-args: --verbose -J-Xmx1g
+#            native-build-args: -Xmx1g
           - os: windows-2019
             executable-suffix: '.exe'
-            native-build-args: --verbose -J-Xmx1g
+            native-build-args: -Xmx1g
     steps:
       # OS customizations that allow the builds to succeed on Linux and Windows.
       # Using hash for better security due to third party actions.
