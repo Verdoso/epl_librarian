@@ -40,12 +40,16 @@ jobs:
       run: |
         mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn release:prepare -Pdeployment -Dusername=$GITHUB_ACTOR -Dpassword=$GITHUB_TOKEN
         mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn release:perform -Pdeployment
+
+    - name: Checkout tag before creating release
+      run: |
+        git checkout v${{ env.RELEASE_VERSION }}
       
     - name: Create Release
       id: create_release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: Release_Tag_v.${{ env.RELEASE_VERSION }}
+        tag_name: Release_Tag_v${{ env.RELEASE_VERSION }}
         name: Release ${{ env.RELEASE_VERSION }}
         draft: false
         prerelease: false
