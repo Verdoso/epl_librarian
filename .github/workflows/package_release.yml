@@ -5,7 +5,7 @@ name: Package release
 on:
   push:
     tags:
-      - "v*.*.*"
+      - "v*"
       
 jobs:
   build:
