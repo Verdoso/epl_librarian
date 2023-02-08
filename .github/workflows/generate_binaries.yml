@@ -110,6 +110,6 @@ jobs:
 
       - name: Upload release
         if: github.event.release.tag_name
-        run: gh release upload ${{ github.event.release.tag_name }} target/epl_librarian-${{ env.RELEASE_VERSION }}-native.zip
+        run: gh release upload ${{ github.event.release.tag_name }} target/epl_librarian-${{ env.RELEASE_VERSION }}-${{ runner.os }}-native.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}                   
