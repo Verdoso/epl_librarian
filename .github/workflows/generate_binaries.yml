@@ -99,20 +99,14 @@ jobs:
       - name: Build ${{ steps.executable.outputs.name }} native image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn  -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -DskipTests -Dassembly.skipAssembly=true -Dnative-image-name=${{ env.name }} -Dnative-build-args=${{ matrix.native-build-args }} -Pnative native:compile
+        run: |
+          mvn -Pdeployment package
+          mvn  -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -DskipTests -Dassembly.skipAssembly=true -Dnative-image-name=${{ env.name }} -Dnative-build-args=${{ matrix.native-build-args }} -Pnative native:compile
 
       - name: Package binary release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: mvn -Ppackage-native assembly:single
-
-      - name: Archive binary release
-        uses: actions/upload-artifact@v3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          name: ${{ env.name }}.zip
-          path: target/epl_librarian-${{ env.RELEASE_VERSION }}-native.zip
 
       - name: Upload release
         if: github.event.release.tag_name
