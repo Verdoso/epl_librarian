@@ -99,16 +99,23 @@ jobs:
       - name: Build ${{ steps.executable.outputs.name }} native image
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn  -Duser.country=ES -Duser.language=es -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -DskipTests -Dassembly.skipAssembly=true -Dnative-image-name=${{ env.name }} -Dnative-build-args=${{ matrix.native-build-args }} -Pnative native:compile
+        run: mvn  -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -DskipTests -Dassembly.skipAssembly=true -Dnative-image-name=${{ env.name }} -Dnative-build-args=${{ matrix.native-build-args }} -Pnative native:compile
 
-      - name: Archive binary
+      - name: Package binary release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: mvn -Ppackage-native assembly:single
+
+      - name: Archive binary release
         uses: actions/upload-artifact@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: ${{ steps.executable.outputs.name }}
-          path: target/${{ steps.executable.outputs.name }}${{ matrix.executable-suffix }}
+          name: ${{ env.name }}.zip
+          path: target/epl_librarian-${{ env.RELEASE_VERSION }}-native.zip
 
       - name: Upload release
         if: github.event.release.tag_name
-        run: gh release upload ${{ github.event.release.tag_name }} target/${{ steps.executable.outputs.name }}${{ matrix.executable-suffix }}
+        run: gh release upload ${{ github.event.release.tag_name }} target/epl_librarian-${{ env.RELEASE_VERSION }}-native.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}                   
