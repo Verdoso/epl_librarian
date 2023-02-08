@@ -310,7 +310,7 @@
         <artifactId>maven-assembly-plugin</artifactId>
         <executions>
           <execution>
-            <id>make-assembly</id>
+            <id>make-release-assembly</id>
             <phase>package</phase>
             <goals>
               <goal>single</goal>
@@ -411,6 +411,26 @@
   </build>
 
   <profiles>
+    <profile>
+      <id>package-native</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <configuration>
+              <descriptors>
+                <descriptor>src/main/assembly/native.xml</descriptor>
+              </descriptors>
+            </configuration>
+            <executions>
+              <execution>
+                <id>make-native-assembly</id>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
     <profile>
       <id>code-quality</id>
       <build>
