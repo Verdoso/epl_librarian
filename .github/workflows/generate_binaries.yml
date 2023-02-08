@@ -31,15 +31,6 @@ jobs:
             executable-suffix: '.exe'
             native-build-args: '-J-Xmx10g'
     steps:
-      - name: Find out version
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
-        run: |
-           RELEASE_TAG=${{ github.event.release.tag_name }}
-           CLEAN_RELEASE_TAG=`echo "${RELEASE_TAG//Release_Tag_}"`
-           echo "CHECKOUT_TAG=${CLEAN_PROJECT_VERSION}" >> $GITHUB_ENV
-           echo "Haciendo checkout del tag ${CLEAN_RELEASE_TAG}"
-
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
@@ -48,7 +39,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
         run: |
-          git checkout ${{ env.CHECKOUT_TAG }}
+           RELEASE_TAG=${{ github.event.release.tag_name }}
+           CLEAN_RELEASE_TAG=`echo "${RELEASE_TAG//Release_Tag_}"`
+           echo "CHECKOUT_TAG=${CLEAN_PROJECT_VERSION}" >> $GITHUB_ENV
+           echo "Haciendo checkout del tag ${CLEAN_RELEASE_TAG}"
+           git checkout ${CLEAN_RELEASE_TAG}
     
       - name: Find out version
         env:
