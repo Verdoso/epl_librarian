@@ -44,6 +44,7 @@
     <npm.directory>src/main/frontend</npm.directory>
 
     <native-image-name>epl_librarian</native-image-name>
+    <descriptor-ref></descriptor-ref>
     <sonar-projectKey>Verdoso_epl_librarian</sonar-projectKey>
     <sonar-organization>verdoso</sonar-organization>
     <sonar-host.url>https://sonarcloud.io</sonar-host.url>
@@ -418,6 +419,7 @@
           <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
             <configuration>
+              <finalName>${native-image-name}-${project.version}-${descriptor-ref}</finalName>
               <descriptors>
                 <descriptor>src/main/assembly/native.xml</descriptor>
               </descriptors>

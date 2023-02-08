@@ -106,7 +106,7 @@ jobs:
       - name: Package binary release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: mvn -Ppackage-native assembly:single
+        run: mvn -Ppackage-native assembly:single -Ddescriptor-ref=${{ runner.os }}
 
       - name: Upload release
         if: github.event.release.tag_name
