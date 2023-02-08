@@ -38,13 +38,15 @@ jobs:
            RELEASE_TAG=${{ github.event.release.tag_name }}
            CLEAN_RELEASE_TAG=`echo "${RELEASE_TAG//Release_Tag_}"`
            echo "CHECKOUT_TAG=${CLEAN_PROJECT_VERSION}" >> $GITHUB_ENV
-           echo "Haciendo checkout del tag ${CHECKOUT_TAG}"
+           echo "Haciendo checkout del tag ${CLEAN_RELEASE_TAG}"
 
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
       - name: Checkout release tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
         run: |
           git checkout ${{ env.CHECKOUT_TAG }}
     
@@ -55,14 +57,20 @@ jobs:
            PROJECT_VERSION=`mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive  exec:exec`
            CLEAN_PROJECT_VERSION=`echo "${PROJECT_VERSION%-SNAPSHOT}"`
            echo "RELEASE_VERSION=${CLEAN_PROJECT_VERSION}" >> $GITHUB_ENV
-           echo "Generando release de la versión ${RELEASE_VERSION}"
+           echo "Generando release de la versión ${CLEAN_PROJECT_VERSION}"
 
       - id: executable
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
         run: |
-          echo "CHECKOUT_TAG=epl_librarian-${{ runner.os }}-${{ env.RELEASE_VERSION }}-x86_64" >> $GITHUB_ENV
+          echo "name=epl_librarian-${{ runner.os }}-${{ env.RELEASE_VERSION }}-x86_64" >> $GITHUB_ENV
 
       - name: Preparing to create binary
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
         run: |
-          git checkout ${{ env.CHECKOUT_TAG }}
+          echo env.name: ${{ env.name }}
+          echo env.CHECKOUT_TAG: ${{ env.CHECKOUT_TAG }}
+          echo env.RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
     
           
