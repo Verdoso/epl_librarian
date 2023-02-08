@@ -190,6 +190,7 @@
         <artifactId>native-maven-plugin</artifactId>
         <configuration>
           <imageName>${native-image-name}</imageName>
+          <outputDirectory>${project.build.directory}/native</outputDirectory>
           <buildArgs>
             <buildArg>--initialize-at-build-time=ch.qos.logback</buildArg>
             <buildArg>--initialize-at-build-time=org.apache.commons.logging.LogFactoryService</buildArg>
