@@ -3,8 +3,8 @@
 name: Generate binaries
 
 on: 
-#  release:
-#    types: [released]      
+  release:
+    types: [released]      
   workflow_dispatch:
 jobs:
   build:
@@ -31,26 +31,14 @@ jobs:
             executable-suffix: '.exe'
             native-build-args: '-J-Xmx10g'
     steps:
-      # OS customizations that allow the builds to succeed on Linux and Windows.
-      # Using hash for better security due to third party actions.
-      - name: Set up swap space
-        if: runner.os == 'Linux'
-        # v1.0 (49819abfb41bd9b44fb781159c033dba90353a7c)
-        uses: pierotofy/set-swap-space@v1.0
-        with:
-          swap-size-gb: 10
-      - name:
-          Configure pagefile
-        uses: al-cheb/configure-pagefile-action@v1.3
-        if: runner.os == 'Windows'
-        with:
-          minimum-size: 10GB
-          maximum-size: 12GB
-      - name: Set up pagefile
-        if: runner.os == 'Windows'
+      - name: Find out version
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
         run: |
-          (Get-CimInstance Win32_PageFileUsage).AllocatedBaseSize
-        shell: pwsh
+           RELEASE_TAG=${{ github.event.release.tag_name }}
+           CLEAN_RELEASE_TAG=`echo "${RELEASE_TAG//Release_Tag_}"`
+           echo "CHECKOUT_TAG=${CLEAN_PROJECT_VERSION}" >> $GITHUB_ENV
+           echo "Haciendo checkout del tag ${CHECKOUT_TAG}"
 
       - uses: actions/checkout@v3
         with:
@@ -58,15 +46,8 @@ jobs:
 
       - name: Checkout release tag
         run: |
-          git checkout ${{ github.event.release.tag_name }}
-
-      - name: Cache Maven dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven
-      
+          git checkout ${{ env.CHECKOUT_TAG }}
+    
       - name: Find out version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -77,4 +58,11 @@ jobs:
            echo "Generando release de la versión ${RELEASE_VERSION}"
 
       - id: executable
-        run: echo "::set-output name=name::epl_librarian-${{ runner.os }}-${{ env.RELEASE_VERSION }}-x86_64"
+        run: |
+          echo "CHECKOUT_TAG=epl_librarian-${{ runner.os }}-${{ env.RELEASE_VERSION }}-x86_64" >> $GITHUB_ENV
+
+      - name: Preparing to create binary
+        run: |
+          git checkout ${{ env.CHECKOUT_TAG }}
+    
+          
