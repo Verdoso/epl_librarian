@@ -31,6 +31,27 @@ jobs:
             executable-suffix: '.exe'
             native-build-args: '-J-Xmx10g'
     steps:
+      # OS customizations that allow the builds to succeed on Linux and Windows.
+      # Using hash for better security due to third party actions.
+      - name: Set up swap space
+        if: runner.os == 'Linux'
+        # v1.0 (49819abfb41bd9b44fb781159c033dba90353a7c)
+        uses: pierotofy/set-swap-space@v1.0
+        with:
+          swap-size-gb: 10
+      - name:
+          Configure pagefile
+        uses: al-cheb/configure-pagefile-action@v1.3
+        if: runner.os == 'Windows'
+        with:
+          minimum-size: 10GB
+          maximum-size: 12GB
+      - name: Set up pagefile
+        if: runner.os == 'Windows'
+        run: |
+          (Get-CimInstance Win32_PageFileUsage).AllocatedBaseSize
+        shell: pwsh
+
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
@@ -41,9 +62,16 @@ jobs:
         run: |
            RELEASE_TAG=${{ github.event.release.tag_name }}
            CLEAN_RELEASE_TAG=`echo "${RELEASE_TAG//Release_Tag_}"`
-           echo "CHECKOUT_TAG=${CLEAN_PROJECT_VERSION}" >> $GITHUB_ENV
+           echo "CHECKOUT_TAG=${CLEAN_RELEASE_TAG}" >> $GITHUB_ENV
            echo "Haciendo checkout del tag ${CLEAN_RELEASE_TAG}"
            git checkout ${CLEAN_RELEASE_TAG}
+    
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven
     
       - name: Find out version
         env:
@@ -52,8 +80,7 @@ jobs:
            PROJECT_VERSION=`mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive  exec:exec`
            CLEAN_PROJECT_VERSION=`echo "${PROJECT_VERSION%-SNAPSHOT}"`
            echo "RELEASE_VERSION=${CLEAN_PROJECT_VERSION}" >> $GITHUB_ENV
-           echo "Generando release de la versión ${CLEAN_PROJECT_VERSION}"
-           echo "Basado en el checkout del tag ${CHECKOUT_TAG}"
+           echo "Generando release de la versión ${CLEAN_PROJECT_VERSION} basada en el checkout del tag ${CHECKOUT_TAG}"
 
       - id: executable
         env:
@@ -61,12 +88,27 @@ jobs:
         run: |
           echo "name=epl_librarian-${{ runner.os }}-${{ env.RELEASE_VERSION }}-x86_64" >> $GITHUB_ENV
 
-      - name: Preparing to create binary
+      - name: Set up GraalVM (Java ${{ matrix.java-version }})
+        uses: graalvm/setup-graalvm@v1
+        with:
+          version: '${{ matrix.graalvm-version }}'
+          java-version: '${{ matrix.java-version }}'
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build ${{ steps.executable.outputs.name }} native image
         env:
-          GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
-        run: |
-          echo env.name: ${{ env.name }}
-          echo env.CHECKOUT_TAG: ${{ env.CHECKOUT_TAG }}
-          echo env.RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
-    
-          
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: mvn  -Duser.country=ES -Duser.language=es -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -DskipTests -Dassembly.skipAssembly=true -Dnative-image-name=${{ env.name }} -Dnative-build-args=${{ matrix.native-build-args }} -Pnative native:compile
+
+      - name: Archive binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.executable.outputs.name }}
+          path: target/${{ steps.executable.outputs.name }}${{ matrix.executable-suffix }}
+
+      - name: Upload release
+        if: github.event.release.tag_name
+        run: gh release upload ${{ github.event.release.tag_name }} target/${{ steps.executable.outputs.name }}${{ matrix.executable-suffix }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}                   
