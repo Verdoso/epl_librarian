@@ -53,6 +53,7 @@ jobs:
            CLEAN_PROJECT_VERSION=`echo "${PROJECT_VERSION%-SNAPSHOT}"`
            echo "RELEASE_VERSION=${CLEAN_PROJECT_VERSION}" >> $GITHUB_ENV
            echo "Generando release de la versión ${CLEAN_PROJECT_VERSION}"
+           echo "Basado en el checkout del tag ${CHECKOUT_TAG}"
 
       - id: executable
         env:
