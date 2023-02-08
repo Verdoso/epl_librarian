@@ -53,10 +53,13 @@
       "pattern":"\\Qlogback-spring.xml\\E"
     }, 
     {
-      "pattern":"\\Qorg/eclipse/jetty/http/encoding.properties\\E"
+      "pattern":"\\Qmozilla/public-suffix-list.txt\\E"
     }, 
     {
-      "pattern":"\\Qopencsv.properties\\E"
+      "pattern":"\\Qorg/apache/http/client/version.properties\\E"
+    }, 
+    {
+      "pattern":"\\Qorg/eclipse/jetty/http/encoding.properties\\E"
     }, 
     {
       "pattern":"\\Qorg/eclipse/jetty/http/mime.properties\\E"
@@ -905,7 +908,31 @@
       "pattern":"\\Qorg/sqlite/native/Windows/x86_64/sqlitejdbc.dll\\E"
     }, 
     {
+      "pattern":"\\Qorg/thymeleaf/thymeleaf.properties\\E"
+    }, 
+    {
+      "pattern":"\\Qstatic/librarian/dist/fontawesome-webfont.woff2\\E"
+    }, 
+    {
+      "pattern":"\\Qstatic/librarian/dist/main_build.js.gz\\E"
+    }, 
+    {
+      "pattern":"\\Qstatic/librarian/dist/materialdesignicons-webfont.woff2\\E"
+    }, 
+    {
       "pattern":"\\Qtemplates/\\E"
+    }, 
+    {
+      "pattern":"\\Qtemplates/fragments/layout.html\\E"
+    }, 
+    {
+      "pattern":"\\Qtemplates/fragments/navbar.html\\E"
+    }, 
+    {
+      "pattern":"\\Qtemplates/fragments/user-sidebar.html\\E"
+    }, 
+    {
+      "pattern":"\\Qtemplates/main.html\\E"
     }
   ]},
   "bundles":[
@@ -919,6 +946,10 @@
         "", 
         "es"
       ]
+    }, 
+    {
+      "name":"sun.awt.resources.awt",
+      "classNames":["sun.awt.resources.awt"]
     }
   ]
 }

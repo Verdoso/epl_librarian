@@ -1,6 +1,15 @@
 [
 {
+  "name":"[B"
+},
+{
+  "name":"[C"
+},
+{
   "name":"[D"
+},
+{
+  "name":"[F"
 },
 {
   "name":"[I"
@@ -21,10 +30,22 @@
   "name":"[Lcom.fasterxml.jackson.databind.ser.Serializers;"
 },
 {
+  "name":"[Ljava.io.File;"
+},
+{
   "name":"[Ljava.io.Serializable;"
 },
 {
+  "name":"[Ljava.lang.Boolean;"
+},
+{
+  "name":"[Ljava.lang.Byte;"
+},
+{
   "name":"[Ljava.lang.CharSequence;"
+},
+{
+  "name":"[Ljava.lang.Character;"
 },
 {
   "name":"[Ljava.lang.Class;"
@@ -36,16 +57,55 @@
   "name":"[Ljava.lang.Double;"
 },
 {
+  "name":"[Ljava.lang.Float;"
+},
+{
+  "name":"[Ljava.lang.Integer;"
+},
+{
+  "name":"[Ljava.lang.Long;"
+},
+{
   "name":"[Ljava.lang.Object;"
 },
 {
+  "name":"[Ljava.lang.Short;"
+},
+{
   "name":"[Ljava.lang.String;"
+},
+{
+  "name":"[Ljava.lang.annotation.Annotation;"
 },
 {
   "name":"[Ljava.lang.constant.Constable;"
 },
 {
   "name":"[Ljava.lang.constant.ConstantDesc;"
+},
+{
+  "name":"[Ljava.math.BigDecimal;"
+},
+{
+  "name":"[Ljava.math.BigInteger;"
+},
+{
+  "name":"[Ljava.net.URL;"
+},
+{
+  "name":"[Ljava.sql.Date;"
+},
+{
+  "name":"[Ljava.sql.Time;"
+},
+{
+  "name":"[Ljava.sql.Timestamp;"
+},
+{
+  "name":"[Ljava.util.Calendar;"
+},
+{
+  "name":"[Ljava.util.Date;"
 },
 {
   "name":"[Lorg.eclipse.jetty.servlet.FilterHolder;"
@@ -64,6 +124,9 @@
 },
 {
   "name":"[Lorg.springframework.web.bind.annotation.RequestMethod;"
+},
+{
+  "name":"[S"
 },
 {
   "name":"[Z"
@@ -196,8 +259,8 @@
   "queryAllDeclaredMethods":true,
   "methods":[
     {"name":"getJsonFactory","parameterTypes":[] }, 
-    {"name":"readValues","parameterTypes":["com.fasterxml.jackson.core.JsonParser","com.fasterxml.jackson.core.type.TypeReference"] }, 
-    {"name":"readValues","parameterTypes":["com.fasterxml.jackson.core.JsonParser","java.lang.Class"] }
+    {"name":"readValues","parameterTypes":["com.fasterxml.jackson.core.JsonParser","com.fasterxml.jackson.core.type.ResolvedType"] }, 
+    {"name":"readValues","parameterTypes":["com.fasterxml.jackson.core.JsonParser","com.fasterxml.jackson.core.type.TypeReference"] }
   ]
 },
 {
@@ -239,6 +302,10 @@
     {"name":"writeTree","parameterTypes":["com.fasterxml.jackson.core.JsonGenerator","com.fasterxml.jackson.core.TreeNode"] }, 
     {"name":"writeValue","parameterTypes":["com.fasterxml.jackson.core.JsonGenerator","java.lang.Object"] }
   ]
+},
+{
+  "name":"com.fasterxml.jackson.databind.ext.Java7HandlersImpl",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"com.fasterxml.jackson.databind.ext.Java7SupportImpl",
@@ -289,7 +356,55 @@
   "methods":[{"name":"setupModule","parameterTypes":["com.fasterxml.jackson.databind.Module$SetupContext"] }]
 },
 {
+  "name":"com.sun.crypto.provider.AESCipher$General",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.ARCFOURCipher",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.ChaCha20Cipher$ChaCha20Poly1305",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.DESCipher",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.DESedeCipher",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.DHParameters",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.GaloisCounterMode$AESGCM",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.TlsKeyMaterialGenerator",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.TlsMasterSecretGenerator",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.TlsPrfGenerator$V12",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.sun.management.GarbageCollectionNotificationInfo"
+},
+{
+  "name":"com.sun.management.GcInfo",
+  "fields":[
+    {"name":"builder"}, 
+    {"name":"extAttributes"}
+  ],
+  "methods":[{"name":"getMemoryUsageBeforeGc","parameterTypes":[] }]
 },
 {
   "name":"com.sun.management.OperatingSystemMXBean",
@@ -614,6 +729,9 @@
   "name":"jakarta.websocket.server.ServerContainer"
 },
 {
+  "name":"java.beans.PropertyVetoException"
+},
+{
   "name":"java.io.FilePermission"
 },
 {
@@ -628,11 +746,18 @@
 },
 {
   "name":"java.lang.Boolean",
+  "queryAllDeclaredMethods":true,
+  "fields":[{"name":"TYPE"}],
   "methods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]
 },
 {
   "name":"java.lang.Byte",
+  "fields":[{"name":"TYPE"}],
   "methods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"java.lang.Character",
+  "fields":[{"name":"TYPE"}]
 },
 {
   "name":"java.lang.Class",
@@ -643,16 +768,27 @@
   "methods":[{"name":"defineClass","parameterTypes":["java.lang.String","byte[]","int","int","java.security.ProtectionDomain"] }]
 },
 {
+  "name":"java.lang.Cloneable",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"java.lang.Comparable",
+  "queryAllDeclaredMethods":true
+},
+{
   "name":"java.lang.Double",
+  "fields":[{"name":"TYPE"}],
   "methods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]
 },
 {
   "name":"java.lang.Float",
+  "fields":[{"name":"TYPE"}],
   "methods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]
 },
 {
   "name":"java.lang.Integer",
   "queryAllDeclaredMethods":true,
+  "fields":[{"name":"TYPE"}],
   "methods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]
 },
 {
@@ -665,6 +801,7 @@
 },
 {
   "name":"java.lang.Long",
+  "fields":[{"name":"TYPE"}],
   "methods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]
 },
 {
@@ -672,20 +809,31 @@
   "queryAllDeclaredMethods":true
 },
 {
+  "name":"java.lang.Number",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
   "name":"java.lang.Object",
   "allDeclaredClasses":true,
-  "queryAllDeclaredMethods":true
+  "queryAllDeclaredMethods":true,
+  "queryAllPublicMethods":true
 },
 {
   "name":"java.lang.RuntimePermission"
 },
 {
   "name":"java.lang.Short",
+  "fields":[{"name":"TYPE"}],
   "methods":[{"name":"valueOf","parameterTypes":["java.lang.String"] }]
 },
 {
   "name":"java.lang.String",
   "queryAllDeclaredMethods":true
+},
+{
+  "name":"java.lang.Void",
+  "fields":[{"name":"TYPE"}]
 },
 {
   "name":"java.lang.annotation.Documented",
@@ -718,6 +866,11 @@
 {
   "name":"java.lang.management.ManagementFactory",
   "methods":[{"name":"getRuntimeMXBean","parameterTypes":[] }]
+},
+{
+  "name":"java.lang.management.MemoryUsage",
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"from","parameterTypes":["javax.management.openmbean.CompositeData"] }]
 },
 {
   "name":"java.lang.management.RuntimeMXBean",
@@ -754,6 +907,15 @@
   ]
 },
 {
+  "name":"java.math.BigDecimal",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
+  "name":"java.math.BigInteger"
+},
+{
   "name":"java.net.NetPermission"
 },
 {
@@ -764,7 +926,13 @@
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String"] }]
 },
 {
+  "name":"java.security.AlgorithmParametersSpi"
+},
+{
   "name":"java.security.AllPermission"
+},
+{
+  "name":"java.security.KeyStoreSpi"
 },
 {
   "name":"java.security.SecureRandomParameters"
@@ -773,13 +941,29 @@
   "name":"java.security.SecurityPermission"
 },
 {
+  "name":"java.security.interfaces.RSAPrivateKey"
+},
+{
+  "name":"java.security.interfaces.RSAPublicKey"
+},
+{
   "name":"java.sql.Date"
 },
 {
   "name":"java.sql.Timestamp"
 },
 {
+  "name":"java.util.Date",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true
+},
+{
   "name":"java.util.PropertyPermission"
+},
+{
+  "name":"java.util.concurrent.Callable",
+  "methods":[{"name":"call","parameterTypes":[] }]
 },
 {
   "name":"java.util.concurrent.Executor"
@@ -795,10 +979,18 @@
   "name":"javax.inject.Inject"
 },
 {
+  "name":"javax.management.ObjectName"
+},
+{
   "name":"javax.naming.InitialContext"
 },
 {
   "name":"javax.naming.ldap.LdapContext"
+},
+{
+  "name":"javax.security.auth.x500.X500Principal",
+  "fields":[{"name":"thisX500Name"}],
+  "methods":[{"name":"<init>","parameterTypes":["sun.security.x509.X500Name"] }]
 },
 {
   "name":"javax.sql.DataSource"
@@ -808,6 +1000,10 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "methods":[{"name":"getProcessors","parameterTypes":["java.lang.String"] }]
+},
+{
+  "name":"nz.net.ultraq.thymeleaf.layoutdialect.context.extensions.IContextExtensions",
+  "methods":[{"name":"getPrefixForDialect","parameterTypes":["org.thymeleaf.context.IContext","java.lang.Class"] }]
 },
 {
   "name":"org.apache.commons.logging.LogFactory"
@@ -1095,21 +1291,134 @@
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
+  "methods":[
+    {"name":"<init>","parameterTypes":[] }, 
+    {"name":"main","parameterTypes":[] }
+  ]
 },
 {
   "name":"org.greeneyed.epl.librarian.controller.LibrarianAPIController",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["org.greeneyed.epl.librarian.services.BibliotecaService","org.springframework.context.ApplicationContext"] }]
+  "methods":[
+    {"name":"<init>","parameterTypes":["org.greeneyed.epl.librarian.services.BibliotecaService","org.springframework.context.ApplicationContext"] }, 
+    {"name":"exit","parameterTypes":[] }, 
+    {"name":"paginaAutores","parameterTypes":["int"] }, 
+    {"name":"paginaAutores","parameterTypes":["int","int","boolean","org.greeneyed.epl.librarian.services.BibliotecaService$AUTOR_ORDERING","boolean","java.lang.String"] }, 
+    {"name":"paginaGeneros","parameterTypes":["int","int","boolean","org.greeneyed.epl.librarian.services.BibliotecaService$GENERO_ORDERING","boolean","java.lang.String"] }, 
+    {"name":"paginaIdiomas","parameterTypes":["int"] }, 
+    {"name":"paginaIdiomas","parameterTypes":["int","int","boolean","org.greeneyed.epl.librarian.services.BibliotecaService$IDIOMA_ORDERING","boolean","java.lang.String"] }, 
+    {"name":"paginaLibro","parameterTypes":["int","int","boolean","org.greeneyed.epl.librarian.services.BibliotecaService$BOOK_ORDERING","java.lang.String","java.lang.String","java.lang.String","java.lang.String","java.lang.String","boolean","boolean","boolean","java.lang.Boolean","java.lang.Long"] }, 
+    {"name":"sumario","parameterTypes":[] }
+  ]
 },
 {
   "name":"org.greeneyed.epl.librarian.controller.PreferencesAPIController",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
-  "methods":[{"name":"<init>","parameterTypes":["org.greeneyed.epl.librarian.services.PreferencesService","org.greeneyed.epl.librarian.services.BibliotecaService"] }]
+  "methods":[
+    {"name":"<init>","parameterTypes":["org.greeneyed.epl.librarian.services.PreferencesService","org.greeneyed.epl.librarian.services.BibliotecaService"] }, 
+    {"name":"fechaBase","parameterTypes":[] }, 
+    {"name":"guardarFechaBase","parameterTypes":["long"] }
+  ]
+},
+{
+  "name":"org.greeneyed.epl.librarian.model.Autor",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"getLibros","parameterTypes":[] }, 
+    {"name":"getNombre","parameterTypes":[] }, 
+    {"name":"getNombreNormalizado","parameterTypes":[] }, 
+    {"name":"isFavorito","parameterTypes":[] }
+  ]
+},
+{
+  "name":"org.greeneyed.epl.librarian.model.Genero",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"getLibros","parameterTypes":[] }, 
+    {"name":"getNombre","parameterTypes":[] }, 
+    {"name":"getNombreNormalizado","parameterTypes":[] }, 
+    {"name":"isFavorito","parameterTypes":[] }
+  ]
+},
+{
+  "name":"org.greeneyed.epl.librarian.model.Idioma",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"getLibros","parameterTypes":[] }, 
+    {"name":"getNombre","parameterTypes":[] }, 
+    {"name":"getNombreNormalizado","parameterTypes":[] }, 
+    {"name":"isFavorito","parameterTypes":[] }
+  ]
+},
+{
+  "name":"org.greeneyed.epl.librarian.model.Libro",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"getAutor","parameterTypes":[] }, 
+    {"name":"getAutorFavorito","parameterTypes":[] }, 
+    {"name":"getColeccion","parameterTypes":[] }, 
+    {"name":"getColeccionCompleta","parameterTypes":[] }, 
+    {"name":"getDescartado","parameterTypes":[] }, 
+    {"name":"getEstado","parameterTypes":[] }, 
+    {"name":"getFechaPublicacion","parameterTypes":[] }, 
+    {"name":"getGeneroFavorito","parameterTypes":[] }, 
+    {"name":"getGeneros","parameterTypes":[] }, 
+    {"name":"getId","parameterTypes":[] }, 
+    {"name":"getIdioma","parameterTypes":[] }, 
+    {"name":"getIdiomaFavorito","parameterTypes":[] }, 
+    {"name":"getInCalibre","parameterTypes":[] }, 
+    {"name":"getListaAutoresNormalizados","parameterTypes":[] }, 
+    {"name":"getListaMagnetIds","parameterTypes":[] }, 
+    {"name":"getMagnetId","parameterTypes":[] }, 
+    {"name":"getPaginas","parameterTypes":[] }, 
+    {"name":"getPortada","parameterTypes":[] }, 
+    {"name":"getPublicado","parameterTypes":[] }, 
+    {"name":"getRevision","parameterTypes":[] }, 
+    {"name":"getSinopsis","parameterTypes":[] }, 
+    {"name":"getTitulo","parameterTypes":[] }, 
+    {"name":"getVolumen","parameterTypes":[] }
+  ]
+},
+{
+  "name":"org.greeneyed.epl.librarian.model.Pagina",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"getResults","parameterTypes":[] }, 
+    {"name":"getTotal","parameterTypes":[] }
+  ]
+},
+{
+  "name":"org.greeneyed.epl.librarian.model.PuedeSerFavorito",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.greeneyed.epl.librarian.model.Sumario",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[
+    {"name":"getAutores","parameterTypes":[] }, 
+    {"name":"getBuildVersion","parameterTypes":[] }, 
+    {"name":"getFechaActualizacion","parameterTypes":[] }, 
+    {"name":"getGeneros","parameterTypes":[] }, 
+    {"name":"getIdiomas","parameterTypes":[] }, 
+    {"name":"getLibros","parameterTypes":[] }, 
+    {"name":"isIntegracionCalibreHabilitada","parameterTypes":[] }
+  ]
 },
 {
   "name":"org.greeneyed.epl.librarian.services.BibliotecaService",
@@ -1185,6 +1494,31 @@
     {"name":"<init>","parameterTypes":[] }, 
     {"name":"CGLIB$SET_STATIC_CALLBACKS","parameterTypes":["org.springframework.cglib.proxy.Callback[]"] }, 
     {"name":"CGLIB$SET_THREAD_CALLBACKS","parameterTypes":["org.springframework.cglib.proxy.Callback[]"] }
+  ]
+},
+{
+  "name":"org.greeneyed.epl.librarian.services.EplCSVProcessor$LibroCSV",
+  "allDeclaredFields":true,
+  "queryAllPublicMethods":true,
+  "methods":[
+    {"name":"<init>","parameterTypes":[] }, 
+    {"name":"setAnyoPublicacion","parameterTypes":["int"] }, 
+    {"name":"setAutor","parameterTypes":["java.lang.String"] }, 
+    {"name":"setColeccion","parameterTypes":["java.lang.String"] }, 
+    {"name":"setEstado","parameterTypes":["java.lang.String"] }, 
+    {"name":"setGeneros","parameterTypes":["java.lang.String"] }, 
+    {"name":"setId","parameterTypes":["int"] }, 
+    {"name":"setIdioma","parameterTypes":["java.lang.String"] }, 
+    {"name":"setMagnetId","parameterTypes":["java.lang.String"] }, 
+    {"name":"setPaginas","parameterTypes":["java.lang.Integer"] }, 
+    {"name":"setPortadaCompleta","parameterTypes":["java.lang.String"] }, 
+    {"name":"setPublicado","parameterTypes":["java.lang.String"] }, 
+    {"name":"setRevision","parameterTypes":["java.math.BigDecimal"] }, 
+    {"name":"setSinopsis","parameterTypes":["java.lang.String"] }, 
+    {"name":"setTitulo","parameterTypes":["java.lang.String"] }, 
+    {"name":"setValoracion","parameterTypes":["java.math.BigDecimal"] }, 
+    {"name":"setVolumen","parameterTypes":["java.math.BigDecimal"] }, 
+    {"name":"setVotos","parameterTypes":["java.lang.Integer"] }
   ]
 },
 {
@@ -2714,7 +3048,8 @@
 },
 {
   "name":"org.springframework.boot.actuate.web.mappings.MappingDescriptionProvider",
-  "queryAllPublicMethods":true
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"describeMappings","parameterTypes":["org.springframework.context.ApplicationContext"] }]
 },
 {
   "name":"org.springframework.boot.actuate.web.mappings.MappingsEndpoint",
@@ -3909,7 +4244,8 @@
 {
   "name":"org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController",
   "allDeclaredFields":true,
-  "queryAllDeclaredMethods":true
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"error","parameterTypes":["jakarta.servlet.http.HttpServletRequest"] }]
 },
 {
   "name":"org.springframework.boot.autoconfigure.web.servlet.error.DefaultErrorViewResolver",
@@ -4493,6 +4829,10 @@
   ]
 },
 {
+  "name":"org.springframework.boot.web.servlet.context.ApplicationServletEnvironment",
+  "queryAllPublicMethods":true
+},
+{
   "name":"org.springframework.boot.web.servlet.context.ServletWebServerApplicationContextFactory",
   "queryAllDeclaredConstructors":true,
   "queryAllPublicConstructors":true,
@@ -4792,6 +5132,13 @@
   ]
 },
 {
+  "name":"org.springframework.core.env.ConfigurableEnvironment"
+},
+{
+  "name":"org.springframework.core.env.Environment",
+  "methods":[{"name":"getActiveProfiles","parameterTypes":[] }]
+},
+{
   "name":"org.springframework.core.env.EnvironmentCapable",
   "queryAllPublicMethods":true
 },
@@ -5049,6 +5396,10 @@
   "queryAllDeclaredMethods":true
 },
 {
+  "name":"org.springframework.web.bind.annotation.RequestParam",
+  "queryAllDeclaredMethods":true
+},
+{
   "name":"org.springframework.web.bind.annotation.ResponseBody",
   "queryAllDeclaredMethods":true
 },
@@ -5231,7 +5582,8 @@
 },
 {
   "name":"org.springframework.web.servlet.View",
-  "queryAllPublicMethods":true
+  "queryAllPublicMethods":true,
+  "fields":[{"name":"PATH_VARIABLES"}]
 },
 {
   "name":"org.springframework.web.servlet.ViewResolver",
@@ -5569,6 +5921,14 @@
   ]
 },
 {
+  "name":"org.springframework.web.servlet.view.AbstractUrlBasedView",
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.springframework.web.servlet.view.AbstractView",
+  "queryAllDeclaredMethods":true
+},
+{
   "name":"org.springframework.web.servlet.view.BeanNameViewResolver",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true
@@ -5581,6 +5941,10 @@
 {
   "name":"org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator",
   "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true
+},
+{
+  "name":"org.springframework.web.servlet.view.InternalResourceView",
   "queryAllDeclaredMethods":true
 },
 {
@@ -5710,6 +6074,11 @@
   "queryAllPublicMethods":true
 },
 {
+  "name":"org.thymeleaf.expression.Arrays",
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"contains","parameterTypes":["java.lang.Object[]","java.lang.Object"] }]
+},
+{
   "name":"org.thymeleaf.spring6.ISpringTemplateEngine",
   "queryAllDeclaredMethods":true,
   "queryAllPublicMethods":true
@@ -5724,16 +6093,90 @@
   ]
 },
 {
+  "name":"org.thymeleaf.spring6.expression.Mvc$Spring41MvcUriComponentsBuilderDelegate",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "methods":[{"name":"setApplicationContext","parameterTypes":["org.springframework.context.ApplicationContext"] }]
 },
 {
+  "name":"org.thymeleaf.spring6.view.AbstractThymeleafView",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[
+    {"name":"addStaticVariable","parameterTypes":["java.lang.String","java.lang.Object"] }, 
+    {"name":"getBeanName","parameterTypes":[] }, 
+    {"name":"getCharacterEncoding","parameterTypes":[] }, 
+    {"name":"getContentType","parameterTypes":[] }, 
+    {"name":"getForceContentType","parameterTypes":[] }, 
+    {"name":"getProducePartialOutputWhileProcessing","parameterTypes":[] }, 
+    {"name":"getStaticVariables","parameterTypes":[] }, 
+    {"name":"getTemplateName","parameterTypes":[] }, 
+    {"name":"setBeanName","parameterTypes":["java.lang.String"] }, 
+    {"name":"setCharacterEncoding","parameterTypes":["java.lang.String"] }, 
+    {"name":"setContentType","parameterTypes":["java.lang.String"] }, 
+    {"name":"setForceContentType","parameterTypes":["boolean"] }, 
+    {"name":"setProducePartialOutputWhileProcessing","parameterTypes":["boolean"] }, 
+    {"name":"setStaticVariables","parameterTypes":["java.util.Map"] }, 
+    {"name":"setTemplateName","parameterTypes":["java.lang.String"] }
+  ]
+},
+{
+  "name":"org.thymeleaf.spring6.view.ThymeleafView",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"org.thymeleaf.spring6.view.ThymeleafViewResolver",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,
   "methods":[{"name":"getOrder","parameterTypes":[] }]
+},
+{
+  "name":"org.thymeleaf.standard.expression.AdditionSubtractionExpression",
+  "methods":[
+    {"name":"isLeftAllowed","parameterTypes":["org.thymeleaf.standard.expression.IStandardExpression"] }, 
+    {"name":"isRightAllowed","parameterTypes":["org.thymeleaf.standard.expression.IStandardExpression"] }
+  ]
+},
+{
+  "name":"org.thymeleaf.standard.expression.AndExpression",
+  "methods":[
+    {"name":"isLeftAllowed","parameterTypes":["org.thymeleaf.standard.expression.IStandardExpression"] }, 
+    {"name":"isRightAllowed","parameterTypes":["org.thymeleaf.standard.expression.IStandardExpression"] }
+  ]
+},
+{
+  "name":"org.thymeleaf.standard.expression.EqualsNotEqualsExpression",
+  "methods":[
+    {"name":"isLeftAllowed","parameterTypes":["org.thymeleaf.standard.expression.IStandardExpression"] }, 
+    {"name":"isRightAllowed","parameterTypes":["org.thymeleaf.standard.expression.IStandardExpression"] }
+  ]
+},
+{
+  "name":"org.thymeleaf.standard.expression.GreaterLesserExpression",
+  "methods":[
+    {"name":"isLeftAllowed","parameterTypes":["org.thymeleaf.standard.expression.IStandardExpression"] }, 
+    {"name":"isRightAllowed","parameterTypes":["org.thymeleaf.standard.expression.IStandardExpression"] }
+  ]
+},
+{
+  "name":"org.thymeleaf.standard.expression.MultiplicationDivisionRemainderExpression",
+  "methods":[
+    {"name":"isLeftAllowed","parameterTypes":["org.thymeleaf.standard.expression.IStandardExpression"] }, 
+    {"name":"isRightAllowed","parameterTypes":["org.thymeleaf.standard.expression.IStandardExpression"] }
+  ]
+},
+{
+  "name":"org.thymeleaf.standard.expression.OrExpression",
+  "methods":[
+    {"name":"isLeftAllowed","parameterTypes":["org.thymeleaf.standard.expression.IStandardExpression"] }, 
+    {"name":"isRightAllowed","parameterTypes":["org.thymeleaf.standard.expression.IStandardExpression"] }
+  ]
 },
 {
   "name":"org.thymeleaf.templatemode.TemplateMode"
@@ -5818,15 +6261,127 @@
   "name":"org.yaml.snakeyaml.Yaml"
 },
 {
+  "name":"sun.java2d.marlin.DMarlinRenderingEngine",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.pkcs12.PKCS12KeyStore",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.pkcs12.PKCS12KeyStore$DualFormatPKCS12",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"sun.security.provider.DRBG",
   "methods":[{"name":"<init>","parameterTypes":["java.security.SecureRandomParameters"] }]
+},
+{
+  "name":"sun.security.provider.DSA$SHA224withDSA",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.DSA$SHA256withDSA",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.JavaKeyStore$JKS",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"sun.security.provider.SHA",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"sun.security.provider.SHA2$SHA224",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"sun.security.provider.SHA2$SHA256",
   "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.SHA5$SHA384",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.SHA5$SHA512",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.provider.X509Factory",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.rsa.PSSParameters",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.rsa.RSAKeyFactory$Legacy",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.rsa.RSAPSSSignature",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.rsa.RSASignature$SHA224withRSA",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.ssl.SSLContextImpl$TLSContext",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.ssl.TrustManagerFactoryImpl$PKIXFactory",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"sun.security.x509.AuthorityInfoAccessExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.AuthorityKeyIdentifierExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.BasicConstraintsExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.CRLDistributionPointsExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.CertificatePoliciesExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.ExtendedKeyUsageExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.IssuerAlternativeNameExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.KeyUsageExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.NetscapeCertTypeExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.PrivateKeyUsageExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.SubjectAlternativeNameExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
+},
+{
+  "name":"sun.security.x509.SubjectKeyIdentifierExtension",
+  "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
 }
 ]
