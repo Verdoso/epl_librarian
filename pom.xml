@@ -3,13 +3,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.greeneyed</groupId>
   <artifactId>epl_librarian</artifactId>
-  <version>1.17.11-SNAPSHOT</version>
+  <version>1.17.11</version>
   <packaging>jar</packaging>
   <name>EPL Librarian</name>
   <description>EPL Librarian</description>
   <scm>
     <developerConnection>scm:git:https://github.com/Verdoso/${project.artifactId}</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v1.17.11</tag>
   </scm>
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -44,7 +44,7 @@
     <npm.directory>src/main/frontend</npm.directory>
 
     <native-image-name>epl_librarian</native-image-name>
-    <descriptor-ref></descriptor-ref>
+    <descriptor-ref />
     <sonar-projectKey>Verdoso_epl_librarian</sonar-projectKey>
     <sonar-organization>verdoso</sonar-organization>
     <sonar-host.url>https://sonarcloud.io</sonar-host.url>
