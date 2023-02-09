@@ -419,6 +419,7 @@
           <plugin>
             <artifactId>maven-assembly-plugin</artifactId>
             <configuration>
+              <appendAssemblyId>false</appendAssemblyId>
               <finalName>${native-image-name}-${project.version}-${descriptor-ref}</finalName>
               <descriptors>
                 <descriptor>src/main/assembly/native.xml</descriptor>
