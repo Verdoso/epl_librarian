@@ -6,11 +6,28 @@
 Repositorio para una mini-aplicación para consultar localmente el catálogo de EPL
 
 ## Para ejecutar
-Simplemente descargar el fichero zip, descomprimirlo en un directorio sin espacios y ejecutar el fichero .cmd o .sh dependiendo de si estamos en Windows o \*nix. También podemos ejecutarlo directamente en un terminal con el comando java -jar epl_librarian-version.jar. Al acabar de preparar el catalogo, debería abrirse automáticamente una ventana del navegador apuntando a la direccion http://localhost:7070/librarian/. Ojo que si hacemos doble-click en Windows es posible que nos arranque la aplicación en segundo plano y para matarla tengamos que usar el botón "Cerrar" de la aplicación (arriba a la derecha) o usar el "Administrador de tareas" de Windows.
 
-### Requisitos
+### Versión nativa para Windows
+Esta versión se puede ejecutar en Windows 10 sin que haga falta tener Java instalado
+
+#### Requisitos
+* Windows 10
+
+#### Ejecución
+Descargar el fichero epl_librarian-\*.\*.\*-Windows.zip, descomprimirlo en un directorio sin espacios y ejecutar el fichero .exe que contiene. Seguramente al ejecutar por primera vez una versión, Windows nos dirá que es un fichero sin editor conocido y tengamos que darle permisos para ejecutarlo y para acceder a la red. Le damos permisos y ya está, no tendremos que volver a dárselos.
+
+### Versión Java multiplataforma 
+Esta versión sirve para cualquier S.O. y es la que hay que usar, de momento, en Linux o MacOS.
+
+#### Requisitos
 * Tener instalado Java 17 o superior (Por ejemplo, del proyecto abierto y gratuito Temurin https://adoptium.net/es/temurin/releases)
 * Tener configurado el comando java en el path (lo podemos comprobar ejecutando java -version en un terminal)
+
+#### Ejecución
+Descargar el fichero epl_librarian-\*.\*.\*.zip, descomprimirlo en un directorio sin espacios y ejecutar el fichero .cmd o .sh dependiendo de si estamos en Windows o \*nix. También podemos ejecutarlo directamente en un terminal con el comando `java  -Xms1g -Xmx1g -jar epl_librarian-version.jar`. Ojo que si hacemos doble-click en el .jar Windows es posible que nos arranque la aplicación en segundo plano y para matarla tengamos que usar el botón "Cerrar" de la aplicación (arriba a la derecha) o usar el "Administrador de tareas" de Windows.
+
+### Acceder a la aplicación
+En cualquiera de las versiones, al acabar de preparar el catalogo (aparece en el log el mensaje `EPL Librarian inicializado`), debería abrirse automáticamente una ventana del navegador apuntando a la direccion http://localhost:7070/librarian/, si no es así tendremos que escribirla nosotros en un navegador para acceder.
 
 ## Actualizaciones de ePubLlibre
 Hay que tener en cuenta que:
