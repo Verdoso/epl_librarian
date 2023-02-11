@@ -16,6 +16,8 @@ public interface MapperService {
   @Mapping(ignore = true, target = "autorFavorito")
   @Mapping(ignore = true, target = "generoFavorito")
   @Mapping(ignore = true, target = "idiomaFavorito")
+  @Mapping(ignore = true, target = "listaAutoresNormalizados")
+  @Mapping(ignore = true, target = "listaGenerosNormalizados")
   Libro from(LibroCSV libroCSV);
 
 }
