@@ -1,6 +1,5 @@
 package org.greeneyed.epl.librarian.controller;
 
-import static com.googlecode.cqengine.query.QueryFactory.contains;
 import static com.googlecode.cqengine.query.QueryFactory.equal;
 
 import java.time.Instant;
