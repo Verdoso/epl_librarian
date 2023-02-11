@@ -5,14 +5,16 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
-import java.util.function.BiConsumer;
-
-import jakarta.annotation.PostConstruct;
+import java.util.Set;
+import java.util.function.BiFunction;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -67,7 +69,8 @@ public class CalibreService {
     }
   }
 
-  public void updateLibros(BiConsumer<String, String> searchAndUpdateAction) {
+  public Set<Integer> updateLibros(BiFunction<String, String, List<Integer>> searchAndUpdateAction) {
+    Set<Integer> inCalibre = new HashSet<>();
     if (enabled) {
       try (Connection con = DriverManager.getConnection(url);
           PreparedStatement ps = con.prepareStatement(TODOS_LOS_LIBROS_STMNT);
@@ -75,11 +78,15 @@ public class CalibreService {
         while (rs.next()) {
           String titulo = rs.getString(2);
           String autores = rs.getString(1);
-          searchAndUpdateAction.accept(titulo, autores);
+          List<Integer> ids = searchAndUpdateAction.apply(titulo, autores);
+          if (ids != null) {
+            inCalibre.addAll(ids);
+          }
         }
       } catch (Exception e) {
         log.error("Error comprobando libros en base de datos de Calibre: {}", e.getMessage());
       }
     }
+    return inCalibre;
   }
 }

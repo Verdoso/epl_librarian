@@ -22,7 +22,7 @@ public class Idioma implements PuedeSerFavorito {
   public static final SimpleAttribute<Idioma, String> IDIOMA_NOMBRE = attribute(Idioma.class, String.class, IDIOMA_NOMBRE_PARAM,
       Idioma::getNombreNormalizado);
   public static final SimpleAttribute<Idioma, Boolean> IDIOMA_FAVORITO = attribute(Idioma.class, Boolean.class, IDIOMA_FAVORITO_PARAM,
-		  Idioma::getFavorito);
+      Idioma::getFavorito);
   public static final SimpleAttribute<Idioma, Integer> IDIOMA_LIBROS = attribute(Idioma.class, Integer.class, IDIOMA_LIBROS_PARAM, Idioma::getLibros);
 
   @EqualsAndHashCode.Include

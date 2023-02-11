@@ -22,7 +22,7 @@ public class Autor implements PuedeSerFavorito {
   public static final SimpleAttribute<Autor, String> AUTOR_NOMBRE = attribute(Autor.class, String.class, AUTOR_NOMBRE_PARAM,
       Autor::getNombreNormalizado);
   public static final SimpleAttribute<Autor, Boolean> AUTOR_FAVORITO = attribute(Autor.class, Boolean.class, AUTOR_FAVORITO_PARAM,
-		  Autor::getFavorito);
+      Autor::getFavorito);
   public static final SimpleAttribute<Autor, Integer> AUTOR_LIBROS = attribute(Autor.class, Integer.class, AUTOR_LIBROS_PARAM, Autor::getLibros);
 
   @EqualsAndHashCode.Include
@@ -38,5 +38,10 @@ public class Autor implements PuedeSerFavorito {
 
   public String getNombreNormalizado() {
     return Libro.flattenToAscii(nombre);
+  }
+
+  public static String getNombreComparable(String unNombre) {
+    final String flattened = Libro.flattenToAscii(unNombre);
+    return flattened.replaceAll("\\s+\\w\\.\\s+", " ");
   }
 }

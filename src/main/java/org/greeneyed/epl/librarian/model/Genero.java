@@ -22,7 +22,7 @@ public class Genero implements PuedeSerFavorito {
   public static final SimpleAttribute<Genero, String> GENERO_NOMBRE = attribute(Genero.class, String.class, GENERO_NOMBRE_PARAM,
       Genero::getNombreNormalizado);
   public static final SimpleAttribute<Genero, Boolean> GENERO_FAVORITO = attribute(Genero.class, Boolean.class, GENERO_FAVORITO_PARAM,
-		  Genero::getFavorito);
+      Genero::getFavorito);
   public static final SimpleAttribute<Genero, Integer> GENERO_LIBROS = attribute(Genero.class, Integer.class, GENERO_LIBROS_PARAM, Genero::getLibros);
 
   @EqualsAndHashCode.Include

@@ -33,95 +33,91 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Data
 public class BusquedaLibro {
-	private final BibliotecaService bibliotecaService;
-	private final int numeroPagina;
-	private final int porPagina;
-	private final BOOK_ORDERING ordering;
-	private final boolean reversed;
-	private final String filtroTitulo;
-	private final String filtroColeccion;
-	private final String filtroAutor;
-	private final String filtroGenero;
-	private final String filtroIdioma;
-	private final LocalDate filtroFecha;
-	private final boolean soloAutoresFavoritos;
-	private final boolean soloIdiomasFavoritos;
-	private final boolean soloGenerosFavoritos;
-	private final Boolean soloNoEnPropiedad;
+  private final BibliotecaService bibliotecaService;
+  private final int numeroPagina;
+  private final int porPagina;
+  private final BOOK_ORDERING ordering;
+  private final boolean reversed;
+  private final String filtroTitulo;
+  private final String filtroColeccion;
+  private final String filtroAutor;
+  private final String filtroGenero;
+  private final String filtroIdioma;
+  private final LocalDate filtroFecha;
+  private final boolean soloAutoresFavoritos;
+  private final boolean soloIdiomasFavoritos;
+  private final boolean soloGenerosFavoritos;
+  private final Boolean soloNoEnPropiedad;
 
-	public QueryOptions getQueryOptions() {
-		return reversed ? ordering.getQueryOptionsDescending() : ordering.getQueryOptionsAscending();
-	}
+  public QueryOptions getQueryOptions() {
+    return reversed ? ordering.getQueryOptionsDescending() : ordering.getQueryOptionsAscending();
+  }
 
-	public Query<Libro> getQuery(PreferencesService preferencesService) {
-		Query<Libro> query;
-		List<Query<Libro>> partialQueries = Arrays
-				.asList(getPartialQuery(getFiltroTitulo(), Libro.LIBRO_TITULO),
-						getPartialQuery(getFiltroAutor(), Libro.LIBRO_AUTOR),
-						getPartialQuery(getFiltroIdioma(), Libro.LIBRO_IDIOMA),
-						getPartialQuery(getFiltroColeccion(), Libro.LIBRO_COLECCION),
-						getPartialQuery(getFiltroGenero(), Libro.LIBRO_GENERO),
-						//
-						getEnCalibreNoDescartadosQuery(), getAutoresFavoritosQuery(preferencesService),
-						getIdiomasFavoritosQuery(preferencesService), getGenerosFavoritosQuery(preferencesService),
-						getFechaQuery(getFiltroFecha(), Libro.LIBRO_PUBLICADO))
-				.stream()
-				.filter(Objects::nonNull)
-				.collect(Collectors.toList());
-		if (partialQueries.isEmpty()) {
-			query = all(Libro.class);
-		} else {
-			query = partialQueries.get(0);
-			for (int i = 1; i < partialQueries.size(); i++) {
-				query = and(query, partialQueries.get(i));
-			}
-		}
-		log.debug("Query: {}", query);
-		return query;
-	}
+  public Query<Libro> getQuery(PreferencesService preferencesService) {
+    Query<Libro> query;
+    List<Query<Libro>> partialQueries = Arrays
+        .asList(getPartialQuery(getFiltroTitulo(), Libro.LIBRO_TITULO), getPartialQuery(getFiltroAutor(), Libro.LIBRO_AUTOR),
+            getPartialQuery(getFiltroIdioma(), Libro.LIBRO_IDIOMA), getPartialQuery(getFiltroColeccion(), Libro.LIBRO_COLECCION),
+            getPartialQuery(getFiltroGenero(), Libro.LIBRO_GENERO),
+            //
+            getEnCalibreNoDescartadosQuery(), getAutoresFavoritosQuery(preferencesService), getIdiomasFavoritosQuery(preferencesService),
+            getGenerosFavoritosQuery(preferencesService), getFechaQuery(getFiltroFecha(), Libro.LIBRO_PUBLICADO))
+        .stream()
+        .filter(Objects::nonNull)
+        .collect(Collectors.toList());
+    if (partialQueries.isEmpty()) {
+      query = all(Libro.class);
+    } else {
+      query = partialQueries.get(0);
+      for (int i = 1; i < partialQueries.size(); i++) {
+        query = and(query, partialQueries.get(i));
+      }
+    }
+    log.debug("Query: {}", query);
+    return query;
+  }
 
-	private static Query<Libro> getFechaQuery(final LocalDate criterio, final Attribute<Libro, ChronoLocalDate> campo) {
-		if (criterio != null) {
-			return greaterThanOrEqualTo(campo, criterio);
-		} else
-			return null;
-	}
+  private static Query<Libro> getFechaQuery(final LocalDate criterio,
+      final Attribute<Libro, ChronoLocalDate> campo) {
+    if (criterio != null) {
+      return greaterThanOrEqualTo(campo, criterio);
+    } else
+      return null;
+  }
 
-	public Query<Libro> getEnCalibreNoDescartadosQuery() {
-		if (Boolean.TRUE.equals(soloNoEnPropiedad)) {
-			return and(equal(Libro.LIBRO_EN_CALIBRE, Boolean.FALSE), equal(Libro.LIBRO_DESCARTADO, Boolean.FALSE));
-		} else
-			return null;
-	}
+  public Query<Libro> getEnCalibreNoDescartadosQuery() {
+    if (Boolean.TRUE.equals(soloNoEnPropiedad)) {
+      return and(equal(Libro.LIBRO_EN_CALIBRE, Boolean.FALSE), equal(Libro.LIBRO_DESCARTADO, Boolean.FALSE));
+    } else
+      return null;
+  }
 
-	public Query<Libro> getAutoresFavoritosQuery(PreferencesService preferencesService) {
-		if (preferencesService.canAplyAutoresFavoritos() && Boolean.TRUE.equals(soloAutoresFavoritos)) {
-			return existsIn(bibliotecaService.getAutores(), Libro.LIBRO_AUTORES, Autor.AUTOR_NOMBRE,
-					equal(Autor.AUTOR_FAVORITO, Boolean.TRUE));
-		} else
-			return null;
-	}
+  public Query<Libro> getAutoresFavoritosQuery(PreferencesService preferencesService) {
+    if (preferencesService.canAplyAutoresFavoritos() && Boolean.TRUE.equals(soloAutoresFavoritos)) {
+      return existsIn(bibliotecaService.getAutores(), Libro.LIBRO_AUTORES, Autor.AUTOR_NOMBRE, equal(Autor.AUTOR_FAVORITO, Boolean.TRUE));
+    } else
+      return null;
+  }
 
-	public Query<Libro> getIdiomasFavoritosQuery(PreferencesService preferencesService) {
-		if (preferencesService.canAplyIdiomasFavoritos() && Boolean.TRUE.equals(soloIdiomasFavoritos)) {
-			return existsIn(bibliotecaService.getIdiomas(), Libro.LIBRO_IDIOMA, Idioma.IDIOMA_NOMBRE,
-					equal(Idioma.IDIOMA_FAVORITO, Boolean.TRUE));
-		} else
-			return null;
-	}
+  public Query<Libro> getIdiomasFavoritosQuery(PreferencesService preferencesService) {
+    if (preferencesService.canAplyIdiomasFavoritos() && Boolean.TRUE.equals(soloIdiomasFavoritos)) {
+      return existsIn(bibliotecaService.getIdiomas(), Libro.LIBRO_IDIOMA, Idioma.IDIOMA_NOMBRE, equal(Idioma.IDIOMA_FAVORITO, Boolean.TRUE));
+    } else
+      return null;
+  }
 
-	public Query<Libro> getGenerosFavoritosQuery(PreferencesService preferencesService) {
-		if (preferencesService.canAplyGenerosFavoritos() && Boolean.TRUE.equals(soloGenerosFavoritos)) {
-			return existsIn(bibliotecaService.getGeneros(), Libro.LIBRO_GENEROS, Genero.GENERO_NOMBRE,
-					equal(Genero.GENERO_FAVORITO, Boolean.TRUE));
-		} else
-			return null;
-	}
+  public Query<Libro> getGenerosFavoritosQuery(PreferencesService preferencesService) {
+    if (preferencesService.canAplyGenerosFavoritos() && Boolean.TRUE.equals(soloGenerosFavoritos)) {
+      return existsIn(bibliotecaService.getGeneros(), Libro.LIBRO_GENEROS, Genero.GENERO_NOMBRE, equal(Genero.GENERO_FAVORITO, Boolean.TRUE));
+    } else
+      return null;
+  }
 
-	public static Query<Libro> getPartialQuery(final String criterio, final Attribute<Libro, String> campo) {
-		if (StringUtils.isNotBlank(criterio)) {
-			return contains(campo, Libro.flattenToAscii(criterio));
-		} else
-			return null;
-	}
+  public static Query<Libro> getPartialQuery(final String criterio,
+      final Attribute<Libro, String> campo) {
+    if (StringUtils.isNotBlank(criterio)) {
+      return contains(campo, Libro.flattenToAscii(criterio));
+    } else
+      return null;
+  }
 }

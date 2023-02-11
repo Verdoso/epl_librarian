@@ -30,6 +30,7 @@ public class Libro {
 
   private static final String LIBRO_ID_PARAM = "libroID";
   private static final String LIBRO_TITULO_PARAM = "libroTITULO";
+  private static final String LIBRO_TITULO_COMPARABLE_PARAM = "libroTITULOCOMPARABLE";
   private static final String LIBRO_AUTOR_PARAM = "libroAUTOR";
   private static final String LIBRO_AUTORES_PARAM = "libroAUTORES";
   private static final String LIBRO_COLECCION_PARAM = "libroCOLECCION";
@@ -44,6 +45,8 @@ public class Libro {
   public static final SimpleAttribute<Libro, Integer> LIBRO_ID = attribute(Libro.class, Integer.class, LIBRO_ID_PARAM, Libro::getId);
   public static final SimpleAttribute<Libro, String> LIBRO_TITULO = attribute(Libro.class, String.class, LIBRO_TITULO_PARAM,
       Libro::getTituloNormalizado);
+  public static final SimpleAttribute<Libro, String> LIBRO_TITULO_COMPARABLE = attribute(Libro.class, String.class, LIBRO_TITULO_COMPARABLE_PARAM,
+      Libro::getTituloComparable);
   public static final SimpleAttribute<Libro, String> LIBRO_AUTOR = attribute(Libro.class, String.class, LIBRO_AUTOR_PARAM,
       Libro::getAutorNormalizado);
   public static final MultiValueAttribute<Libro, String> LIBRO_AUTORES = attribute(Libro.class, String.class, LIBRO_AUTORES_PARAM,
@@ -174,6 +177,11 @@ public class Libro {
   }
 
   @JsonIgnore
+  public String getTituloComparable() {
+    return tituloComparable(titulo);
+  }
+
+  @JsonIgnore
   public String getAutorNormalizado() {
     return flattenToAscii(autor);
   }
@@ -197,6 +205,11 @@ public class Libro {
     }
   }
 
+  public static String tituloComparable(String unNombre) {
+    final String flattened = Libro.flattenToAscii(unNombre);
+    return flattened.replaceAll("[\\.\\(\\)\\-\\s]", "");
+  }
+
   public static String flattenToAscii(String string) {
     if (string != null) {
       StringBuilder sb = new StringBuilder(string.length());
@@ -206,9 +219,11 @@ public class Libro {
           sb.append(c);
         }
       }
+      // log.info("Nombre normalizado {}", sb);
       return sb.toString();
     } else {
       return null;
     }
   }
+
 }
