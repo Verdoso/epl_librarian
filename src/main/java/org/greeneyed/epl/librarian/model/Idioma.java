@@ -14,13 +14,15 @@ import lombok.RequiredArgsConstructor;
 public class Idioma implements PuedeSerFavorito {
   private static final String IDIOMA_ID_PARAM = "idiomaID";
   private static final String IDIOMA_NOMBRE_PARAM = "idiomaNOMBRE";
+  private static final String IDIOMA_FAVORITO_PARAM = "idiomaFAVORITO";
   private static final String IDIOMA_LIBROS_PARAM = "idiomaLIBROS";
 
   public static final SimpleAttribute<Idioma, String> IDIOMA_ID = attribute(Idioma.class, String.class, IDIOMA_ID_PARAM, Idioma::getNombre);
 
   public static final SimpleAttribute<Idioma, String> IDIOMA_NOMBRE = attribute(Idioma.class, String.class, IDIOMA_NOMBRE_PARAM,
       Idioma::getNombreNormalizado);
-
+  public static final SimpleAttribute<Idioma, Boolean> IDIOMA_FAVORITO = attribute(Idioma.class, Boolean.class, IDIOMA_FAVORITO_PARAM,
+		  Idioma::getFavorito);
   public static final SimpleAttribute<Idioma, Integer> IDIOMA_LIBROS = attribute(Idioma.class, Integer.class, IDIOMA_LIBROS_PARAM, Idioma::getLibros);
 
   @EqualsAndHashCode.Include
@@ -28,7 +30,7 @@ public class Idioma implements PuedeSerFavorito {
 
   private final int libros;
 
-  private boolean favorito = false;
+  private Boolean favorito = Boolean.FALSE;
 
   public boolean tieneLibros() {
     return libros > 0;

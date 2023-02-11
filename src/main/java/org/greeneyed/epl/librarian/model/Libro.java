@@ -32,13 +32,10 @@ public class Libro {
   private static final String LIBRO_TITULO_PARAM = "libroTITULO";
   private static final String LIBRO_AUTOR_PARAM = "libroAUTOR";
   private static final String LIBRO_AUTORES_PARAM = "libroAUTORES";
-  private static final String LIBRO_AUTOR_FAVORITO_PARAM = "libroAUTOR_FAVORITO";
   private static final String LIBRO_COLECCION_PARAM = "libroCOLECCION";
   private static final String LIBRO_GENERO_PARAM = "libroGENERO";
   private static final String LIBRO_GENEROS_PARAM = "libroGENEROS";
-  private static final String LIBRO_GENERO_FAVORITO_PARAM = "libroGENERO_FAVORITO";
   private static final String LIBRO_IDIOMA_PARAM = "libroIDIOMA";
-  private static final String LIBRO_IDIOMA_FAVORITO_PARAM = "libroIDIOMA_FAVORITO";
   private static final String LIBRO_VOLUMEN_PARAM = "libroVOLUMEN";
   private static final String LIBRO_PUBLICADO_PARAM = "libroPUBLICADO";
   private static final String LIBRO_EN_CALIBRE_PARAM = "libroEN_CALIBRE";
@@ -51,12 +48,8 @@ public class Libro {
       Libro::getAutorNormalizado);
   public static final MultiValueAttribute<Libro, String> LIBRO_AUTORES = attribute(Libro.class, String.class, LIBRO_AUTORES_PARAM,
       Libro::getListaAutoresNormalizados);
-  public static final SimpleAttribute<Libro, Boolean> LIBRO_AUTOR_FAVORITO = attribute(Libro.class, Boolean.class, LIBRO_AUTOR_FAVORITO_PARAM,
-      Libro::getAutorFavorito);
   public static final SimpleAttribute<Libro, String> LIBRO_IDIOMA = attribute(Libro.class, String.class, LIBRO_IDIOMA_PARAM,
       Libro::getIdiomaNormalizado);
-  public static final SimpleAttribute<Libro, Boolean> LIBRO_IDIOMA_FAVORITO = attribute(Libro.class, Boolean.class, LIBRO_IDIOMA_FAVORITO_PARAM,
-      Libro::getIdiomaFavorito);
   public static final SimpleAttribute<Libro, Boolean> LIBRO_EN_CALIBRE = attribute(Libro.class, Boolean.class, LIBRO_EN_CALIBRE_PARAM,
       Libro::getInCalibre);
   public static final SimpleAttribute<Libro, Boolean> LIBRO_DESCARTADO = attribute(Libro.class, Boolean.class, LIBRO_DESCARTADO_PARAM,
@@ -71,8 +64,6 @@ public class Libro {
       Libro::getGeneroNormalizado);
   public static final MultiValueNullableAttribute<Libro, String> LIBRO_GENEROS = nullableAttribute(Libro.class, String.class, LIBRO_GENEROS_PARAM,
       Libro::getListaGenerosNormalizados);
-  public static final SimpleAttribute<Libro, Boolean> LIBRO_GENERO_FAVORITO = attribute(Libro.class, Boolean.class, LIBRO_GENERO_FAVORITO_PARAM,
-      Libro::getGeneroFavorito);
 
   @EqualsAndHashCode.Include
   private int id;
@@ -114,12 +105,6 @@ public class Libro {
   private Boolean inCalibre = Boolean.FALSE;
 
   private Boolean descartado = Boolean.FALSE;
-
-  private Boolean autorFavorito = Boolean.FALSE;
-
-  private Boolean generoFavorito = Boolean.FALSE;
-
-  private Boolean idiomaFavorito = Boolean.FALSE;
 
   @JsonIgnore
   public List<String> getListaAutores() {
