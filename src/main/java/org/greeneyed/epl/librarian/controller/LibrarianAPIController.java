@@ -1,7 +1,5 @@
 package org.greeneyed.epl.librarian.controller;
 
-import static com.googlecode.cqengine.query.QueryFactory.equal;
-
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -28,8 +26,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.googlecode.cqengine.resultset.ResultSet;
-
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,18 +45,6 @@ public class LibrarianAPIController {
 
 	private final BibliotecaService bibliotecaService;
 	private final ApplicationContext applicationContext;
-
-	@GetMapping(value = "/test")
-	public ResponseEntity<String> test() {
-		log.info("Probando");
-		try (final ResultSet<Autor> queryResult = bibliotecaService.getAutores()
-				.retrieve(equal(Autor.AUTOR_FAVORITO, Boolean.TRUE))) {
-			for (Autor autor : queryResult) {
-				log.info("Autor: {} ", autor.getNombreNormalizado());
-			}
-		}
-		return ResponseEntity.ok("OK");
-	}
 
 	@GetMapping(value = "/sumario")
 	public ResponseEntity<Sumario> sumario() {
