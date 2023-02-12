@@ -13,7 +13,7 @@ Para generar el nativo necesitamos una consola de tipo "x64 Native Tools Command
 ```
 set JAVA_HOME=D:\Java\GRAAL17
 mvn -Pdeployment -DskipTests -Dassembly.skipAssembly=true package
-mvn -DskipTests -DskipTests -Dassembly.skipAssembly=true -Pnative native:compile
+mvn -DskipTests -Dassembly.skipAssembly=true -Pnative native:compile
 ```
 
 ## Referencias
