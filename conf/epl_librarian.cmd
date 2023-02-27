@@ -18,5 +18,5 @@ ECHO Java instalado compatible (%jver%)!
 ECHO Ejecutando...
 @ECHO ON
 
-java -Xms1g -Xmx1g -jar epl_librarian-@project.version@.jar
+java -Xms1536M -Xmx1536M -jar epl_librarian-@project.version@.jar
 PAUSE

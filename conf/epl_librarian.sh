@@ -16,7 +16,7 @@ JAVA_VERSION=$($_java -version 2>&1 | sed -n ';s/.* version "\(.*\)\.\(.*\)\..*"
 
 if [[ "$JAVA_VERSION" -ge 170 ]]; then
   echo "¡Versión de Java compatible!"
-  $_java -Xms1g -Xmx1g -jar epl_librarian-@project.version@.jar
+  $_java -Xms1536M -Xmx1536M -jar epl_librarian-@project.version@.jar
 else         
     echo "La versión minima de Java soportada es la 17. No se puede ejecutar el programa."
 fi
