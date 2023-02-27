@@ -435,9 +435,6 @@ public class BibliotecaService {
 						.map(Autor::getNombreComparable)
 						.collect(Collectors.toSet());
 				if (autoresSetLibro.containsAll(autoresSet) && autoresSet.containsAll(autoresSetLibro)) {
-					libreria.remove(libro);
-					libro.setInCalibre(true);
-					libreria.add(libro);
 					aModificar.add(libro);
 				}
 			});
@@ -497,17 +494,26 @@ public class BibliotecaService {
 		writeLock.lock();
 		try {
 			// Actualizamos segun los datos que tenemos
+			log.info("Recopilando libros de Calibre...");
 			Set<Integer> enCalibre = calibreService.updateLibros(SEARCH_AND_UDPATE_BOOK);
-			if (withReset) {
-				libreria.stream()
-						.filter(libro -> !enCalibre.contains(libro.getId()))
-						.filter(Libro::getInCalibre)
-						.forEach(libro -> {
-							libreria.remove(libro);
-							libro.setInCalibre(Boolean.FALSE);
-							libreria.add(libro);
-						});
-			}
+			List<Libro> librosYaNoEnCablibre = libreria.stream()
+					.filter(Libro::getInCalibre)
+					.filter(libro -> !enCalibre.contains(libro.getId()))
+					.toList();
+			List<Libro> librosEnCablibre = libreria.stream()
+					.filter(libro -> enCalibre.contains(libro.getId()))
+					.toList();
+			log.debug("Actualizando libros que tenemos...");
+			libreria.removeAll(librosEnCablibre);
+			librosEnCablibre.forEach(libro -> libro.setInCalibre(Boolean.TRUE));
+			libreria.addAll(librosEnCablibre);
+			log.debug("Actualizados {} libros que tenemos en Calibre.", librosEnCablibre.size());
+			log.debug("Actualizando libros que ya no tenemos...");
+			libreria.removeAll(librosYaNoEnCablibre);
+			librosYaNoEnCablibre.forEach(libro -> libro.setInCalibre(Boolean.FALSE));
+			libreria.addAll(librosYaNoEnCablibre);
+			log.debug("Actualizados {} libros que ya no tenemos en Calibre.", librosYaNoEnCablibre.size());
+			log.info("Recopilados {} libros de Calibre", enCalibre.size());
 		} finally {
 			writeLock.unlock();
 		}
