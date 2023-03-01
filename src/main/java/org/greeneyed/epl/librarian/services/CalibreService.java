@@ -54,11 +54,9 @@ public class CalibreService {
 		calibreMetadata = preferencesService.getBDDCalibre();
 		if (calibreMetadata.isPresent()) {
 			try {
-				SQLiteConfig sqLiteConfig = new SQLiteConfig();
-				sqLiteConfig.setReadOnly(true);
 				log.debug("Path to DB: {}", calibreMetadata.get().getCanonicalPath());
 				url = "jdbc:sqlite:" + calibreMetadata.get().getCanonicalPath();
-				try (Connection con = DriverManager.getConnection(url, sqLiteConfig.toProperties());
+				try (Connection con = DriverManager.getConnection(url, sqliteConfig().toProperties());
 						PreparedStatement ps = con.prepareStatement("SELECT COUNT(1) FROM books");
 						ResultSet rs = ps.executeQuery()) {
 					enabled = true;
@@ -70,10 +68,16 @@ public class CalibreService {
 		}
 	}
 
+	private SQLiteConfig sqliteConfig() {
+		SQLiteConfig sqLiteConfig = new SQLiteConfig();
+		sqLiteConfig.setReadOnly(true);
+		return sqLiteConfig;
+	}
+
 	public Set<Integer> updateLibros(BiFunction<String, String, List<Integer>> searchAndUpdateAction) {
 		Set<Integer> inCalibre = new HashSet<>();
 		if (enabled) {
-			try (Connection con = DriverManager.getConnection(url);
+			try (Connection con = DriverManager.getConnection(url, sqliteConfig().toProperties());
 					PreparedStatement ps = con.prepareStatement(TODOS_LOS_LIBROS_STMNT);
 					ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
