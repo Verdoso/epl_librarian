@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StopWatch;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,8 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
     if (!environment.acceptsProfiles(Profiles.of("test"))) {
       log.info("Inicializando datos...");
       boolean comprobaremosActualizacionAutomatica = actualizacionAutomatica;
+      StopWatch timeMeasure = new StopWatch();
+      timeMeasure.start("Procesando datos");
       UpdateSpec updateSpec = eplCSVProcessor.processBackup();
       if (updateSpec.isEmpty()) {
         if (descargarDeEPL) {
@@ -78,7 +81,8 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
         log.info("Preparando {} libros de la descarga con fecha {}", updateSpec.getLibroCSVs()
             .size(), DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(updateSpec.getFechaActualizacion()));
         bibliotecaService.update(updateSpec);
-        log.info("EPL Librarian inicializado");
+        timeMeasure.stop();
+        log.info("EPL Librarian inicializado en ~{}s", (int) timeMeasure.getTotalTimeSeconds());
         abrirEnNavegador();
       }
     }

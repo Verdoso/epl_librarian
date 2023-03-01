@@ -43,6 +43,7 @@ public class PreferencesService {
   static final String GENEROS_PREFERIDOS_KEY = "generos_preferidos";
 
   static final String CALIBRE_HOME_KEY = "calibre_home";
+  static final String CALIBRE_UPDATING_KEY = "calibre_update";
 
   private static final String ERROR_DETALLADO = "Error detallado";
 
@@ -174,6 +175,16 @@ public class PreferencesService {
       readLock.unlock();
     }
     return result;
+  }
+
+  public boolean isUpdatingCalibre() {
+    readLock.lock();
+    try {
+      final String property = preferences.getProperty(CALIBRE_UPDATING_KEY);
+      return Boolean.parseBoolean(property);
+    } finally {
+      readLock.unlock();
+    }
   }
 
   public Optional<File> getBDDCalibre() {
