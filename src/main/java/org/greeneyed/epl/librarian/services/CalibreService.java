@@ -28,23 +28,22 @@ public class CalibreService {
 	private final PreferencesService preferencesService;
 	private Optional<File> calibreMetadata = null;
 	private String url;
-	private static final String TODOS_LOS_LIBROS_STMNT =
-			//
-			" SELECT DISTINCT group_concat(AUT.name, ' & '), BOK.title,  BOK.id" +
-			//
-					" FROM books BOK" +
-					//
-					" INNER JOIN books_authors_link LNK" +
-					//
-					"   ON LNK.book = BOK.id" +
-					//
-					" INNER JOIN authors AUT" +
-					//
-					"   ON AUT.id = LNK.author" +
-					//
-					" GROUP BY BOK.id" +
-					//
-					" ORDER BY BOK.id, LNK.id";
+	private static final String TODOS_LOS_LIBROS_STMNT = """
+			 SELECT DISTINCT
+			 	group_concat(AUT.name, ' & '),
+			 	BOK.title,
+			 	BOK.id,
+				IDE.id epl_id
+			 FROM books BOK
+			 INNER JOIN books_authors_link LNK
+			   ON LNK.book = BOK.id
+			 INNER JOIN authors AUT
+			   ON AUT.id = LNK.author
+			 LEFT JOIN (SELECT * FROM identifiers WHERE type='epl') IDE
+			   ON IDE.book = BOK.ID
+			 GROUP BY BOK.id
+			 ORDER BY BOK.id, LNK.id
+			""";
 
 	@Getter
 	private boolean enabled = false;
@@ -83,9 +82,14 @@ public class CalibreService {
 				while (rs.next()) {
 					String titulo = rs.getString(2);
 					String autores = rs.getString(1);
-					List<Integer> ids = searchAndUpdateAction.apply(titulo, autores);
-					if (ids != null) {
-						inCalibre.addAll(ids);
+					Integer eplId = (Integer) rs.getObject(4);
+					if (eplId != null) {
+						inCalibre.add(eplId);
+					} else {
+						List<Integer> ids = searchAndUpdateAction.apply(titulo, autores);
+						if (ids != null) {
+							inCalibre.addAll(ids);
+						}
 					}
 				}
 			} catch (Exception e) {
