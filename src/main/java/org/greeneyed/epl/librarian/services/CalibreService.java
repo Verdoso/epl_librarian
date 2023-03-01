@@ -13,6 +13,7 @@ import java.util.function.BiFunction;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.sqlite.SQLiteConfig;
 
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
@@ -53,9 +54,11 @@ public class CalibreService {
 		calibreMetadata = preferencesService.getBDDCalibre();
 		if (calibreMetadata.isPresent()) {
 			try {
+				SQLiteConfig sqLiteConfig = new SQLiteConfig();
+				sqLiteConfig.setReadOnly(true);
 				log.debug("Path to DB: {}", calibreMetadata.get().getCanonicalPath());
 				url = "jdbc:sqlite:" + calibreMetadata.get().getCanonicalPath();
-				try (Connection con = DriverManager.getConnection(url);
+				try (Connection con = DriverManager.getConnection(url, sqLiteConfig.toProperties());
 						PreparedStatement ps = con.prepareStatement("SELECT COUNT(1) FROM books");
 						ResultSet rs = ps.executeQuery()) {
 					enabled = true;
