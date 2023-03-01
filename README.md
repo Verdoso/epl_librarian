@@ -53,8 +53,12 @@ Al arrancar EPL Librarian nos indicará que integración con Calibre está habil
 
 La comprobación mira el título exacto del libro y sus autores, por lo que puede ser que no encuentre algún libro que no tenga exactamente el mismo título (p.e. 'El Camel Club' vs 'Camel Club') o que tenga alguna errata en el nombre (p.e. 'James S.A. Corey' vs 'James S. A. Corey'). Se ha optado por quedarse corto y decir que hay libros que no tenemos, por pequeñas diferencias en los datos, que posibilitar los errores al reves y dar por hecho que tenemos ciertos libros por ser demasiado generosos en las comprobaciones.
 
-### Actualización de los datos de Calibre
-El programa sincroniza automáticamente los datos de Calibre al arrancar. Además, es posible actualizar los datos mientras el prorgrama está en marcha haciendo click con el ratón sobre el botón de "Integración con Calibre":
+### Actualización de la bibliotaca de Calibre (por defecto, desactivada)
+Si queremos que el programa actualice la base de datos de Calibre con los identificadores de los libros de EPubLibre, podemos hacerlo configurando la propiedad ```calibre_update``` a true. De esta forma, cuando encuentre un libro en Calibre que se encuentre en la lista de libros de EPubLibre pero no tenga bien configurado su epl_id, actualizará la BDD del Calibre para ponérselo. Los libros que tienen configurado el epl_id correctamente se reconocen mucho más rápido durante la sincronización.
+
+
+### Sincronización con Calibre en ejecución
+El programa sincroniza automáticamente los datos de Calibre al arrancar, pero también es posible actualizar los datos mientras el programa está en marcha haciendo click con el ratón sobre el botón de "Integración con Calibre":
 
 ![Botón que indica la integración con Calibre](https://raw.githubusercontent.com/Verdoso/epl_librarian/master/docs/IntegracionCalibre.png)
 
