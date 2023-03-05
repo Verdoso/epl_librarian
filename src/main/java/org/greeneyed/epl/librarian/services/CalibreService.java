@@ -64,7 +64,7 @@ public class CalibreService {
        	BOK.title,
        	BOK.id,
       	LNG.lang_code,
-      	IDE.id epl_id
+      	coalesce(IDE.id,CAST(IDG.value as integer) - 10000000) epl_id_2,
        FROM books BOK
        INNER JOIN books_authors_link LNK
          ON LNK.book = BOK.id
@@ -76,6 +76,8 @@ public class CalibreService {
          ON LNG.id = LNGK.lang_code
        LEFT JOIN (SELECT * FROM identifiers WHERE type='epl') IDE
          ON IDE.book = BOK.ID
+	   LEFT JOIN custom_column_3 IDG
+	     ON IDG.book  = BOK.ID
        GROUP BY BOK.id
        ORDER BY BOK.id, LNK.id
       """;
