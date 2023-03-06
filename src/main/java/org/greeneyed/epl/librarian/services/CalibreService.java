@@ -56,54 +56,54 @@ public class CalibreService {
 	private Optional<File> calibreMetadata = null;
 	private String url;
 	private static final String TODOS_LOS_LIBROS_STMNT = """
-			   SELECT DISTINCT
-			   	group_concat(AUT.name, ' & '),
-			   	BOK.title,
-			   	BOK.id,
-			  	LNG.lang_code,
-			  	IDE.id epl_id
-			   FROM books BOK
-			   INNER JOIN books_authors_link LNK
-			     ON LNK.book = BOK.id
-			   INNER JOIN authors AUT
-			     ON AUT.id = LNK.author
-			   INNER JOIN books_languages_link LNGK
-			     ON LNGK.book = BOK.id
-			   INNER JOIN languages LNG
-			     ON LNG.id = LNGK.lang_code
-			   LEFT JOIN (SELECT * FROM identifiers WHERE type='epl') IDE
-			     ON IDE.book = BOK.ID
-			   GROUP BY BOK.id
-			   ORDER BY BOK.id, LNK.id
-			  """;
+			 SELECT DISTINCT
+			 	group_concat(AUT.name, ' & '),
+			 	BOK.title,
+			 	BOK.id,
+				LNG.lang_code,
+				IDE.val epl_id
+			 FROM books BOK
+			 INNER JOIN books_authors_link LNK
+			   ON LNK.book = BOK.id
+			 INNER JOIN authors AUT
+			   ON AUT.id = LNK.author
+			 INNER JOIN books_languages_link LNGK
+			   ON LNGK.book = BOK.id
+			 INNER JOIN languages LNG
+			   ON LNG.id = LNGK.lang_code
+			 LEFT JOIN (SELECT * FROM identifiers WHERE type='epl') IDE
+			   ON IDE.book = BOK.ID
+			 GROUP BY BOK.id
+			 ORDER BY BOK.id, LNK.id
+			""";
 	private static final String EPG_ID_COLUMN = """
 			SELECT id
 			FROM custom_columns
 			WHERE label = 'epg_id'
 			""";
 	private static final String TODOS_LOS_LIBROS_EPG_ID_STMNT = """
-			   SELECT DISTINCT
-			   	group_concat(AUT.name, ' & '),
-			   	BOK.title,
-			   	BOK.id,
-			  	LNG.lang_code,
-			  	coalesce(IDE.id,CAST(IDG.value as integer) - 10000000) epl_id_2
-			   FROM books BOK
-			   INNER JOIN books_authors_link LNK
-			     ON LNK.book = BOK.id
-			   INNER JOIN authors AUT
-			     ON AUT.id = LNK.author
-			   INNER JOIN books_languages_link LNGK
-			     ON LNGK.book = BOK.id
-			   INNER JOIN languages LNG
-			     ON LNG.id = LNGK.lang_code
-			   LEFT JOIN (SELECT * FROM identifiers WHERE type='epl') IDE
-			     ON IDE.book = BOK.ID
-			   LEFT JOIN custom_column_%s IDG
-			     ON IDG.book  = BOK.ID
-			   GROUP BY BOK.id
-			   ORDER BY BOK.id, LNK.id
-			  """;
+			 SELECT DISTINCT
+			 	group_concat(AUT.name, ' & '),
+			 	BOK.title,
+			 	BOK.id,
+				LNG.lang_code,
+				coalesce(IDE.val,CAST(IDG.value as integer) - 10000000) epl_id_2
+			 FROM books BOK
+			 INNER JOIN books_authors_link LNK
+			   ON LNK.book = BOK.id
+			 INNER JOIN authors AUT
+			   ON AUT.id = LNK.author
+			 INNER JOIN books_languages_link LNGK
+			   ON LNGK.book = BOK.id
+			 INNER JOIN languages LNG
+			   ON LNG.id = LNGK.lang_code
+			 LEFT JOIN (SELECT * FROM identifiers WHERE type='epl') IDE
+			   ON IDE.book = BOK.ID
+			 LEFT JOIN custom_column_%s IDG
+			   ON IDG.book  = BOK.ID
+			 GROUP BY BOK.id
+			 ORDER BY BOK.id, LNK.id
+			""";
 
 	private static final String INSERT_EPL_ID = """
 			INSERT INTO identifiers
@@ -152,9 +152,9 @@ public class CalibreService {
 			try (Connection con = DriverManager.getConnection(url, sqliteConfig().toProperties());
 					Statement findEgpIDColumn = con.createStatement();
 					ResultSet rs = findEgpIDColumn.executeQuery(EPG_ID_COLUMN);) {
-				if(rs.next()) {
+				if (rs.next()) {
 					String columnNumber = rs.getString(1);
-					log.info("Detectada columna almacenando el identificador EPG: {}",columnNumber);
+					log.info("Detectada columna almacenando el identificador EPG: {}", columnNumber);
 					todosLosLibrosStmnt = TODOS_LOS_LIBROS_EPG_ID_STMNT.formatted(columnNumber);
 				} else {
 					log.info("No se han detectado metadatos extra del plugin de Calibre");
@@ -179,9 +179,9 @@ public class CalibreService {
 						log.error("Lenguaje de Calibre no detectado, notifícalo y lo añadiremos a la lista: {}",
 								languageCode);
 					}
-					Integer eplId = (Integer) rs.getObject(5);
+					String eplId = rs.getString(5);
 					if (eplId != null) {
-						inCalibre.add(eplId);
+						inCalibre.add(Integer.parseInt(eplId));
 					} else {
 						List<Integer> ids = searchAndUpdateAction.apply(titulo, autores, calibreLanguage);
 						if (ids != null) {
@@ -189,8 +189,8 @@ public class CalibreService {
 							if (preferencesService.isUpdatingCalibre()) {
 								Integer detectedEplId = ids.get(0);
 								try {
-									log.debug("Detectado el libro {}({}) como el libro {} en Calibre", detectedEplId,
-											titulo, calibreId);
+									log.debug("Detectado el libro {} {} -> {} en Calibre", titulo, calibreId,
+											detectedEplId);
 									insert.setInt(1, calibreId);
 									insert.setInt(2, detectedEplId);
 									insert.addBatch();
@@ -211,7 +211,7 @@ public class CalibreService {
 					}
 				}
 			} catch (Exception e) {
-				log.error("Error comprobando libros en base de datos de Calibre: {}", e.getMessage());
+				log.error("Error comprobando libros en base de datos de Calibre: {}", e);
 			}
 		}
 		return inCalibre;
