@@ -181,7 +181,13 @@ public class CalibreService {
 					}
 					String eplId = rs.getString(5);
 					if (eplId != null) {
-						inCalibre.add(Integer.parseInt(eplId));
+						try {
+							inCalibre.add(Integer.parseInt(eplId));
+						} catch (Exception e) {
+							log.error(
+									"Error detectando identificador EPL en calibre del libro {} ({}) no tiene el formato correcto () ha de ser un entero: {}",
+									titulo, autores, eplId);
+						}
 					} else {
 						List<Integer> ids = searchAndUpdateAction.apply(titulo, autores, calibreLanguage);
 						if (ids != null) {
