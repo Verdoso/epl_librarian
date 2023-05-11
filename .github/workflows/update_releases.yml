@@ -1,6 +1,6 @@
 # This workflow will update the links to the latest n releases when it is called
 
-name: Create release
+name: Update README
 
 on: 
   workflow_dispatch:
