@@ -5,6 +5,14 @@
 # EPL Librarian [![GitHub release](https://img.shields.io/github/release/Verdoso/epl_librarian.svg)](https://GitHub.com/Verdoso/epl_librarian/releases/)
 Repositorio para una mini-aplicación para consultar localmente el catálogo de EPL
 
+## Últimas versiones
+[//]: # (BEGIN)
+* Release 1.17.21: https://github.com/Verdoso/epl_librarian/releases/tag/Release_Tag_v1.17.21
+* Release 1.17.20: https://github.com/Verdoso/epl_librarian/releases/tag/Release_Tag_v1.17.20
+* Release 1.17.17: https://github.com/Verdoso/epl_librarian/releases/tag/Release_Tag_v1.17.17
+
+[//]: # (END)
+
 ## Para ejecutar
 
 ### Versión Java multiplataforma 
