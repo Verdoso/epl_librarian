@@ -61,7 +61,7 @@ Al arrancar EPL Librarian nos indicará que integración con Calibre está habil
 
 La comprobación mira el título exacto del libro y sus autores, por lo que puede ser que no encuentre algún libro que no tenga exactamente el mismo título (p.e. 'El Camel Club' vs 'Camel Club') o que tenga alguna errata en el nombre (p.e. 'James S.A. Corey' vs 'James S. A. Corey'). Se ha optado por quedarse corto y decir que hay libros que no tenemos, por pequeñas diferencias en los datos, que posibilitar los errores al reves y dar por hecho que tenemos ciertos libros por ser demasiado generosos en las comprobaciones.
 
-### Actualización de la bibliotaca de Calibre (por defecto, desactivada)
+### Actualización de la biblioteca de Calibre (por defecto, desactivada)
 Si queremos que el programa actualice la base de datos de Calibre con los identificadores de los libros de EPubLibre, podemos hacerlo configurando la propiedad ```calibre_update``` a true. De esta forma, cuando encuentre un libro en Calibre que se encuentre en la lista de libros de EPubLibre pero no tenga bien configurado su epl_id, actualizará la BDD del Calibre para ponérselo. Los libros que tienen configurado el epl_id correctamente se reconocen mucho más rápido durante la sincronización.
 
 
