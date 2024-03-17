@@ -97,7 +97,7 @@ En esta sección podemos consultar los idiomas de los libros del catalogo, podem
 
 ### Sección de gráficos
 En esta sección podemos encontrar unos gráficos sobre la distribución de autores, géneros e idiomas. En el caso de autores y géneros solo se muestran los más populares, dado el volumen de datos. El gráfico de doughnut de idiomas es interactivo y podemos habilitar/deshabilitar idiomas para poder ver el resto de idiomas más claramente.
-En caso de tener la integración con Calibre habilitada, podremos optar por ver los mismo gráficos pero solo de los libros de EPL que tenemos en nuestra libreria de Calibre a través del check (Mi biblioteca Calibre).
+En caso de tener la integración con Calibre habilitada, podremos optar por ver los mismos gráficos pero solo de los libros de EPL que tenemos en nuestra libreria de Calibre a través del check (Mi biblioteca Calibre).
 ![Imagen de la sección de gráficos - gráfico de autores](https://raw.githubusercontent.com/Verdoso/epl_librarian/master/docs/seccion_graficos.jpg)
 
 ### Opción de salto en la paginación
