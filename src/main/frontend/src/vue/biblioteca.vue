@@ -1,8 +1,7 @@
 <template>
   <section>
     <div id="fecha_base">
-      <b-field grouped group-multiline>
-        <b-switch v-model="soloNovedades" @input="cambioNovedades()">Novedades posteriores a</b-switch>
+      <b-field grouped label="Fecha corte de las novedades" horizontal>        
         <b-datepicker
           placeholder="Selecciona una fecha para filtrar"
           icon="calendar-today"
@@ -12,7 +11,7 @@
           trap-focus
           v-model="fechaBase"
           @input="cambioFechaNovedades()"
-          class="fechaBaseSelector"
+          class="fechaBaseSelector"          
         >
           <button class="button is-primary" @click="fechaBaseHoy()">
             <b-icon icon="calendar-today"></b-icon>
@@ -45,6 +44,7 @@
       @filters-change="onFilterChange"
       @page-change="onPageChange"
       @sort="onSort"
+      striped
     >
       <b-table-column
         field="POR_TITULO"
@@ -52,8 +52,20 @@
         searchable
         sortable
         width="20%"
-        v-slot="props"
-      >{{ props.row.titulo }}</b-table-column>
+      >
+        <template #searchable="props">
+          <b-input
+            v-model="props.filters[props.column.field]"
+            placeholder="titulo..."
+            icon-right="close-circle"
+            icon-right-clickable
+            @icon-right-click="clearTituloFilter(props)"
+          />
+        </template>
+        <template  v-slot="props">
+          {{ props.row.titulo }}
+        </template>
+      </b-table-column>
 
       <b-table-column
         field="POR_COLECCION"
@@ -61,8 +73,20 @@
         sortable
         searchable
         width="20%"
-        v-slot="props"
-      >{{ props.row.coleccionCompleta }}</b-table-column>
+      >
+        <template #searchable="props">
+          <b-input
+            v-model="props.filters[props.column.field]"
+            placeholder="colección..."
+            icon-right="close-circle"
+            icon-right-clickable
+            @icon-right-click="clearColeccionFilter(props)"
+          />
+        </template>
+        <template  v-slot="props">
+          {{ props.row.coleccionCompleta }}
+        </template>
+      </b-table-column>
 
       <b-table-column field="POR_AUTOR" label="Autor" sortable searchable width="20%">
         <template v-slot:header="{ column }">
@@ -118,7 +142,7 @@
         <template v-slot:header="{ column }">
           {{ column.label }}
           <br/>
-          <b-tooltip class="onlyFilter" :label="soloGenerosFavoritos?'Click para todos los géneros':'Click para solo géneros favoritos'" position="is-left" dashed>
+          <b-tooltip class="onlyFilter" :label="soloGenerosFavoritos?'Click para todos los géneros':'Click para solo géneros favoritos'" position="is-top" dashed>
             <b-switch v-model="soloGenerosFavoritos" @input="cambioGenerosFavoritos()" />          
           </b-tooltip>
         </template>
@@ -147,8 +171,20 @@
         label="Publicado"
         sortable
         width="10%"
-        v-slot="props"
-      >{{ props.row.publicado.substring(2) }}</b-table-column>
+      >
+        <template v-slot:header="{ column }">
+          {{ column.label }}
+          <br/>
+          <b-tooltip class="onlyFilter" :label="soloNovedades?'Mostrando novedades posteriores a ' + fechaBase.toLocaleDateString() + ', click para mostrar todos los libros':'Click para mostrar las novedades posteriores a ' + fechaBase.toLocaleDateString()" position="is-top" dashed>
+            <b-switch v-model="soloNovedades" @input="cambioNovedades()"/>          
+          </b-tooltip>
+        </template>
+        <template  v-slot="props">
+          <span class="tag is-black">
+            {{ props.row.publicado.substring(2) }}
+          </span>
+        </template>
+      </b-table-column>
 
       <b-table-column
         field="POR_CALIBRE"
@@ -156,25 +192,34 @@
         :visible="integracioncalibre"
         sortable
         width="5%"
-        v-slot="props"
       >
-        <b-icon
-          pack="fa"
-          :type="props.row.inCalibre ? 'is-success' : 'is-danger'"
-          :icon="props.row.inCalibre ? 'check' : 'times'"
-        ></b-icon>
+        <template v-slot:header="{ column }">
+          {{ column.label }}
+          <br/>
+          <b-tooltip class="onlyFilter" :label="soloNoEnPropiedad?'Click para mostrar también los que tengo':'Click para ocultar los que tengo'" position="is-left" dashed>
+          <b-switch v-model="soloNoEnPropiedad" @input="cambioSoloNoEnPropiedad()" v-if="integracioncalibre"/>          
+          </b-tooltip>
+        </template>
+        <template v-slot="props">
+          <b-icon
+            pack="fa"
+            :type="props.row.inCalibre ? 'is-success' : 'is-danger'"
+            :icon="props.row.inCalibre ? 'check' : 'times'"
+          ></b-icon>
+        </template>
       </b-table-column>
       <b-table-column
-        field="descartado"
+        field="POR_DESCARTE"
         label="Descarte"
         :visible="integracioncalibre"
+        sortable
         width="10%"
       >
         <template v-slot:header="{ column }">
           {{ column.label }}
           <br/>
-          <b-tooltip class="onlyFilter" :label="soloNoEnPropiedad?'Click para mostrar también los que tengo y los descartados':'Click para ocultar los que tengo y los descartados'" position="is-left" dashed>
-          <b-switch v-model="soloNoEnPropiedad" @input="cambioSoloNoEnPropiedad()" v-if="integracioncalibre"/>          
+          <b-tooltip class="onlyFilter" :label="ocultarDescartados?'Click para mostrar también los descartados':'Click para ocultar los descartados'" position="is-left" dashed>
+          <b-switch v-model="ocultarDescartados" @input="cambioOcultarDescartados()" />          
           </b-tooltip>
         </template>
         <template v-slot="props">
@@ -286,6 +331,7 @@ export default {
       soloIdiomasFavoritos: true,
       soloGenerosFavoritos: false,
       soloNoEnPropiedad: false,
+      ocultarDescartados: false,
       fechaBase: null
     };
   },
@@ -308,6 +354,7 @@ export default {
         `favoritos_generos=${this.soloGenerosFavoritos}`,
         `filtro_fecha=${this.porFechaBase()}`,
         `solo_no_en_propiedad=${this.soloNoEnPropiedad}`,
+        `ocultar_descartados=${this.ocultarDescartados}`,
         `por_pagina=${this.perPage}`
       ].join("&");
 
@@ -384,6 +431,14 @@ export default {
       props.filters[props.column.field] = '';
       this.$store.commit("changeGeneroFilter", "");
     },
+    clearTituloFilter(props) {
+      props.filters[props.column.field] = '';
+      this.$store.commit("changeTituloFilter", "");
+    },
+    clearColeccionFilter(props) {
+      props.filters[props.column.field] = '';
+      this.$store.commit("changeColeccionFilter", "");
+    },
     clearIdiomaFilter(props) {
       props.filters[props.column.field] = '';
       this.$store.commit("changeIdiomaFilter", "");
@@ -412,6 +467,9 @@ export default {
     cambioSoloNoEnPropiedad() {
       this.loadAsyncData();
     },
+    cambioOcultarDescartados() {
+      this.loadAsyncData();
+    },
     descartar(libro) {
       var formData = new FormData();
       formData.append("id", libro.id);
@@ -428,7 +486,7 @@ export default {
             message: `${libro.titulo} ${libro.descartado? 'descartado' : 'mostrado'}`,
             hasIcon: true
           });
-          if (libro.descartado && this.soloNoEnPropiedad) {
+          if (libro.descartado && this.ocultarDescartados) {
             this.loadAsyncData();
           }
         })
@@ -566,7 +624,7 @@ export default {
 
 <style>
 #fecha_base label {
-  padding-right: 0.5em;
+  width: max-content;
 }
 
 #fecha_base {

@@ -37,123 +37,134 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 public class LibrarianAPIController {
 
-  private static final String ERROR_DETALLADO = "Error detallado";
-  private static final String DEFAULT_ORDER = "POR_TITULO";
-  private static final String DEFAULT_ORDER_AUTOR = "POR_AUTOR";
-  private static final String DEFAULT_ORDER_GENERO = "POR_GENERO";
-  private static final String DEFAULT_ORDER_IDIOMA = "POR_IDIOMA";
+	private static final String ERROR_DETALLADO = "Error detallado";
+	private static final String DEFAULT_ORDER = "POR_TITULO";
+	private static final String DEFAULT_ORDER_AUTOR = "POR_AUTOR";
+	private static final String DEFAULT_ORDER_GENERO = "POR_GENERO";
+	private static final String DEFAULT_ORDER_IDIOMA = "POR_IDIOMA";
 
-  private final BibliotecaService bibliotecaService;
-  private final ApplicationContext applicationContext;
+	private final BibliotecaService bibliotecaService;
+	private final ApplicationContext applicationContext;
 
-  @GetMapping(value = "/sumario")
-  public ResponseEntity<Sumario> sumario() {
-    return ResponseEntity.ok(bibliotecaService.getSumario());
-  }
+	@GetMapping(value = "/sumario")
+	public ResponseEntity<Sumario> sumario() {
+		return ResponseEntity.ok(bibliotecaService.getSumario());
+	}
 
-  @GetMapping(value = "/updateCalibre")
-  public ResponseEntity<String> updateCalibre() {
-    bibliotecaService.updateCalibre(true);
-    return ResponseEntity.ok("OK");
-  }
+	@GetMapping(value = "/updateCalibre")
+	public ResponseEntity<String> updateCalibre() {
+		bibliotecaService.updateCalibre(true);
+		return ResponseEntity.ok("OK");
+	}
 
-  @GetMapping(value = "/exit")
-  public ResponseEntity<String> exit() {
-    new Thread(() -> {
-      try {
-        Thread.sleep(2_000);
-        log.warn("Cerrando aplicación...");
-        SpringApplication.exit(applicationContext, () -> 0);
-      } catch (InterruptedException e) {
-        log.error("Error esperando para cerrar la app");
-      }
-    }).start();
-    return ResponseEntity.ok("OK");
-  }
+	@GetMapping(value = "/exit")
+	public ResponseEntity<String> exit() {
+		new Thread(() -> {
+			try {
+				Thread.sleep(2_000);
+				log.warn("Cerrando aplicación...");
+				SpringApplication.exit(applicationContext, () -> 0);
+			} catch (InterruptedException e) {
+				log.error("Error esperando para cerrar la app");
+			}
+		}).start();
+		return ResponseEntity.ok("OK");
+	}
 
-  @GetMapping(value = "/libros")
-  public ResponseEntity<Pagina<Libro>> paginaLibro(@RequestParam(name = "numero_pagina", defaultValue = "0") int numeroPagina,
-      @RequestParam(name = "por_pagina", defaultValue = "10") int porPagina,
-      @RequestParam(name = "desc", defaultValue = "false") boolean reversed,
-      @RequestParam(name = "orden", defaultValue = DEFAULT_ORDER) BOOK_ORDERING ordering,
-      @RequestParam(name = "filtro_titulo", required = false) String filtroTitulo,
-      @RequestParam(name = "filtro_coleccion", required = false) String filtroColeccion,
-      @RequestParam(name = "filtro_autor", required = false) String filtroAutor,
-      @RequestParam(name = "filtro_idioma", required = false) String filtroIdioma,
-      @RequestParam(name = "filtro_genero", required = false) String filtroGenero,
-      @RequestParam(name = "favoritos_autores", required = false) boolean soloAutoresFavoritos,
-      @RequestParam(name = "favoritos_idiomas", required = false) boolean soloIdiomasFavoritos,
-      @RequestParam(name = "favoritos_generos", required = false) boolean soloGenerosFavoritos,
-      @RequestParam(name = "solo_no_en_propiedad", required = false) Boolean soloNoEnPropiedad,
-      @RequestParam(name = "filtro_fecha", required = false) Long filtroFechaLong) {
-    LocalDate filtroFecha = null;
-    if (filtroFechaLong != null) {
-      try {
-        filtroFecha = Instant.ofEpochMilli(filtroFechaLong)
-            .atZone(ZoneId.systemDefault())
-            .toLocalDate();
-      } catch (Exception e) {
-        log.error("Filtro fecha con formato incorrecto: {}", e.getMessage());
-        log.trace(ERROR_DETALLADO, e);
-      }
-    }
-    BusquedaLibro busquedaLibro = new BusquedaLibro(bibliotecaService, numeroPagina, porPagina, ordering, reversed, filtroTitulo, filtroColeccion,
-        filtroAutor, filtroGenero, filtroIdioma, filtroFecha, soloAutoresFavoritos, soloIdiomasFavoritos, soloGenerosFavoritos, soloNoEnPropiedad);
-    log.trace("BusquedaLibro: {}", busquedaLibro);
-    return ResponseEntity.ok(bibliotecaService.paginaLibros(busquedaLibro));
-  }
+	@GetMapping(value = "/libros")
+	public ResponseEntity<Pagina<Libro>> paginaLibro(
+			@RequestParam(name = "numero_pagina", defaultValue = "0") int numeroPagina,
+			@RequestParam(name = "por_pagina", defaultValue = "10") int porPagina,
+			@RequestParam(name = "desc", defaultValue = "false") boolean reversed,
+			@RequestParam(name = "orden", defaultValue = DEFAULT_ORDER) BOOK_ORDERING ordering,
+			@RequestParam(name = "filtro_titulo", required = false) String filtroTitulo,
+			@RequestParam(name = "filtro_coleccion", required = false) String filtroColeccion,
+			@RequestParam(name = "filtro_autor", required = false) String filtroAutor,
+			@RequestParam(name = "filtro_idioma", required = false) String filtroIdioma,
+			@RequestParam(name = "filtro_genero", required = false) String filtroGenero,
+			@RequestParam(name = "favoritos_autores", required = false) boolean soloAutoresFavoritos,
+			@RequestParam(name = "favoritos_idiomas", required = false) boolean soloIdiomasFavoritos,
+			@RequestParam(name = "favoritos_generos", required = false) boolean soloGenerosFavoritos,
+			@RequestParam(name = "solo_no_en_propiedad", required = false) Boolean soloNoEnPropiedad,
+			@RequestParam(name = "ocultar_descartados", required = false) Boolean ocultarDescartados,
+			@RequestParam(name = "filtro_fecha", required = false) Long filtroFechaLong) {
+		LocalDate filtroFecha = null;
+		if (filtroFechaLong != null) {
+			try {
+				filtroFecha = Instant.ofEpochMilli(filtroFechaLong).atZone(ZoneId.systemDefault()).toLocalDate();
+			} catch (Exception e) {
+				log.error("Filtro fecha con formato incorrecto: {}", e.getMessage());
+				log.trace(ERROR_DETALLADO, e);
+			}
+		}
+		BusquedaLibro busquedaLibro = new BusquedaLibro(bibliotecaService, numeroPagina, porPagina, ordering, reversed,
+				filtroTitulo, filtroColeccion, filtroAutor, filtroGenero, filtroIdioma, filtroFecha,
+				soloAutoresFavoritos, soloIdiomasFavoritos, soloGenerosFavoritos, soloNoEnPropiedad,
+				ocultarDescartados);
+		log.trace("BusquedaLibro: {}", busquedaLibro);
+		return ResponseEntity.ok(bibliotecaService.paginaLibros(busquedaLibro));
+	}
 
-  @GetMapping(value = "/top_autores_propios")
-  public ResponseEntity<Pagina<Autor>> paginaAutores(@RequestParam(name = "por_pagina", defaultValue = "10") int porPagina) {
-    Pagina<Autor> topAutores = bibliotecaService.getTopAutores(porPagina);
-    return ResponseEntity.ok(topAutores);
-  }
+	@GetMapping(value = "/top_autores_propios")
+	public ResponseEntity<Pagina<Autor>> paginaAutores(
+			@RequestParam(name = "por_pagina", defaultValue = "10") int porPagina) {
+		Pagina<Autor> topAutores = bibliotecaService.getTopAutores(porPagina);
+		return ResponseEntity.ok(topAutores);
+	}
 
-  @GetMapping(value = "/top_idiomas_propios")
-  public ResponseEntity<Pagina<Idioma>> paginaIdiomas(@RequestParam(name = "por_pagina", defaultValue = "10") int porPagina) {
-    Pagina<Idioma> topIdiomas = bibliotecaService.getTopIdiomas(porPagina);
-    return ResponseEntity.ok(topIdiomas);
-  }
+	@GetMapping(value = "/top_idiomas_propios")
+	public ResponseEntity<Pagina<Idioma>> paginaIdiomas(
+			@RequestParam(name = "por_pagina", defaultValue = "10") int porPagina) {
+		Pagina<Idioma> topIdiomas = bibliotecaService.getTopIdiomas(porPagina);
+		return ResponseEntity.ok(topIdiomas);
+	}
 
-  @GetMapping(value = "/top_generos_propios")
-  public ResponseEntity<Pagina<Genero>> paginaGeneros(@RequestParam(name = "por_pagina", defaultValue = "10") int porPagina) {
-    Pagina<Genero> topGeneros = bibliotecaService.getTopGeneros(porPagina);
-    return ResponseEntity.ok(topGeneros);
-  }
+	@GetMapping(value = "/top_generos_propios")
+	public ResponseEntity<Pagina<Genero>> paginaGeneros(
+			@RequestParam(name = "por_pagina", defaultValue = "10") int porPagina) {
+		Pagina<Genero> topGeneros = bibliotecaService.getTopGeneros(porPagina);
+		return ResponseEntity.ok(topGeneros);
+	}
 
-  @GetMapping(value = "/autores")
-  public ResponseEntity<Pagina<Autor>> paginaAutores(@RequestParam(name = "numero_pagina", defaultValue = "0") int numeroPagina,
-      @RequestParam(name = "por_pagina", defaultValue = "10") int porPagina,
-      @RequestParam(name = "desc", defaultValue = "false") boolean reversed,
-      @RequestParam(name = "orden", defaultValue = DEFAULT_ORDER_AUTOR) AUTOR_ORDERING ordering,
-      @RequestParam(name = "favoritos_autores", required = false) boolean soloAutoresFavoritos,
-      @RequestParam(name = "filtro_autor", required = false) String filtroAutor) {
-    BusquedaElemento<Autor> busquedaAutor = new BusquedaElemento<>(numeroPagina, porPagina, ordering, reversed, soloAutoresFavoritos, filtroAutor);
-    log.trace("BusquedaAutor: {}", busquedaAutor);
-    return ResponseEntity.ok(bibliotecaService.paginaAutor(busquedaAutor));
-  }
+	@GetMapping(value = "/autores")
+	public ResponseEntity<Pagina<Autor>> paginaAutores(
+			@RequestParam(name = "numero_pagina", defaultValue = "0") int numeroPagina,
+			@RequestParam(name = "por_pagina", defaultValue = "10") int porPagina,
+			@RequestParam(name = "desc", defaultValue = "false") boolean reversed,
+			@RequestParam(name = "orden", defaultValue = DEFAULT_ORDER_AUTOR) AUTOR_ORDERING ordering,
+			@RequestParam(name = "favoritos_autores", required = false) boolean soloAutoresFavoritos,
+			@RequestParam(name = "filtro_autor", required = false) String filtroAutor) {
+		BusquedaElemento<Autor> busquedaAutor = new BusquedaElemento<>(numeroPagina, porPagina, ordering, reversed,
+				soloAutoresFavoritos, filtroAutor);
+		log.trace("BusquedaAutor: {}", busquedaAutor);
+		return ResponseEntity.ok(bibliotecaService.paginaAutor(busquedaAutor));
+	}
 
-  @GetMapping(value = "/generos")
-  public ResponseEntity<Pagina<Genero>> paginaGeneros(@RequestParam(name = "numero_pagina", defaultValue = "0") int numeroPagina,
-      @RequestParam(name = "por_pagina", defaultValue = "10") int porPagina,
-      @RequestParam(name = "desc", defaultValue = "false") boolean reversed,
-      @RequestParam(name = "orden", defaultValue = DEFAULT_ORDER_GENERO) GENERO_ORDERING ordering,
-      @RequestParam(name = "favoritos_generos", required = false) boolean soloGenerosFavoritos,
-      @RequestParam(name = "filtro_genero", required = false) String filtroGenero) {
-    BusquedaElemento<Genero> busquedaGenero = new BusquedaElemento<>(numeroPagina, porPagina, ordering, reversed, soloGenerosFavoritos, filtroGenero);
-    log.trace("BusquedaGenero: {}", busquedaGenero);
-    return ResponseEntity.ok(bibliotecaService.paginaGenero(busquedaGenero));
-  }
+	@GetMapping(value = "/generos")
+	public ResponseEntity<Pagina<Genero>> paginaGeneros(
+			@RequestParam(name = "numero_pagina", defaultValue = "0") int numeroPagina,
+			@RequestParam(name = "por_pagina", defaultValue = "10") int porPagina,
+			@RequestParam(name = "desc", defaultValue = "false") boolean reversed,
+			@RequestParam(name = "orden", defaultValue = DEFAULT_ORDER_GENERO) GENERO_ORDERING ordering,
+			@RequestParam(name = "favoritos_generos", required = false) boolean soloGenerosFavoritos,
+			@RequestParam(name = "filtro_genero", required = false) String filtroGenero) {
+		BusquedaElemento<Genero> busquedaGenero = new BusquedaElemento<>(numeroPagina, porPagina, ordering, reversed,
+				soloGenerosFavoritos, filtroGenero);
+		log.trace("BusquedaGenero: {}", busquedaGenero);
+		return ResponseEntity.ok(bibliotecaService.paginaGenero(busquedaGenero));
+	}
 
-  @GetMapping(value = "/idiomas")
-  public ResponseEntity<Pagina<Idioma>> paginaIdiomas(@RequestParam(name = "numero_pagina", defaultValue = "0") int numeroPagina,
-      @RequestParam(name = "por_pagina", defaultValue = "10") int porPagina,
-      @RequestParam(name = "desc", defaultValue = "false") boolean reversed,
-      @RequestParam(name = "orden", defaultValue = DEFAULT_ORDER_IDIOMA) IDIOMA_ORDERING ordering,
-      @RequestParam(name = "favoritos_idiomas", required = false) boolean soloIdiomasFavoritos,
-      @RequestParam(name = "filtro_idioma", required = false) String filtroIdioma) {
-    BusquedaElemento<Idioma> busquedaIdioma = new BusquedaElemento<>(numeroPagina, porPagina, ordering, reversed, soloIdiomasFavoritos, filtroIdioma);
-    log.trace("BusquedaIdioma: {}", busquedaIdioma);
-    return ResponseEntity.ok(bibliotecaService.paginaIdioma(busquedaIdioma));
-  }
+	@GetMapping(value = "/idiomas")
+	public ResponseEntity<Pagina<Idioma>> paginaIdiomas(
+			@RequestParam(name = "numero_pagina", defaultValue = "0") int numeroPagina,
+			@RequestParam(name = "por_pagina", defaultValue = "10") int porPagina,
+			@RequestParam(name = "desc", defaultValue = "false") boolean reversed,
+			@RequestParam(name = "orden", defaultValue = DEFAULT_ORDER_IDIOMA) IDIOMA_ORDERING ordering,
+			@RequestParam(name = "favoritos_idiomas", required = false) boolean soloIdiomasFavoritos,
+			@RequestParam(name = "filtro_idioma", required = false) String filtroIdioma) {
+		BusquedaElemento<Idioma> busquedaIdioma = new BusquedaElemento<>(numeroPagina, porPagina, ordering, reversed,
+				soloIdiomasFavoritos, filtroIdioma);
+		log.trace("BusquedaIdioma: {}", busquedaIdioma);
+		return ResponseEntity.ok(bibliotecaService.paginaIdioma(busquedaIdioma));
+	}
 }

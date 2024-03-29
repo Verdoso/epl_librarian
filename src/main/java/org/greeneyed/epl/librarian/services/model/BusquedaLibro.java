@@ -48,6 +48,7 @@ public class BusquedaLibro {
   private final boolean soloIdiomasFavoritos;
   private final boolean soloGenerosFavoritos;
   private final Boolean soloNoEnPropiedad;
+  private final Boolean ocultarDescartados;
 
   public QueryOptions getQueryOptions() {
     return reversed ? ordering.getQueryOptionsDescending() : ordering.getQueryOptionsAscending();
@@ -60,8 +61,19 @@ public class BusquedaLibro {
             getPartialQuery(getFiltroIdioma(), Libro.LIBRO_IDIOMA), getPartialQuery(getFiltroColeccion(), Libro.LIBRO_COLECCION),
             getPartialQuery(getFiltroGenero(), Libro.LIBRO_GENERO),
             //
-            getEnCalibreNoDescartadosQuery(), getAutoresFavoritosQuery(preferencesService), getIdiomasFavoritosQuery(preferencesService),
-            getGenerosFavoritosQuery(preferencesService), getFechaQuery(getFiltroFecha(), Libro.LIBRO_PUBLICADO))
+            getNoEnCalibreQuery(),
+            //
+            getNoDescartadosQuery(),
+            //
+            getAutoresFavoritosQuery(preferencesService),
+            //
+            getIdiomasFavoritosQuery(preferencesService),
+            //
+            getGenerosFavoritosQuery(preferencesService),
+            //
+            getFechaQuery(getFiltroFecha(), Libro.LIBRO_PUBLICADO)
+            //
+            )
         .stream()
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
@@ -85,11 +97,18 @@ public class BusquedaLibro {
       return null;
   }
 
-  public Query<Libro> getEnCalibreNoDescartadosQuery() {
+  public Query<Libro> getNoEnCalibreQuery() {
     if (Boolean.TRUE.equals(soloNoEnPropiedad)) {
-      return and(equal(Libro.LIBRO_EN_CALIBRE, Boolean.FALSE), equal(Libro.LIBRO_DESCARTADO, Boolean.FALSE));
+      return equal(Libro.LIBRO_EN_CALIBRE, Boolean.FALSE);
     } else
       return null;
+  }
+  
+  public Query<Libro> getNoDescartadosQuery() {
+	  if (Boolean.TRUE.equals(ocultarDescartados)) {
+		  return equal(Libro.LIBRO_DESCARTADO, Boolean.FALSE);
+	  } else
+		  return null;
   }
 
   public Query<Libro> getAutoresFavoritosQuery(PreferencesService preferencesService) {
