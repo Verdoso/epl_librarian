@@ -51,7 +51,7 @@
         label="Titulo"
         searchable
         sortable
-        width="20%"
+        width="25%"
       >
         <template #searchable="props">
           <b-input
@@ -116,7 +116,7 @@
         </template>
       </b-table-column>
 
-      <b-table-column field="POR_IDIOMA" label="Idiomas" sortable searchable width="10%">
+      <b-table-column field="POR_IDIOMA" label="Idiomas" sortable searchable width="5em">
         <template v-slot:header="{ column }">
           {{ column.label }}
           <br/>
@@ -170,19 +170,21 @@
         field="POR_PUBLICADO"
         label="Publicado"
         sortable
-        width="10%"
+        width="5em"
       >
         <template v-slot:header="{ column }">
           {{ column.label }}
           <br/>
-          <b-tooltip class="onlyFilter" :label="soloNovedades?'Mostrando novedades posteriores a ' + fechaBase.toLocaleDateString() + ', click para mostrar todos los libros':'Click para mostrar las novedades posteriores a ' + fechaBase.toLocaleDateString()" position="is-top" dashed>
+          <b-tooltip v-if="fechaBase" class="onlyFilter" :label="soloNovedades?'Mostrando novedades posteriores a ' + fechaBase.toLocaleDateString() + ', click para mostrar todos los libros':'Click para mostrar las novedades posteriores a ' + fechaBase.toLocaleDateString()" position="is-top" dashed>
             <b-switch v-model="soloNovedades" @input="cambioNovedades()"/>          
           </b-tooltip>
         </template>
         <template  v-slot="props">
-          <span class="tag is-black">
-            {{ props.row.publicado.substring(2) }}
-          </span>
+          <b-tooltip :label="timeAgo.format(new Date(props.row.fechaPublicacion))" position="is-left">
+            <span class="tag is-black">
+                {{ props.row.publicado.substring(2) }}
+            </span>
+          </b-tooltip>
         </template>
       </b-table-column>
 
@@ -191,7 +193,8 @@
         label="Calibre"
         :visible="integracioncalibre"
         sortable
-        width="5%"
+        centered
+        width="5em"
       >
         <template v-slot:header="{ column }">
           {{ column.label }}
@@ -213,7 +216,8 @@
         label="Descarte"
         :visible="integracioncalibre"
         sortable
-        width="10%"
+        centered
+        width="5em"
       >
         <template v-slot:header="{ column }">
           {{ column.label }}
@@ -297,8 +301,11 @@ import axios from "axios";
 import Vuex from "vuex";
 import Bottleneck from "bottleneck";
 import { EventBus } from '../event-bus';
+import TimeAgo from 'javascript-time-ago'
+import es from 'javascript-time-ago/locale/es'
 
 Vue.use(Vuex);
+TimeAgo.addDefaultLocale(es)
 
 const limiter = new Bottleneck({
   maxConcurrent: 1,
@@ -332,7 +339,8 @@ export default {
       soloGenerosFavoritos: false,
       soloNoEnPropiedad: false,
       ocultarDescartados: false,
-      fechaBase: null
+      fechaBase: null,
+      timeAgo: new TimeAgo('es-ES')
     };
   },
   methods: {

@@ -56,24 +56,23 @@ public class BusquedaLibro {
 
   public Query<Libro> getQuery(PreferencesService preferencesService) {
     Query<Libro> query;
-    List<Query<Libro>> partialQueries = Arrays
-        .asList(getPartialQuery(getFiltroTitulo(), Libro.LIBRO_TITULO), getPartialQuery(getFiltroAutor(), Libro.LIBRO_AUTOR),
-            getPartialQuery(getFiltroIdioma(), Libro.LIBRO_IDIOMA), getPartialQuery(getFiltroColeccion(), Libro.LIBRO_COLECCION),
-            getPartialQuery(getFiltroGenero(), Libro.LIBRO_GENERO),
-            //
-            getNoEnCalibreQuery(),
-            //
-            getNoDescartadosQuery(),
-            //
-            getAutoresFavoritosQuery(preferencesService),
-            //
-            getIdiomasFavoritosQuery(preferencesService),
-            //
-            getGenerosFavoritosQuery(preferencesService),
-            //
-            getFechaQuery(getFiltroFecha(), Libro.LIBRO_PUBLICADO)
-            //
-            )
+    List<Query<Libro>> partialQueries = Arrays.asList(getPartialQuery(getFiltroTitulo(), Libro.LIBRO_TITULO),
+        getPartialQuery(getFiltroAutor(), Libro.LIBRO_AUTOR), getPartialQuery(getFiltroIdioma(), Libro.LIBRO_IDIOMA),
+        getPartialQuery(getFiltroColeccion(), Libro.LIBRO_COLECCION), getPartialQuery(getFiltroGenero(), Libro.LIBRO_GENERO),
+        //
+        getNoEnCalibreQuery(),
+        //
+        getNoDescartadosQuery(),
+        //
+        getAutoresFavoritosQuery(preferencesService),
+        //
+        getIdiomasFavoritosQuery(preferencesService),
+        //
+        getGenerosFavoritosQuery(preferencesService),
+        //
+        getFechaQuery(getFiltroFecha(), Libro.LIBRO_PUBLICADO)
+    //
+    )
         .stream()
         .filter(Objects::nonNull)
         .collect(Collectors.toList());
@@ -103,12 +102,12 @@ public class BusquedaLibro {
     } else
       return null;
   }
-  
+
   public Query<Libro> getNoDescartadosQuery() {
-	  if (Boolean.TRUE.equals(ocultarDescartados)) {
-		  return equal(Libro.LIBRO_DESCARTADO, Boolean.FALSE);
-	  } else
-		  return null;
+    if (Boolean.TRUE.equals(ocultarDescartados)) {
+      return equal(Libro.LIBRO_DESCARTADO, Boolean.FALSE);
+    } else
+      return null;
   }
 
   public Query<Libro> getAutoresFavoritosQuery(PreferencesService preferencesService) {
