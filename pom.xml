@@ -38,8 +38,8 @@
     <spotbugs-maven-plugin.version>4.7.1.0</spotbugs-maven-plugin.version>
     <jakarta-servlet.version>5.0.0</jakarta-servlet.version>
     <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
-    <node.version>v12.14.1</node.version>
-    <npm.version>8.3.0</npm.version>
+    <node.version>v18.17.0</node.version>
+    <npm.version>10.5.0</npm.version>
     <springdoc-openapi.version>1.6.9</springdoc-openapi.version>
     <npm.directory>src/main/frontend</npm.directory>
 

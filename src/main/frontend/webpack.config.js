@@ -19,7 +19,10 @@ module.exports = {
     // Filter out the moment locales to reduce bundle size
     // Locales that should be included MUST be added to the project, otherwise they won't be available for use)
     // References: https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.IgnorePlugin({
+      resourceRegExp: /^\.\/locale$/,
+      contextRegExp: /moment$/,
+    }),
     new VueLoaderPlugin(),
   ],
   output: {
@@ -80,15 +83,22 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        loader: 'babel-loader',
+        use: [{
+            loader: 'babel-loader'
+        }],
         exclude: /node_modules/
       },
       {
         test: /\.(png|jpg|gif|eot|woff2|woff|ttf|svg)$/,
-        loader: 'file-loader',
-        options: {
-          name: '[name].[ext]?[hash]'
-        }
+        type: 'asset/resource',
+        dependency: { not: ['url'] },        
+//        use: [{
+//            loader: 'file-loader',
+//            options: {
+//              name: '[name].[ext]',
+//              //name: '[name].[ext]?[hash]'
+//            }
+//        }],
       }
     ]
   },
@@ -107,24 +117,23 @@ module.exports = {
   performance: {
     hints: false
   },
-  devtool: '#eval-source-map'
+  devtool: 'eval-source-map'
 }
 
 if (process.env.NODE_ENV === 'development') {
   module.exports.output.publicPath = '/webpack'
   module.exports.devServer = {
-      proxy: {
-        '/librarian': {
+      proxy: [{
+          context: ['/librarian'],
           target: 'http://localhost:7070',
           ws: true,
           changeOrigin: true
-        }
-      }
-    }
+        }]
+  }
 }
 
 if (process.env.NODE_ENV !== 'development') {
-  module.exports.devtool = '#source-map'
+  module.exports.devtool = 'source-map'
   module.exports.optimization = {minimize : true}
   // http://vue-loader.vuejs.org/en/workflow/production.html
   module.exports.plugins = (module.exports.plugins || []).concat([

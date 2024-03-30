@@ -13,6 +13,9 @@
    <meta http-equiv="Cache-Control" content="private" />
    <title>EPL Librarian</title>
    <style>
+      #app {
+        display: none;
+      }
       .lds-dual-ring {
       display: block;
       width: 490px;
@@ -43,7 +46,7 @@
 
 <body class="sidebar-toggled">
    <div id="loader" class="lds-dual-ring"></div>
-   <div id="app" style="display: none">
+   <div id="app">
       <div id="wrapper">
          <header th:replace="~{fragments/navbar :: navbar}"></header>
          <div class="d-md-flex">
