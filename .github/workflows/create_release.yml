@@ -48,6 +48,8 @@ jobs:
     - name: Create Release
       id: create_release
       uses: softprops/action-gh-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
       with:
         tag_name: Release_Tag_v${{ env.RELEASE_VERSION }}
         name: Release ${{ env.RELEASE_VERSION }}
