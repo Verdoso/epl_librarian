@@ -453,6 +453,7 @@ export default {
     },
     fechaBaseHoy() {
       this.fechaBase = new Date();
+      this.guardarFechaBase();
     },
     cambioFechaNovedades() {
       if (this.soloNovedades) {
