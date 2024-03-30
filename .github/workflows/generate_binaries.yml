@@ -19,7 +19,7 @@ jobs:
       matrix:
 #        os: [ubuntu-latest, macos-latest, windows-2019]
         os: [windows-2019]
-        graalvm-version: ['22.3.1']
+        graalvm-version: ['graalvm-community']
         java-version: ['17']
         include:
 #          - os: ubuntu-latest
@@ -42,7 +42,7 @@ jobs:
           swap-size-gb: 10
       - name:
           Configure pagefile
-        uses: al-cheb/configure-pagefile-action@v1.3
+        uses: al-cheb/configure-pagefile-action@v1.4
         if: runner.os == 'Windows'
         with:
           minimum-size: 10GB
