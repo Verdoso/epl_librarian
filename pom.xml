@@ -289,8 +289,27 @@
         <artifactId>maven-resources-plugin</artifactId>
         <executions>
           <execution>
-            <id>copy-resources</id>
-            <!-- here the phase you need -->
+            <id>copy-resources-windows</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/conf</outputDirectory>
+              <encoding>CP1252</encoding>
+              <resources>
+                <resource>
+                  <directory>conf</directory>
+                  <filtering>true</filtering>
+                  <includes>
+                    <include>**/*.cmd</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-resources-linux</id>
             <phase>validate</phase>
             <goals>
               <goal>copy-resources</goal>
@@ -301,6 +320,9 @@
                 <resource>
                   <directory>conf</directory>
                   <filtering>true</filtering>
+                  <excludes>
+                    <exclude>**/*.cmd</exclude>
+                  </excludes>
                 </resource>
               </resources>
             </configuration>

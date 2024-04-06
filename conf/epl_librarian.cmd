@@ -1,9 +1,9 @@
 @ECHO OFF
 CHCP 1250 > NUL
 
-ECHO Comprobando instalaciÃ³n de Java...
+ECHO Comprobando instalación de Java...
 where /q java || ECHO No hemos podido detectar java instalado en su sistema. No se puede ejecutar el programa. && PAUSE && EXIT /B
-ECHO Â¡Java detectado!
+ECHO !Java detectado!
 
 ECHO Comprobando Java instalado...
 for /f "tokens=3" %%g in ('java -version 2^>^&1 ^| findstr /i "version"') do set "JAVAVER=%%g"
@@ -12,7 +12,7 @@ set JAVAVER=%JAVAVER:"=%
 for /f "delims=. tokens=1-3" %%v in ("%JAVAVER%") do set "jver=%%v.%%w"
 ECHO Java instalado= %jver%
 
-if %jver% LSS 17 ECHO La versiÃ³n minima de Java soportada es la 17. No se puede ejecutar el programa. && PAUSE && EXIT /B
+if %jver% LSS 17 ECHO La versión minima de Java soportada es la 17. No se puede ejecutar el programa. && PAUSE && EXIT /B
 ECHO Java instalado compatible (%jver%)!
 
 ECHO Ejecutando...
