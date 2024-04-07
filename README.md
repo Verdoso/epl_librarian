@@ -113,4 +113,4 @@ A partir de la version 0.0.41, en el listado de libros se puede saltar directame
 ### Opciones de minimización de la interfaz
 Se han añadido opciones para poder minimizar la parte de los menús de la interfaz y recogerlo todo y dejar el máximo espacio a la tabla de consulta de libros.
 
-![Imagen de la opción para minimizar el menú](https://raw.githubusercontent.com/Verdoso/epl_librarian/master/docs/menu_encogido.PNG)
+![Imagen de la opción para minimizar el menú](https://raw.githubusercontent.com/Verdoso/epl_librarian/master/docs/menu_encogido.jpg)
