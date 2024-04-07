@@ -19,7 +19,6 @@ jobs:
       matrix:
 #        os: [ubuntu-latest, macos-latest, windows-2019]
         os: [windows-2019]
-        graalvm-version: ['graalvm']
         java-version: ['17']
         include:
 #          - os: ubuntu-latest
@@ -92,7 +91,7 @@ jobs:
       - name: Set up GraalVM (Java ${{ matrix.java-version }})
         uses: graalvm/setup-graalvm@v1
         with:
-          version: '${{ matrix.graalvm-version }}'
+          distribution: 'graalvm'
           java-version: '${{ matrix.java-version }}'
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
