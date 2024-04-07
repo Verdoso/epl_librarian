@@ -15,7 +15,7 @@ Repositorio para una mini-aplicación para consultar localmente el catálogo de 
 
 ## Para ejecutar
 
-### Versión Java multiplataforma 
+### Versión Java multiplataforma
 Esta versión sirve para cualquier S.O. y es la que hay que usar, de momento, en Linux o MacOS.
 
 #### Requisitos
@@ -42,6 +42,11 @@ Hay que tener en cuenta que:
 * El programa almacena los ficheros del catalogo en el directorio temporal del usuario
 * Si el catalogo almacenado tienes mas de 24h, intentará descargarse una versión nueva desde ePubLlibre
 * En caso de no poder descargarse una versión nueva, intentará cargar un fichero que se haya descargado manualmente y colocado en el directorio temporal.
+
+## Actualizaciones de esta misma aplicación
+A partir de la versión 1.17.30, EPL Librarian consulta este mismo README en GitHub para ver si existe una nueva versión y, si es el caso, muestra un un botón de aviso, al lado del botón de cerrar, que enlaza con la página desde donde se puede uno descargar la nueva versión. Esta funcionalidad es meramente informativa y lo único que se hace es consultar la página README como si fuese un navegador cualquiera, pero en caso de no querer que el programa acceda a la página de GitHub, se puede deshabilitar esta opción añadiendo la propiedad ```skip_version_check``` a true a nuestro fichero de preferencias.
+![Botón que indica que hay una nueva versión publicada](https://raw.githubusercontent.com/Verdoso/epl_librarian/master/docs/NuevaVersion.png)
+
 
 ## Uso avanzado
 * En caso de que no queramos que intente descargarse una versión nueva de la biblioteca de ePubLlibre, podemos añadir al arrancar la propiedad ```-Ddescarga_epl=false```. En ese caso intentará usar el backup o el fichero descargado manualmente, pero en ningún caso intentará acceder a ePubLlibre.
