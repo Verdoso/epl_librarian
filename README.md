@@ -45,6 +45,7 @@ Hay que tener en cuenta que:
 
 ## Actualizaciones de esta misma aplicación
 A partir de la versión 1.17.30, EPL Librarian consulta este mismo README en GitHub para ver si existe una nueva versión y, si es el caso, muestra un un botón de aviso, al lado del botón de cerrar, que enlaza con la página desde donde se puede uno descargar la nueva versión. Esta funcionalidad es meramente informativa y lo único que se hace es consultar la página README como si fuese un navegador cualquiera, pero en caso de no querer que el programa acceda a la página de GitHub, se puede deshabilitar esta opción añadiendo la propiedad ```skip_version_check``` a true a nuestro fichero de preferencias.
+
 ![Botón que indica que hay una nueva versión publicada](https://raw.githubusercontent.com/Verdoso/epl_librarian/master/docs/NuevaVersion.png)
 
 
