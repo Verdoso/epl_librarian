@@ -2,7 +2,7 @@ var path = require('path')
 var webpack = require('webpack')
 
 const APP_PATH = path.resolve(__dirname, '../resources/static/librarian');
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const { VueLoaderPlugin } = require('vue-loader')
 const CompressionPlugin = require("compression-webpack-plugin");
 
 const PATHS = {
@@ -12,8 +12,8 @@ const PATHS = {
 }
 
 module.exports = {
-  entry: {    
-    'main': path.join(PATHS.src, 'main.js')  
+  entry: {
+    'main': path.join(PATHS.src, 'main.js')
   },
   plugins: [
     // Filter out the moment locales to reduce bundle size
@@ -91,7 +91,7 @@ module.exports = {
       {
         test: /\.(png|jpg|gif|eot|woff2|woff|ttf|svg)$/,
         type: 'asset/resource',
-        dependency: { not: ['url'] },        
+        dependency: { not: ['url'] },
 //        use: [{
 //            loader: 'file-loader',
 //            options: {
