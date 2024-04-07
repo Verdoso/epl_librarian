@@ -15,6 +15,7 @@ import org.greeneyed.epl.librarian.services.BibliotecaService.AUTOR_ORDERING;
 import org.greeneyed.epl.librarian.services.BibliotecaService.BOOK_ORDERING;
 import org.greeneyed.epl.librarian.services.BibliotecaService.GENERO_ORDERING;
 import org.greeneyed.epl.librarian.services.BibliotecaService.IDIOMA_ORDERING;
+import org.greeneyed.epl.librarian.services.VersionService;
 import org.greeneyed.epl.librarian.services.model.BusquedaElemento;
 import org.greeneyed.epl.librarian.services.model.BusquedaLibro;
 import org.springframework.beans.factory.annotation.Autowired;

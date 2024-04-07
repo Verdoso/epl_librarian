@@ -70,6 +70,7 @@ export default {
             this.sumario = response.data;
             this.fechaActualizacion = new Date(this.sumario.fechaActualizacion);
             this.$store.commit("changeVersion", this.sumario.buildVersion);
+            this.$store.commit("changeLatestVersion", this.sumario.latestVersion);
             this.$store.commit("changeCalibreIntegration", this.sumario.integracionCalibreHabilitada);
           })
          .catch(e => {
