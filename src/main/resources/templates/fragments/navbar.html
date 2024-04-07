@@ -1,19 +1,43 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
-    <title>Sonar no sabe lo que es un fragmento</title>
+<title>Sonar no sabe lo que es un fragmento</title>
 </head>
 <body>
-    <!-- Navigation -->
-    <header th:fragment="navbar" class="align-items-start app-header flex-column flex-md-row navbar navbar-expand-md navbar-light">
-        <div class="align-items-baseline d-flex flex-row navbar-brand p-lg-3 pl-3 pr-3 pt-3">
-            <a class="navbar-brand" th:href="@{/librarian/}"><span style="font-size: 1.5em;">EPL Librarian</span><span style="font-size: .75em;"> - {{ this.$store.state.buildVersion }}</span></a>
-        </div>
-        <ul class="nav navbar-nav ml-md-auto flex-row navbar-top-links">
-            <li class="nav-item">
-                <button type="button" class="btn btn-outline-danger" style="margin-top:1em;" @click="salir()"><i class="fa fa-sign-out" aria-hidden="true"></i> cerrar</button>
-            </li>
-        </ul>
+  <!-- Navigation -->
+  <header th:fragment="navbar"
+    class="align-items-start app-header flex-column flex-md-row navbar navbar-expand-md navbar-light">
+    <div
+      class="align-items-baseline d-flex flex-row navbar-brand p-lg-3 pl-3 pr-3 pt-3">
+      <a class="navbar-brand" th:href="@{/librarian/}"><span
+        style="font-size: 1.5em;">EPL Librarian</span><span
+        style="font-size: .75em;"> - {{
+          this.$store.state.buildVersion }}</span></a>
+    </div>
+    <ul class="nav navbar-nav ml-md-auto flex-row navbar-top-links">
+      <li
+        class="nav-item"
+        v-if="this.$store.state.latestVersion &amp;&amp; !this.$store.state.buildVersion.endsWith('-SNAPSHOT') &amp;&amp; this.$store.state.buildVersion != this.$store.state.latestVersion"
+      >
+        <b-button
+          tag="a"
+          :href="'https://github.com/Verdoso/epl_librarian/releases/tag/Release_Tag_v' + this.$store.state.latestVersion"
+          icon-left="exclamation-circle"
+          icon-pack="fa"
+          type="is-warning"
+          target="_blank"
+          style="margin: 1em; min-height: auto; text-decoration: none"
+          >
+          New version: {{ this.$store.state.latestVersion }}
+        </b-button>
+      </li>
+      <li class="nav-item">
+        <button type="button" class="btn btn-outline-danger"
+          style="margin-top: 1em;" @click="salir()">
+          <i class="fa fa-sign-out" aria-hidden="true"></i> cerrar
+        </button>
+      </li>
+    </ul>
   </header>
 </body>
 </html>

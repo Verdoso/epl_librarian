@@ -45,6 +45,7 @@ const store = new Vuex.Store({
   generofilter: '',
   idiomafilter: '',
   buildVersion: null,
+  latestVersion: null,
   calibreIntegration: false
   },
   mutations: {
@@ -53,6 +54,9 @@ const store = new Vuex.Store({
     },
     changeVersion (state,newBuildVersion) {
       state.buildVersion = newBuildVersion
+    },
+    changeLatestVersion (state,newLatestVersion) {
+      state.latestVersion = newLatestVersion
     },
     changeTab (state,newTab) {
       state.currentTab = newTab
