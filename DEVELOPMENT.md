@@ -11,7 +11,7 @@ Así pues, lo primero es generar un .jar del nativo ejecutable y una vez hecho, 
 Para generar el nativo necesitamos una consola de tipo "x64 Native Tools Command Prompt" (no basta un simple "command prompt"). Establecemos como JDK a GralVM a través de JAVA_HOME y luego podemos ejecutar los comandos maven para empaquetar la aplicación, por si acaso no lo está antes, y luego generar el nativo. Por ejemplo:
 
 ```
-set JAVA_HOME=D:\Java\GRAAL17
+set JAVA_HOME=%GRAAL_HOME%
 mvn -Pdeployment -DskipTests -Dassembly.skipAssembly=true package
 mvn -DskipTests -Dassembly.skipAssembly=true -Pnative native:compile
 ```
