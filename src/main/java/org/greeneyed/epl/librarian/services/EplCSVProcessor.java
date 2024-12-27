@@ -14,6 +14,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Reader;
 import java.io.Serializable;
+import java.io.StringReader;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -45,6 +46,7 @@ import java.util.zip.ZipInputStream;
 import javax.net.ssl.SSLContext;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
@@ -263,32 +265,38 @@ public class EplCSVProcessor {
           LocalDateTime fechaActualizacion = mostrarDatosFicheroAProcesar(nextEntry);
           ColumnPositionMappingStrategy<LibroCSV> ms = new ColumnPositionMappingStrategy<>();
           ms.setType(LibroCSV.class);
-          CsvToBean<LibroCSV> cb = new CsvToBeanBuilder<LibroCSV>(theReader).withType(LibroCSV.class)
-              .withMappingStrategy(ms)
-              .withSkipLines(1)
-              .build();
-          librosCSVs = cb.parse();
-          File librosBCKFile = Files.createTempFile(getTempDirectory(), BACKUP_FILES_PREFIX, "." + LibroCSV.serialVersionUID + BACKUP_FILES_SUFFIX)
-              .toFile();
-          try (FileOutputStream theFOS = new FileOutputStream(librosBCKFile);
-              BufferedOutputStream theBOS = new BufferedOutputStream(theFOS);
-              ObjectOutputStream theOOS = new ObjectOutputStream(theBOS)) {
-            for (LibroCSV libroCSV : librosCSVs) {
-              theOOS.writeObject(libroCSV);
+          // TODO Hack while EPL does not fix their broken CSV
+          String targetString = IOUtils.toString(theReader);
+          targetString = targetString.replaceAll("\\.jpg\"\"", ".jpg\"");
+          //
+          try (StringReader theSR = new StringReader(targetString)) {
+            CsvToBean<LibroCSV> cb = new CsvToBeanBuilder<LibroCSV>(theSR).withType(LibroCSV.class)
+                .withMappingStrategy(ms)
+                .withSkipLines(1)
+                .build();
+            librosCSVs = cb.parse();
+            File librosBCKFile = Files.createTempFile(getTempDirectory(), BACKUP_FILES_PREFIX, "." + LibroCSV.serialVersionUID + BACKUP_FILES_SUFFIX)
+                .toFile();
+            try (FileOutputStream theFOS = new FileOutputStream(librosBCKFile);
+                BufferedOutputStream theBOS = new BufferedOutputStream(theFOS);
+                ObjectOutputStream theOOS = new ObjectOutputStream(theBOS)) {
+              for (LibroCSV libroCSV : librosCSVs) {
+                theOOS.writeObject(libroCSV);
+              }
+              theOOS.flush();
+              theBOS.flush();
+              theFOS.flush();
+              log.info("Creado fichero de backup: {}", librosBCKFile.getAbsolutePath());
             }
-            theOOS.flush();
-            theBOS.flush();
-            theFOS.flush();
-            log.info("Creado fichero de backup: {}", librosBCKFile.getAbsolutePath());
-          }
-          if (fechaActualizacion == null) {
-            fechaActualizacion = Instant.ofEpochMilli(librosBCKFile.lastModified())
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
-          } else {
-            librosBCKFile.setLastModified(fechaActualizacion.atZone(ZoneId.systemDefault())
-                .toInstant()
-                .toEpochMilli());
+            if (fechaActualizacion == null) {
+              fechaActualizacion = Instant.ofEpochMilli(librosBCKFile.lastModified())
+                  .atZone(ZoneId.systemDefault())
+                  .toLocalDateTime();
+            } else {
+              librosBCKFile.setLastModified(fechaActualizacion.atZone(ZoneId.systemDefault())
+                  .toInstant()
+                  .toEpochMilli());
+            }
           }
           return new UpdateSpec(fechaActualizacion, librosCSVs);
         }
@@ -360,7 +368,7 @@ public class EplCSVProcessor {
       }
     } finally {
       try {
-        Files.delete(librosEPL.toPath());
+        // Files.delete(librosEPL.toPath());
       } catch (Exception e) {
         log.error("No se ha podido borrar el fichero {} : {}", librosEPL.getAbsolutePath(), e.getMessage());
       }
