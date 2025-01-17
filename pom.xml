@@ -3,13 +3,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.greeneyed</groupId>
   <artifactId>epl_librarian</artifactId>
-  <version>1.17.32-SNAPSHOT</version>
+  <version>1.17.32</version>
   <packaging>jar</packaging>
   <name>EPL Librarian</name>
   <description>EPL Librarian</description>
   <scm>
     <developerConnection>scm:git:https://github.com/Verdoso/${project.artifactId}</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v1.17.32</tag>
   </scm>
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -55,7 +55,7 @@
     <jib-maven-plugin.version>3.3.2</jib-maven-plugin.version>
     <asm.version>9.7.1</asm.version>
     <JVM_OPTS>-Xms1536M -Xmx1536M</JVM_OPTS>
-    <JAVA_OPTS></JAVA_OPTS>
+    <JAVA_OPTS />
     <docker.user>epl</docker.user>
     <docker.exposed.ports>7070</docker.exposed.ports>
     <docker.base.image>eclipse-temurin:21</docker.base.image>
