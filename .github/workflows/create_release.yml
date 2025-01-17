@@ -57,3 +57,9 @@ jobs:
         token: "${{ secrets.ACTION_TOKEN }}"
         files: |
           ./target/epl_librarian-${{ env.RELEASE_VERSION }}.zip    
+
+    - name: Create & push docker image
+      env:
+        GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
+      run: |
+        mvn -B mvn -Pdocker -Djib.to.auth.username=$DOCKER_USERNAME -Djib.from.auth.username=$DOCKER_USERNAME -Djib.from.auth.password=$DOCKER_PASSWORD -Djib.to.auth.password=$DOCKER_PASSWORD jib:build
