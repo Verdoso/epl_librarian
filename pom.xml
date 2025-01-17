@@ -27,7 +27,7 @@
     <maven-scm-plugin.version>1.9.5</maven-scm-plugin.version>
     <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
     <commons-text.version>1.4</commons-text.version>
-    <commons-io.version>2.7</commons-io.version>
+    <commons-io.version>2.14.0</commons-io.version>
     <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
     <cqengine.version>3.6.0</cqengine.version>
     <jaxb-java-time-adapters.version>1.1.3</jaxb-java-time-adapters.version>
