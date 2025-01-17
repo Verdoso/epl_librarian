@@ -12,7 +12,7 @@
   "dependencies": {
     "@mdi/font": "^5.3.45",
     "axios": "^1.7.4",
-    "bootstrap": "^4.2.1",
+    "bootstrap": "^5.0.0",
     "bottleneck": "^2.19.5",
     "buefy": "^0.9.29",
     "color-hash": "^2.0.1",
