@@ -14,9 +14,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor = @__({ @Autowired }))
 public class BasicController {
 
-	@GetMapping(value = "/")
-	public String main() {
-		return "main";
-	}
+  @GetMapping(value = "/")
+  public String main() {
+    return "main";
+  }
 
 }
