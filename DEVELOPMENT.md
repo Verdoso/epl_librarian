@@ -17,7 +17,7 @@ mvn -DskipTests -Dassembly.skipAssembly=true -Pnative native:compile
 ```
 
 ## Para generar la imagen docker
-Para generar la imagen docker podemos crear una imagen en local, para lo cual necesitamos tener docker instalado en nuestra maquina, o podemos cargar una imagen docker directamente en un registro de docker remoto (por defecto docker.io). Lo que necesitamos en todo caso es un usuario/clave del registro del que obtendremos la imagen base (por defecto ahora eclipse-temurin:21) y al que subiremos la imagen resultado, en caso de que eso sea lo que queremos hacer. El usuario y la clave del registro se pasan como propiedades de maven, así que podemos hacer algo así como:
+Para generar la imagen docker podemos crear una imagen en local, para lo cual necesitamos tener docker instalado en nuestra maquina, o podemos cargar una imagen docker directamente en un registro de docker remoto (por defecto docker.io). Igualmente, hará falta un usuario/clave del registro del que obtendremos la imagen base (por defecto ahora eclipse-temurin:21) y al que subiremos la imagen resultado, en caso de que eso sea lo que queremos hacer. El usuario y la clave del registro se pasan como propiedades de maven, así que podemos hacer algo así como:
 
 ### Para construir la imagen desde cero y subirla a nuestro docker local
 ```
