@@ -62,4 +62,4 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
       run: |
-        mvn -B -Pdocker -Djib.to.auth.username=${{ secrets.DOCKER_USERNAME}} -Djib.from.auth.username=${{ secrets.DOCKER_USERNAME }} -Djib.from.auth.password=${{ secrets.DOCKER_PASSWORD }} -Djib.to.auth.password=${{ secrets.DOCKER_PASSWORD }}jib:build
+        mvn -B -Pdocker -Djib.to.auth.username=${{ secrets.DOCKER_USERNAME}} -Djib.from.auth.username=${{ secrets.DOCKER_USERNAME }} -Djib.from.auth.password=${{ secrets.DOCKER_PASSWORD }} -Djib.to.auth.password=${{ secrets.DOCKER_PASSWORD }} jib:build
