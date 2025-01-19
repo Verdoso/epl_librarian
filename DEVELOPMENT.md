@@ -21,7 +21,7 @@ Para generar la imagen docker podemos crear una imagen en local, para lo cual ne
 
 ### Para construir la imagen desde cero y subirla a nuestro docker local
 ```
-mvn -Pdeployment -Pdocker -Djib.from.auth.username=usuario_del_registro -Djib.from.auth.password=password_del_registro compile jib:dockerBuild
+mvn -Pdeployment -Pdocker -Djib.from.auth.username=usuario_del_registro -Djib.from.auth.password=password_del_registro -Djib.to.auth.username=usuario_del_registro -Djib.to.auth.password=password_del_registro compile jib:dockerBuild
 ```
 
 ### Para construir la imagen desde cero y subirla al registro remoto
