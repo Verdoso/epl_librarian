@@ -92,36 +92,40 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
   }
 
   private void abrirEnNavegador() {
-    boolean inDocker = isRunningInsideDocker();
-    if (!inDocker && !environment.acceptsProfiles(Profiles.of("devel", "test"))) {
+    if (!environment.acceptsProfiles(Profiles.of("devel", "test"))) {
       try {
         final URI appURI = new URI("http://localhost:" + environment.getProperty("local.server.port") + "/librarian/");
-        try {
-          Desktop.getDesktop()
-              .browse(appURI);
-        } catch (java.awt.HeadlessException | java.awt.AWTError e) {
-          if (isUnix()) {
-            try {
-              log.info("Abriendo el navegador a través del shell");
-              ProcessBuilder builder = new ProcessBuilder("bash", "-c", "./open_browser.sh " + appURI.toString());
-              Process process = builder.start();
-              process.waitFor(10, TimeUnit.SECONDS);
-              // process.destroy();
-              if (process.exitValue() != 0) {
-                String result = new String(process.getInputStream()
-                    .readAllBytes());
-                String errorResult = new String(process.getErrorStream()
-                    .readAllBytes());
-                log.warn("Proceso de apertura termino con codigo {}. \n Output: {}\n Error: {}", process.exitValue(), result, errorResult);
-                log.warn("El sistema es Headless y no se puede abrir el navegador automaticamente. La dirección para acceder es {}", appURI);
+        boolean inDocker = isRunningInsideDocker();
+        if (!inDocker) {
+          try {
+            Desktop.getDesktop()
+                .browse(appURI);
+          } catch (java.awt.HeadlessException | java.awt.AWTError e) {
+            if (isUnix()) {
+              try {
+                log.info("Abriendo el navegador a través del shell");
+                ProcessBuilder builder = new ProcessBuilder("bash", "-c", "./open_browser.sh " + appURI.toString());
+                Process process = builder.start();
+                process.waitFor(10, TimeUnit.SECONDS);
+                // process.destroy();
+                if (process.exitValue() != 0) {
+                  String result = new String(process.getInputStream()
+                      .readAllBytes());
+                  String errorResult = new String(process.getErrorStream()
+                      .readAllBytes());
+                  log.warn("Proceso de apertura termino con codigo {}. \n Output: {}\n Error: {}", process.exitValue(), result, errorResult);
+                  log.warn("El sistema es Headless y no se puede abrir el navegador automaticamente. La dirección para acceder es {}", appURI);
+                }
+              } catch (Exception e2) {
+                log.warn("El sistema es Headless y fallo al intentar abrir el navegador automaticamente ( {} ). La dirección para acceder es {}",
+                    e2.getMessage(), appURI);
               }
-            } catch (Exception e2) {
-              log.warn("El sistema es Headless y fallo al intentar abrir el navegador automaticamente ( {} ). La dirección para acceder es {}",
-                  e2.getMessage(), appURI);
+            } else {
+              log.warn("El sistema es Headless, no se puede abrir el navegador automaticamente. La dirección para acceder es {}", appURI);
             }
-          } else {
-            log.warn("El sistema es Headless, no se puede abrir el navegador automaticamente. La dirección para acceder es {}", appURI);
           }
+        } else {
+          log.warn("Desde docker no se puede abrir el navegador automaticamente. La dirección para acceder es {}", appURI);
         }
       } catch (Exception e) {
         log.error("Error abriendo navegador autom\u00e1ticamente", e);
