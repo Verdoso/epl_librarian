@@ -3,9 +3,12 @@ package org.greeneyed.epl.librarian.services;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 import org.greeneyed.epl.librarian.services.EplCSVProcessor.UpdateSpec;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,7 +92,8 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
   }
 
   private void abrirEnNavegador() {
-    if (!environment.acceptsProfiles(Profiles.of("devel", "test"))) {
+    boolean inDocker = isRunningInsideDocker();
+    if (!inDocker && !environment.acceptsProfiles(Profiles.of("devel", "test"))) {
       try {
         final URI appURI = new URI("http://localhost:" + environment.getProperty("local.server.port") + "/librarian/");
         try {
@@ -123,6 +127,18 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
         log.error("Error abriendo navegador autom\u00e1ticamente", e);
       }
     }
+  }
+
+  private static Boolean isRunningInsideDocker() {
+    boolean inDocker = false;
+    if (isUnix()) {
+      try (Stream<String> stream = Files.lines(Paths.get("/proc/1/cgroup"))) {
+        inDocker = stream.anyMatch(line -> line.contains("/docker"));
+      } catch (IOException e) {
+        inDocker = false;
+      }
+    }
+    return inDocker;
   }
 
   private UpdateSpec comprobarActualizacionAutomatica(UpdateSpec updateSpec) {
