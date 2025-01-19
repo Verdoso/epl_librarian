@@ -60,6 +60,7 @@
     <docker.exposed.ports>7070</docker.exposed.ports>
     <docker.base.image>eclipse-temurin:21</docker.base.image>
     <registry.url>docker.io</registry.url>
+    <dollar>$</dollar>
   </properties>
 
   <dependencies>
