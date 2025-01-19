@@ -637,7 +637,9 @@
               <container>
                 <ports>${docker.exposed.ports}</ports>
                 <creationTime>${git.commit.time}</creationTime>
+                <!--
                 <user>${docker.user}</user>
+                -->
                 <entrypoint>
                   <arg>/bin/sh</arg>
                   <arg>-c</arg>
