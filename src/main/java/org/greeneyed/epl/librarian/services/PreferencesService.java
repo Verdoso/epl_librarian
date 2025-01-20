@@ -3,7 +3,9 @@ package org.greeneyed.epl.librarian.services;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -18,13 +20,14 @@ import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import jakarta.annotation.PostConstruct;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,10 +35,12 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 @Slf4j
 @Service
-public class PreferencesService {
+public class PreferencesService implements EnvironmentAware {
 
   @Value("${superportable:false}")
   private boolean superPortable;
+
+  private Environment environment;
 
   static final String IDIOMAS_PREFERIDOS_KEY = "idiomas_preferidos";
   static final String LIBROS_DESCARTADOS_KEY = "libros_descartados";
@@ -62,8 +67,8 @@ public class PreferencesService {
   private final Set<Integer> librosDescartados = new HashSet<>();
 
   @PostConstruct
-  public void postConstruct() {
-    preferencesFile = findPreferencesFile(superPortable);
+  public void postConstruct() throws IOException {
+    preferencesFile = findPreferencesFile(superPortable, environment);
     log.info("Leyendo preferencias desde {}", preferencesFile.getAbsolutePath());
     if (preferencesFile.exists()) {
       leerYCargarPreferencias();
@@ -310,9 +315,29 @@ public class PreferencesService {
     }
   }
 
-  public static File findPreferencesFile(boolean superPortable) {
-    return new File(
-        String.join(File.separator, System.getProperty(superPortable ? "user.dir" : "user.home"), ".librarian", "preferences.properties"));
+  public static File findPreferencesFile(boolean superPortable,
+      Environment environment) throws IOException {
+    // Si nos estamos ejecutando dentro de docker, entonces el directorio de
+    // preferencias está fijado para que el usuario lo pueda mapear con un volumen
+    // al arrancar
+    if (DataLoaderService.isRunningInsideDocker(environment)) {
+      final Path preferencesPath = Path.of("/preferences");
+      File preferencesDirectory = preferencesPath.toFile();
+      if (preferencesDirectory.isDirectory() && preferencesDirectory.canWrite()) {
+        return preferencesPath.resolve(".librarian")
+            .resolve("preferences.properties")
+            .toFile();
+      } else {
+        throw new IOException(
+            """
+                Para poder guardar las preferencias en docker es necesario mapear el directorio /preferences al directorio donde se deseen a almacenar la preferencias
+                """);
+      }
+
+    } else {
+      return new File(
+          String.join(File.separator, System.getProperty(superPortable ? "user.dir" : "user.home"), ".librarian", "preferences.properties"));
+    }
   }
 
   public Optional<LocalDate> getFechaBase() {

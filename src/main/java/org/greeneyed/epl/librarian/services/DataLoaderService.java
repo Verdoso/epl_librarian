@@ -133,7 +133,7 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
     }
   }
 
-  private static Boolean isRunningInsideDocker(Environment environment) {
+  static Boolean isRunningInsideDocker(Environment environment) {
     boolean inDocker = false;
     if (environment.acceptsProfiles(Profiles.of("docker"))) {
       inDocker = true;
