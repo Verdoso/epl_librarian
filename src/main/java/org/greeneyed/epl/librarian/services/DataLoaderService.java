@@ -138,11 +138,11 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
     if (environment.acceptsProfiles(Profiles.of("docker"))) {
       inDocker = true;
     } else if (isUnix()) {
-        try (Stream<String> stream = Files.lines(Paths.get("/proc/1/cgroup"))) {
-          inDocker = stream.anyMatch(line -> line.contains("/docker"));
-        } catch (IOException e) {
-          inDocker = false;
-        }
+      try (Stream<String> stream = Files.lines(Paths.get("/proc/1/cgroup"))) {
+        inDocker = stream.anyMatch(line -> line.contains("/docker"));
+      } catch (IOException e) {
+        inDocker = false;
+      }
     }
     return inDocker;
   }
