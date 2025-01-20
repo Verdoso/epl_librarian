@@ -197,17 +197,21 @@ public class PreferencesService implements EnvironmentAware {
     File calibre = null;
     readLock.lock();
     try {
-      if (preferences.containsKey(CALIBRE_HOME_KEY)) {
+      // Si nos estamos ejecutando dentro de docker, entonces el directorio del
+      // calibre lo sacamos del mapeo que haya hecho el usuario al volumen /calibre
+      if (DataLoaderService.isRunningInsideDocker(environment)) {
+        final Path calibreHomePath = Path.of("/calibre");
+        File calibreHome = calibreHomePath.toFile();
+        if (calibreHome.exists() && calibreHome.isDirectory()) {
+          calibre = comprobarBDDCalibre(calibreHome);
+        } else {
+          log.warn("No existe directorio mapeado para la configuración del calibre: {}. Ignoraremos la configuraci\u00f3n de calibre",
+              calibreHome.getAbsolutePath());
+        }
+      } else if (preferences.containsKey(CALIBRE_HOME_KEY)) {
         File temp = new File(preferences.getProperty(CALIBRE_HOME_KEY));
         if (temp.exists() && temp.isDirectory()) {
-          File bddCalibre = new File(temp, "metadata.db");
-          if (bddCalibre.exists() && bddCalibre.isFile() && bddCalibre.canRead()) {
-            calibre = bddCalibre;
-            log.info("Base de datos de Calibre encontrada correctamente: {}", bddCalibre.getAbsolutePath());
-          } else {
-            log.error("La BDD no se encuentra en el directorio especificado o no es legible: {}. Ignoraremos la configuraci\u00f3n de calibre",
-                bddCalibre.getAbsolutePath());
-          }
+          calibre = comprobarBDDCalibre(temp);
         } else {
           log.error("El directorio especificado no existe: {}. Ignoraremos la configuraci\u00f3n de calibre", temp.getAbsolutePath());
         }
@@ -216,6 +220,19 @@ public class PreferencesService implements EnvironmentAware {
       readLock.unlock();
     }
     return Optional.ofNullable(calibre);
+  }
+
+  private File comprobarBDDCalibre(File temp) {
+    File calibre = null;
+    File bddCalibre = new File(temp, "metadata.db");
+    if (bddCalibre.exists() && bddCalibre.isFile() && bddCalibre.canRead()) {
+      calibre = bddCalibre;
+      log.info("Base de datos de Calibre encontrada correctamente: {}", bddCalibre.getAbsolutePath());
+    } else {
+      log.error("La BDD no se encuentra en el directorio especificado o no es legible: {}. Ignoraremos la configuraci\u00f3n de calibre",
+          bddCalibre.getAbsolutePath());
+    }
+    return calibre;
   }
 
   public void setDescarte(Integer libroId,
