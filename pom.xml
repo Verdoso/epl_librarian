@@ -56,7 +56,7 @@
     <asm.version>9.7.1</asm.version>
     <JVM_OPTS>-Xms1536M -Xmx1536M</JVM_OPTS>
     <JAVA_OPTS />
-    <docker.user>65534</docker.user>
+    <docker.user>epl</docker.user>
     <docker.exposed.ports>7070</docker.exposed.ports>
     <docker.base.image>eclipse-temurin:21</docker.base.image>
     <registry.url>docker.io</registry.url>
@@ -638,7 +638,9 @@
               <container>
                 <ports>${docker.exposed.ports}</ports>
                 <creationTime>${git.commit.time}</creationTime>
+                <!--
                 <user>${docker.user}</user>
+                -->
                 <entrypoint>
                   <arg>/bin/sh</arg>
                   <arg>-c</arg>
