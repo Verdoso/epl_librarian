@@ -15,6 +15,11 @@ Repositorio para una mini-aplicación para consultar localmente el catálogo de 
 
 ## Para ejecutar
 
+Para ejecutar EPL Librarian hay tres formas de hacerlo:
+* La versión Java multiplataforma, que sirve para cualquier S.O. con Java instalado.
+* La versión nativa para Windows, para aquellos usuarios de Windows que no quieran tener que instalarse Java y prefiera un simple ejecutable.
+* La versión docker, para los más frikis del lugar que tengan Docker instalado y no quieran tener que descargarse manualmente ningún fichero.
+
 ### Versión Java multiplataforma
 Esta versión sirve para cualquier S.O. y es la que hay que usar, de momento, en Linux o MacOS.
 
@@ -34,8 +39,23 @@ Esta versión se puede ejecutar en Windows 10 sin que haga falta tener Java inst
 #### Ejecución
 Descargar el fichero epl_librarian-\*.\*.\*-Windows.zip, descomprimirlo en un directorio sin espacios y ejecutar el fichero .exe que contiene. Seguramente al ejecutar por primera vez una versión, Windows nos dirá que es un fichero sin editor conocido y tengamos que darle permisos para ejecutarlo y para acceder a la red. Le damos permisos y ya está, no tendremos que volver a dárselos.
 
+### Versión docker
+Esta versión se puede ejecutar desde cualquier cliente que tenga Docker instalado, independientemente del S.O.
+
+#### Requisitos
+* Cliente docker instalado
+
+#### Ejecución
+Primero hay que decidir donde queremos almacenar las preferencias, ya que si las almacenaramos dentro del contenedor docker se perderían cada vez que iniciáramos un nuevo contenedor. Ese directorio para las preferencias lo mapearemos como volumen a `/preferences`. Después, opcionalmente, si queremos la integración Calibre tenemos que mapear el volumen `/calibre` al directorio donde tengamos almacenados los libros. Una vez decidido esto, ejecutamos un contenedor con la imagen `verdoso/epl_librarian:version_a_ejecutar` que mapee el puerto `7070` al puerto donde queramos acceder a nuestra aplicación y con los volumenes mencionados anteriormente.
+
+Por ejemplo: Estando en Windows y queriendo las preferencias en el directorio %HOME% y teniendo la libreria de Calibre en D:\libreria_calibre, podriamos usar un comando tal que así:
+
+```
+docker run --rm -p 7070:7070 -v %HOME%:/preferences -v D:\libreria_calibre:/calibre verdoso/epl_librarian:1.17.34
+```
+
 ### Acceder a la aplicación
-En cualquiera de las versiones, al acabar de preparar el catalogo (aparece en el log el mensaje `EPL Librarian inicializado`), debería abrirse automáticamente una ventana del navegador apuntando a la direccion http://localhost:7070/librarian/, si no es así tendremos que escribirla nosotros en un navegador para acceder.
+En cualquiera de las versiones, al acabar de preparar el catalogo (aparece en el log el mensaje `EPL Librarian inicializado`), debería abrirse automáticamente una ventana del navegador apuntando a la direccion http://localhost:7070/librarian/, si no es así (como por ejemplo al ejecutar desde Docker o en Linux) tendremos que escribirla nosotros en un navegador para acceder.
 
 ## Actualizaciones de ePubLlibre
 Hay que tener en cuenta que:
