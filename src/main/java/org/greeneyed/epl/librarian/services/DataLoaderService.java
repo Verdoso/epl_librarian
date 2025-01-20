@@ -95,7 +95,7 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
     if (!environment.acceptsProfiles(Profiles.of("devel", "test"))) {
       try {
         final URI appURI = new URI("http://localhost:" + environment.getProperty("local.server.port") + "/librarian/");
-        boolean inDocker = isRunningInsideDocker();
+        boolean inDocker = isRunningInsideDocker(environment);
         if (!inDocker) {
           try {
             Desktop.getDesktop()
@@ -133,14 +133,16 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
     }
   }
 
-  private static Boolean isRunningInsideDocker() {
+  private static Boolean isRunningInsideDocker(Environment environment) {
     boolean inDocker = false;
-    if (isUnix()) {
-      try (Stream<String> stream = Files.lines(Paths.get("/proc/1/cgroup"))) {
-        inDocker = stream.anyMatch(line -> line.contains("/docker"));
-      } catch (IOException e) {
-        inDocker = false;
-      }
+    if (environment.acceptsProfiles(Profiles.of("docker"))) {
+      inDocker = true;
+    } else if (isUnix()) {
+        try (Stream<String> stream = Files.lines(Paths.get("/proc/1/cgroup"))) {
+          inDocker = stream.anyMatch(line -> line.contains("/docker"));
+        } catch (IOException e) {
+          inDocker = false;
+        }
     }
     return inDocker;
   }
