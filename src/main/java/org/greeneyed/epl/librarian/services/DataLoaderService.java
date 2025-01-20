@@ -116,7 +116,7 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
                   log.warn("Proceso de apertura termino con codigo {}. \n Output: {}\n Error: {}", process.exitValue(), result, errorResult);
                   log.warn("El sistema es Headless y no se puede abrir el navegador automaticamente. La dirección para acceder es {}", appURI);
                 }
-              } catch (Exception e2) {
+              } catch (Exception | Error e2) {
                 log.warn("El sistema es Headless y fallo al intentar abrir el navegador automaticamente ( {} ). La dirección para acceder es {}",
                     e2.getMessage(), appURI);
               }
