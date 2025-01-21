@@ -338,16 +338,15 @@ public class PreferencesService implements EnvironmentAware {
     // preferencias está fijado para que el usuario lo pueda mapear con un volumen
     // al arrancar
     if (DataLoaderService.isRunningInsideDocker(environment)) {
-      final Path preferencesPath = Path.of("/preferences");
+      final Path preferencesPath = Path.of("/librarian");
       File preferencesDirectory = preferencesPath.toFile();
       if (preferencesDirectory.isDirectory() && preferencesDirectory.canWrite()) {
-        return preferencesPath.resolve(".librarian")
-            .resolve("preferences.properties")
+        return preferencesPath.resolve("preferences.properties")
             .toFile();
       } else {
         throw new IOException(
             """
-                Para poder guardar las preferencias en docker es necesario mapear el directorio /preferences al directorio donde se deseen a almacenar la preferencias
+                Para poder guardar las preferencias en docker es necesario mapear el directorio /librarian al directorio donde se deseen a almacenar la preferencias
                 """);
       }
 

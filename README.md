@@ -46,12 +46,12 @@ Esta versión se puede ejecutar desde cualquier cliente que tenga Docker instala
 * Cliente docker instalado
 
 #### Ejecución
-Primero hay que decidir donde queremos almacenar las preferencias, ya que si las almacenaramos dentro del contenedor docker se perderían cada vez que iniciáramos un nuevo contenedor. Ese directorio para las preferencias lo mapearemos como volumen a `/preferences`. Después, opcionalmente, si queremos la integración Calibre tenemos que mapear el volumen `/calibre` al directorio donde tengamos almacenados los libros. Una vez decidido esto, ejecutamos un contenedor con la imagen `verdoso/epl_librarian:version_a_ejecutar` que mapee el puerto `7070` al puerto donde queramos acceder a nuestra aplicación y con los volumenes mencionados anteriormente.
+Primero hay que decidir donde queremos almacenar las preferencias, ya que si las almacenaramos dentro del contenedor docker se perderían cada vez que iniciáramos un nuevo contenedor. Ese directorio para las preferencias lo mapearemos como volumen a `/librarian`. Después, opcionalmente, si queremos la integración Calibre tenemos que mapear el volumen `/calibre` al directorio donde tengamos almacenados los libros. Una vez decidido esto, ejecutamos un contenedor con la imagen `verdoso/epl_librarian:version_a_ejecutar` que mapee el puerto `7070` al puerto donde queramos acceder a nuestra aplicación y con los volumenes mencionados anteriormente.
 
 Por ejemplo: Estando en Windows y queriendo las preferencias en el directorio %HOME% y teniendo la libreria de Calibre en D:\libreria_calibre, podriamos usar un comando tal que así:
 
 ```
-docker run --rm -p 7070:7070 -v %HOME%:/preferences -v D:\libreria_calibre:/calibre verdoso/epl_librarian:1.17.34
+docker run --rm -p 7070:7070 -v %HOME%\.librarian:/librarian -v D:\libreria_calibre:/calibre verdoso/epl_librarian:1.17.34
 ```
 
 ### Acceder a la aplicación
