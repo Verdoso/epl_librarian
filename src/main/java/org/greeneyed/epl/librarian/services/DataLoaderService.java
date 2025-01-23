@@ -98,6 +98,7 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
         boolean inDocker = isRunningInsideDocker(environment);
         if (!inDocker) {
           try {
+            log.info("Abriendo navegador en {}", appURI.toString());
             Desktop.getDesktop()
                 .browse(appURI);
           } catch (java.awt.HeadlessException | java.awt.AWTError e) {
