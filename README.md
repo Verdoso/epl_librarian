@@ -46,13 +46,21 @@ Esta versión se puede ejecutar desde cualquier cliente que tenga Docker instala
 * Cliente docker instalado
 
 #### Ejecución
-Primero hay que decidir donde queremos almacenar las preferencias, ya que si las almacenaramos dentro del contenedor docker se perderían cada vez que iniciáramos un nuevo contenedor. Ese directorio para las preferencias lo mapearemos como volumen a `/librarian`. Después, opcionalmente, si queremos la integración Calibre tenemos que mapear el volumen `/calibre` al directorio donde tengamos almacenados los libros. Una vez decidido esto, ejecutamos un contenedor con la imagen `verdoso/epl_librarian:version_a_ejecutar` que mapee el puerto `7070` al puerto donde queramos acceder a nuestra aplicación y con los volumenes mencionados anteriormente.
+Primero hay que decidir donde queremos almacenar las preferencias y los ficheros temporales, ya que si almacenaramos los ficheros dentro del contenedor docker se perderían cada vez que iniciáramos un nuevo contenedor. Ese directorio para las preferencias y los temporales lo mapearemos como volumen a `/librarian`. Después, opcionalmente, si queremos la integración con Calibre tenemos que mapear el volumen `/calibre` al directorio donde tengamos almacenados los libros. Una vez decidido esto, ejecutamos un contenedor con la imagen `verdoso/epl_librarian:version_a_ejecutar` que mapee el puerto `7070` al puerto donde queramos acceder a nuestra aplicación y con los volumenes mencionados anteriormente.
 
-Por ejemplo: Estando en Windows y queriendo las preferencias en el directorio %HOME% y teniendo la libreria de Calibre en D:\libreria_calibre, podriamos usar un comando tal que así:
+Por ejemplo: Estando en Windows y queriendo las preferencias y los directorios en el directorio %HOME%\.librarian y teniendo la libreria de Calibre (metadata.db) en D:\libreria_calibre, podriamos usar un comando tal que así:
 
 ```
-docker run --rm -p 7070:7070 -v %HOME%\.librarian:/librarian -v D:\libreria_calibre:/calibre verdoso/epl_librarian:1.17.34
+docker run --rm -p 7070:7070 -v %HOME%\.librarian:/librarian -v D:\libreria_calibre:/calibre verdoso/epl_librarian:1.17.35
 ```
+
+Para utilizar cualquiera de las opciones avanzadas al ejecutar la imagen Docker, debemos pasar las  opciones como variables de entorno docker. Por ejemplo, si queremos que no intente acceder a ePubLlibre (flag -Ddescarga_epl=false en el modo Java), en el modo docker debemos añadir `-e descarga_epl=false` al comando de ejecución, y quedaría así:
+
+```
+docker run --rm -p 7070:7070 -v %HOME%\.librarian:/librarian -v D:\libreria_calibre:/calibre -e descarga_epl=false verdoso/epl_librarian:1.17.35
+```
+
+**Nota**: En docker, el modo '**superportable**' no tiene mucho sentido, así que dicha opción se ignora.
 
 ### Acceder a la aplicación
 En cualquiera de las versiones, al acabar de preparar el catalogo (aparece en el log el mensaje `EPL Librarian inicializado`), debería abrirse automáticamente una ventana del navegador apuntando a la direccion http://localhost:7070/librarian/, si no es así (como por ejemplo al ejecutar desde Docker o en Linux) tendremos que escribirla nosotros en un navegador para acceder.
