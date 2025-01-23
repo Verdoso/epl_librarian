@@ -250,7 +250,7 @@ public class EplCSVProcessor implements EnvironmentAware {
   private Path getTempDirectory() throws IOException {
     // Si estamos en docker, usamos el mismo directorio de las preferencias
     if (DataLoaderService.isRunningInsideDocker(environment)) {
-      return PreferencesService.getDockerPreferencesPath();
+      return PreferencesService.getDockerBasePath();
     } else if (superPortable) {
       final File tempDirectory = new File(System.getProperty("user.dir"), "tmp");
       tempDirectory.mkdirs();

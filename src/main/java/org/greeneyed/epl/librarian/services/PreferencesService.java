@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -333,30 +334,24 @@ public class PreferencesService implements EnvironmentAware {
   }
 
   public static File findPreferencesFile(boolean superPortable,
-      Environment environment) throws IOException {
+      Environment environment) {
     // Si nos estamos ejecutando dentro de docker, entonces el directorio de
     // preferencias está fijado para que el usuario lo pueda mapear con un volumen
     // al arrancar
     if (DataLoaderService.isRunningInsideDocker(environment)) {
-      Path preferencesPath = getDockerPreferencesPath();
-      File preferencesDirectory = preferencesPath.toFile();
-      if (preferencesDirectory.isDirectory() && preferencesDirectory.canWrite()) {
-        return preferencesPath.resolve("preferences.properties")
-            .toFile();
-      } else {
-        throw new IOException(
-            """
-                Para poder guardar las preferencias en docker es necesario mapear el directorio /librarian al directorio donde se deseen a almacenar la preferencias
-                """);
-      }
-
+      return getDockerPreferencesPath();
     } else {
       return new File(
           String.join(File.separator, System.getProperty(superPortable ? "user.dir" : "user.home"), ".librarian", "preferences.properties"));
     }
   }
 
-  public static Path getDockerPreferencesPath() {
+  private static File getDockerPreferencesPath() {
+    return getDockerBasePath().resolve("preferences.properties")
+        .toFile();
+  }
+
+  public static Path getDockerBasePath() {
     return Path.of("/librarian");
   }
 
