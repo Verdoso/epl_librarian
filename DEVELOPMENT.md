@@ -29,10 +29,6 @@ mvn -Pdeployment -Pdocker -Djib.from.auth.username=usuario_del_registro -Djib.fr
 mvn -Pdeployment -Pdocker -Djib.from.auth.username=usuario_del_registro -Djib.from.auth.password=password_del_registro -Djib.to.auth.username=usuario_del_registro -Djib.to.auth.password=password_del_registro compile jib:build
 ```
 
-### Ejecutar la imagen docker
-
-EN CONSTRUCCION
-
 ## Referencias
 
 * https://docs.spring.io/spring-boot/docs/current/reference/html/native-image.html
