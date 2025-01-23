@@ -17,7 +17,7 @@
     <ul class="nav navbar-nav ml-md-auto flex-row navbar-top-links">
       <li
         class="nav-item"
-        v-if="this.$store.state.latestVersion &amp;&amp; !this.$store.state.buildVersion.endsWith('-SNAPSHOT') &amp;&amp; this.$store.state.buildVersion != this.$store.state.latestVersion"
+        v-if="this.$store.state.latestVersion &amp;&amp; !this.$store.state.buildVersion.endsWith('-SNAPSHOT') &amp;&amp; this.$store.state.buildVersion < this.$store.state.latestVersion"
       >
         <b-button
           tag="a"
