@@ -338,7 +338,7 @@ public class PreferencesService implements EnvironmentAware {
     // preferencias está fijado para que el usuario lo pueda mapear con un volumen
     // al arrancar
     if (DataLoaderService.isRunningInsideDocker(environment)) {
-      final Path preferencesPath = Path.of("/librarian");
+      Path preferencesPath = getDockerPreferencesPath();
       File preferencesDirectory = preferencesPath.toFile();
       if (preferencesDirectory.isDirectory() && preferencesDirectory.canWrite()) {
         return preferencesPath.resolve("preferences.properties")
@@ -354,6 +354,10 @@ public class PreferencesService implements EnvironmentAware {
       return new File(
           String.join(File.separator, System.getProperty(superPortable ? "user.dir" : "user.home"), ".librarian", "preferences.properties"));
     }
+  }
+
+  public static Path getDockerPreferencesPath() {
+    return Path.of("/librarian");
   }
 
   public Optional<LocalDate> getFechaBase() {

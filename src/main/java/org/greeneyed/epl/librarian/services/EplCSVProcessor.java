@@ -60,7 +60,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.opencsv.bean.ColumnPositionMappingStrategy;
@@ -69,15 +71,19 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 import lombok.Data;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @Service
 @Slf4j
-public class EplCSVProcessor {
+public class EplCSVProcessor implements EnvironmentAware {
 
   @Value("${superportable:false}")
   private boolean superPortable;
+
+  @Setter
+  private Environment environment;
 
   private static final String BACKUP_FILES_PREFIX = "Libros";
   private static final String BACKUP_FILES_SUFFIX = ".epl_bck";
@@ -242,7 +248,11 @@ public class EplCSVProcessor {
   }
 
   private Path getTempDirectory() throws IOException {
-    if (superPortable) {
+    // Si estamos en docker, usamos el mismo directorio de las preferencias
+    if (DataLoaderService.isRunningInsideDocker(environment)) {
+      return PreferencesService.getDockerPreferencesPath();
+    }
+    else if (superPortable) {
       final File tempDirectory = new File(System.getProperty("user.dir"), "tmp");
       tempDirectory.mkdirs();
       return tempDirectory.toPath();
