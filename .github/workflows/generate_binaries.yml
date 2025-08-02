@@ -28,7 +28,7 @@ jobs:
 #          - os: macos-latest
 #            executable-suffix: ''
 #            native-build-args: '-J-Xmx10g'
-          - os: windows-2019
+          - os: windows-2025
             executable-suffix: '.exe'
             native-build-args: '-J-Xmx10g'
     steps:
