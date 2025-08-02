@@ -291,6 +291,7 @@ public class BibliotecaService {
           .autores(numAutores)
           .generos(numGeneros)
           .idiomas(numIdiomas)
+          .miniaturasEnTabla(preferencesService.thumbnailsInMain())
           .integracionCalibreHabilitada(calibreService.isEnabled())
           .build();
     }

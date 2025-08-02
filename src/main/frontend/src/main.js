@@ -46,7 +46,13 @@ const store = new Vuex.Store({
   idiomafilter: '',
   buildVersion: null,
   latestVersion: null,
-  calibreIntegration: false
+  calibreIntegration: false,
+  miniaturasEnTabla: false,
+  },
+  getters: {
+    miniaturasEnTabla (state) {
+      return state.miniaturasEnTabla;
+    }
   },
   mutations: {
     markUpdate (state) {
@@ -69,6 +75,9 @@ const store = new Vuex.Store({
     },
     changeCalibreIntegration (state,integration) {
       state.calibreIntegration = integration
+    },
+    changeMiniaturasEnTabla (state,newMiniaturasEnTabla) {
+      state.miniaturasEnTabla = newMiniaturasEnTabla
     },
     changeIdiomaFilter (state,newFilter) {
       state.idiomafilter = newFilter

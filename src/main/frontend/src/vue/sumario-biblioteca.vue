@@ -72,6 +72,7 @@ export default {
             this.$store.commit("changeVersion", this.sumario.buildVersion);
             this.$store.commit("changeLatestVersion", this.sumario.latestVersion);
             this.$store.commit("changeCalibreIntegration", this.sumario.integracionCalibreHabilitada);
+            this.$store.commit("changeMiniaturasEnTabla", this.sumario.miniaturasEnTabla);            
           })
          .catch(e => {
              this.$buefy.notification.open({

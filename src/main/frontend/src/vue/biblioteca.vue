@@ -20,7 +20,6 @@
         </b-datepicker>
       </b-field>      
     </div>
-        
     <b-table
       ref="table"
       :data="data"
@@ -46,6 +45,19 @@
       @sort="onSort"
       striped
     >
+      <b-table-column
+        field="POR_TITULO"
+        width="10%"
+        :visible="miniaturasEnTabla"
+      >
+        <template  v-slot="props">
+          <figure class="media-left">
+            <p class="image">
+                <img :src="props.row | toPortada">
+            </p>
+          </figure>
+        </template>
+      </b-table-column>
       <b-table-column
         field="POR_TITULO"
         label="Titulo"
@@ -340,8 +352,13 @@ export default {
       soloNoEnPropiedad: false,
       ocultarDescartados: false,
       fechaBase: null,
-      timeAgo: new TimeAgo('es-ES')
+      timeAgo: new TimeAgo('es-ES'),
     };
+  },
+  computed: {
+    miniaturasEnTabla: function() {
+      return this.$store.getters.miniaturasEnTabla;
+    },
   },
   methods: {
     /*

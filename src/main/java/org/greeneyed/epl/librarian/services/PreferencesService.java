@@ -51,6 +51,7 @@ public class PreferencesService implements EnvironmentAware {
   static final String CALIBRE_HOME_KEY = "calibre_home";
   static final String CALIBRE_UPDATING_KEY = "calibre_update";
   static final String SKIP_VERSION_CHECK_KEY = "skip_version_check";
+  static final String THUMBNAILS_IN_MAIN_KEY = "thumbnails_in_main";
 
   private static final String ERROR_DETALLADO = "Error detallado";
 
@@ -420,6 +421,16 @@ public class PreferencesService implements EnvironmentAware {
     readLock.lock();
     try {
       final String property = preferences.getProperty(SKIP_VERSION_CHECK_KEY);
+      return Boolean.parseBoolean(property);
+    } finally {
+      readLock.unlock();
+    }
+  }
+
+  public boolean thumbnailsInMain() {
+    readLock.lock();
+    try {
+      final String property = preferences.getProperty(THUMBNAILS_IN_MAIN_KEY);
       return Boolean.parseBoolean(property);
     } finally {
       readLock.unlock();

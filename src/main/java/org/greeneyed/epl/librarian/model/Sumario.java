@@ -18,4 +18,5 @@ public class Sumario {
   private final int autores;
   private final int generos;
   private final boolean integracionCalibreHabilitada;
+  private final boolean miniaturasEnTabla;
 }
