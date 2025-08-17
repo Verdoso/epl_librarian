@@ -81,7 +81,7 @@ public class Libro {
 
   private BigDecimal volumen;
 
-  // private int anyoPublicacion;
+  private int anyoPublicacion;
 
   private String sinopsis;
 

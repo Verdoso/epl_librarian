@@ -180,7 +180,7 @@
 
       <b-table-column
         field="POR_PUBLICADO"
-        label="Publicado"
+        label="En epub."
         sortable
         width="5em"
       >
@@ -266,7 +266,7 @@
             <div class="content">
               <strong>{{ props.row.titulo }}</strong>
               -
-              <small>v.{{ props.row.revision }} - {{ props.row.paginas }} pàginas ( {{props.row.autor}} )</small>
+              <small>v.{{ props.row.revision }} - {{ props.row.paginas }} pàginas ( {{props.row.autor}} ) - Publicado en {{ props.row.anyoPublicacion }}</small>
               <hr />
               <br />
               {{props.row.sinopsis}}
