@@ -212,6 +212,7 @@ public class Libro {
 
   public static String flattenToAscii(String string) {
     if (string != null) {
+      string = string.trim();
       StringBuilder sb = new StringBuilder(string.length());
       string = Normalizer.normalize(string.toLowerCase(), Normalizer.Form.NFD);
       for (char c : string.toCharArray()) {
