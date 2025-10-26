@@ -20,6 +20,20 @@
         </b-datepicker>
       </b-field>      
     </div>
+    <div id="numero_por_pagina">
+        <b-field
+            label="Por pàgina"
+            horizontal
+        >
+            <b-select v-model="perPage" @change="cambioPorPagina">
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </b-select>
+        </b-field>      
+    </div>
     <b-table
       ref="table"
       :data="data"
@@ -478,6 +492,9 @@ export default {
       }
       this.guardarFechaBase();
     },
+    cambioPorPagina() {
+      this.loadAsyncData();
+    },
     cambioNovedades() {
       this.loadAsyncData();
     },
@@ -680,6 +697,13 @@ div.fechaBaseSelector {
 
 .onlyFilter .switch{
   margin-right: 0;
+}
+
+#numero_por_pagina {
+  float: right;
+  margin-bottom: 1em;
+  white-space: nowrap;
+  margin-left: 1em;
 }
 
 </style>
