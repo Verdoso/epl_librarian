@@ -244,7 +244,7 @@ public class BibliotecaService {
       //
       log.info("Idiomas recopilados.");
       //
-      actualizaLibrosDescartados(preferencesService.getLibrosDescartados());
+      actualizaDescartadosOcultos(preferencesService.getDescartadosOcultos());
       actualizaAutoresPreferidos(preferencesService.getAutoresPreferidos());
       actualizaIdiomasFavoritos(preferencesService.getIdiomasPreferidos());
       actualizaGenerosFavoritos(preferencesService.getGenerosPreferidos());
@@ -301,6 +301,11 @@ public class BibliotecaService {
   public Pagina<Libro> paginaLibros(BusquedaLibro busquedaLibro) {
     Pagina<Libro> pagina = new Pagina<>();
     readLock.lock();
+    preferencesService.actualizarAutoresPreferidosMarcado(busquedaLibro.isSoloAutoresFavoritos());
+    preferencesService.actualizarGenerosPreferidosMarcado(busquedaLibro.isSoloGenerosFavoritos());
+    preferencesService.actualizarIdiomasPreferidosMarcado(busquedaLibro.isSoloIdiomasFavoritos());
+    preferencesService.actualizarDescartadosOcultosMarcado(busquedaLibro.getOcultarDescartados());
+    preferencesService.actualizarSoloNoEnPropiedadMarcado(busquedaLibro.getSoloNoEnPropiedad());
     try (final ResultSet<Libro> queryResult = libreria.retrieve(busquedaLibro.getQuery(preferencesService), busquedaLibro.getQueryOptions())) {
       pagina.setTotal(queryResult.size());
       pagina.setResults(queryResult.stream()
@@ -375,7 +380,7 @@ public class BibliotecaService {
     log.info("...actualizado");
   }
 
-  public void actualizaLibrosDescartados(Set<Integer> libros) {
+  public void actualizaDescartadosOcultos(Set<Integer> libros) {
     log.info("Actualizando libros descartados...");
     writeLock.lock();
     try {

@@ -658,6 +658,21 @@ export default {
       .catch(error => {
         throw error;
       });
+    axios
+      .get("/librarian/preferences/valores_por_defecto")
+      .then(({ data }) => {
+        if (data) {
+          this.soloIdiomasFavoritos = data.idiomasPreferidosMarcado;
+          this.soloAutoresFavoritos = data.autoresPreferidosMarcado;
+          this.soloGenerosFavoritos = data.generosPreferidosMarcado;
+          this.ocultarDescartados = data.descartadosOcultosMarcado;
+          this.soloNoEnPropiedad = data.soloNoEnPropiedadMarcado;          
+        }
+        this.loadAsyncData();
+      })
+      .catch(error => {
+        throw error;
+      });    
     EventBus.$on('updatedCalibre', () => {
       this.loadAsyncData();
     });    

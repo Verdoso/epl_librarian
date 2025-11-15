@@ -82,11 +82,11 @@ public class PreferencesServiceTest {
     //
     final String descartados = "0,1,2,3,4,5,6";
     preferencesService.getPreferences()
-        .setProperty(PreferencesService.LIBROS_DESCARTADOS_KEY, descartados);
-    assertThat("Empezamos sin libros descartados", preferencesService.getLibrosDescartados()
+        .setProperty(PreferencesService.DESCARTADOS_OCULTOS_KEY, descartados);
+    assertThat("Empezamos sin libros descartados", preferencesService.getDescartadosOcultos()
         .size(), equalTo(0));
     preferencesService.cargarPreferencias();
-    assertThat("Recuperamos tantos libros descartados como hemos metido", preferencesService.getLibrosDescartados()
+    assertThat("Recuperamos tantos libros descartados como hemos metido", preferencesService.getDescartadosOcultos()
         .size(), equalTo(descartados.split(",").length));
   }
 }

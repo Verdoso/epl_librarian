@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
+import org.greeneyed.epl.librarian.controller.PreferencesAPIController.ValoresPorDefecto;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -44,9 +44,14 @@ public class PreferencesService implements EnvironmentAware {
   private Environment environment;
 
   static final String IDIOMAS_PREFERIDOS_KEY = "idiomas_preferidos";
-  static final String LIBROS_DESCARTADOS_KEY = "libros_descartados";
+  static final String IDIOMAS_PREFERIDOS_MARCADO_KEY = "idiomas_preferidos_marcado";
+  static final String DESCARTADOS_OCULTOS_KEY = "libros_descartados";
+  static final String DESCARTADOS_OCULTOS_MARCADO_KEY = "descartados_ocultos_marcado";
   static final String AUTORES_PREFERIDOS_KEY = "autores_preferidos";
+  static final String AUTORES_PREFERIDOS_MARCADO_KEY = "autores_preferidos_marcado";
   static final String GENEROS_PREFERIDOS_KEY = "generos_preferidos";
+  static final String GENEROS_PREFERIDOS_MARCADO_KEY = "generos_preferidos_marcado";
+  static final String SOLO_NO_EN_PROPIEDAD_MARCADO_KEY = "solo_no_en_propiedad_marcado";
 
   static final String CALIBRE_HOME_KEY = "calibre_home";
   static final String CALIBRE_UPDATING_KEY = "calibre_update";
@@ -64,9 +69,14 @@ public class PreferencesService implements EnvironmentAware {
   private final ReadLock readLock = lock.readLock();
 
   private final Set<String> idiomasPreferidos = new HashSet<>();
+  private Boolean idiomasPreferidosMarcado;
   private final Set<String> autoresPreferidos = new HashSet<>();
+  private Boolean autoresPreferidosMarcado;
   private final Set<String> generosPreferidos = new HashSet<>();
-  private final Set<Integer> librosDescartados = new HashSet<>();
+  private Boolean generosPreferidosMarcado;
+  private final Set<Integer> descartadosOcultos = new HashSet<>();
+  private Boolean descartadosOcultosMarcado;
+  private Boolean soloNoEnPropiedadMarcado;
 
   @PostConstruct
   public void postConstruct() throws IOException {
@@ -100,9 +110,14 @@ public class PreferencesService implements EnvironmentAware {
     writeLock.lock();
     try {
       idiomasPreferidos.addAll(leerIdiomasPreferidos(preferences));
-      librosDescartados.addAll(leerLibrosDescartados(preferences));
+      descartadosOcultos.addAll(leerDescartadosOcultos(preferences));
       autoresPreferidos.addAll(leerAutoresPreferidos(preferences));
       generosPreferidos.addAll(leerGenerosPreferidos(preferences));
+      idiomasPreferidosMarcado = Boolean.valueOf(preferences.getProperty(IDIOMAS_PREFERIDOS_MARCADO_KEY));
+      autoresPreferidosMarcado = Boolean.valueOf(preferences.getProperty(AUTORES_PREFERIDOS_MARCADO_KEY));
+      generosPreferidosMarcado = Boolean.valueOf(preferences.getProperty(GENEROS_PREFERIDOS_MARCADO_KEY));
+      descartadosOcultosMarcado = Boolean.valueOf(preferences.getProperty(DESCARTADOS_OCULTOS_MARCADO_KEY));
+      soloNoEnPropiedadMarcado = Boolean.valueOf(preferences.getProperty(SOLO_NO_EN_PROPIEDAD_MARCADO_KEY));
     } finally {
       writeLock.unlock();
     }
@@ -127,12 +142,12 @@ public class PreferencesService implements EnvironmentAware {
     return result;
   }
 
-  private Set<Integer> leerLibrosDescartados(Properties preferences) {
+  private Set<Integer> leerDescartadosOcultos(Properties preferences) {
     readLock.lock();
     Set<Integer> result = Collections.emptySet();
     try {
-      if (preferences.containsKey(LIBROS_DESCARTADOS_KEY)) {
-        result = new HashSet<>(Stream.of(preferences.getProperty(LIBROS_DESCARTADOS_KEY)
+      if (preferences.containsKey(DESCARTADOS_OCULTOS_KEY)) {
+        result = new HashSet<>(Stream.of(preferences.getProperty(DESCARTADOS_OCULTOS_KEY)
             .split(","))
             .filter(StringUtils::isNotBlank)
             .map(Integer::parseInt)
@@ -242,16 +257,111 @@ public class PreferencesService implements EnvironmentAware {
     writeLock.lock();
     try {
       if (descartado) {
-        this.librosDescartados.add(libroId);
+        this.descartadosOcultos.add(libroId);
       } else {
-        this.librosDescartados.remove(libroId);
+        this.descartadosOcultos.remove(libroId);
       }
-      preferences.setProperty(LIBROS_DESCARTADOS_KEY, this.librosDescartados.stream()
+      preferences.setProperty(DESCARTADOS_OCULTOS_KEY, this.descartadosOcultos.stream()
           .map(i -> Integer.toString(i))
           .collect(Collectors.joining(",")));
       guardarPreferencias();
     } catch (Exception e) {
       log.error("Error parseando libros descartados: {}", e.getMessage());
+      log.trace("Error detallado", e);
+    } finally {
+      writeLock.unlock();
+    }
+  }
+
+  public void actualizarIdiomasPreferidosMarcado(Boolean newIdiomasPreferidosMarcado) {
+    writeLock.lock();
+    try {
+      if (newIdiomasPreferidosMarcado != null) {
+        this.setIdiomasPreferidosMarcado(newIdiomasPreferidosMarcado);
+        preferences.setProperty(IDIOMAS_PREFERIDOS_MARCADO_KEY, newIdiomasPreferidosMarcado.toString());
+      } else {
+        this.setIdiomasPreferidosMarcado(null);
+        preferences.remove(IDIOMAS_PREFERIDOS_MARCADO_KEY);
+      }
+      guardarPreferencias();
+    } catch (Exception e) {
+      log.error("Error almacenando idiomas marcado por defecto: {}", e.getMessage());
+      log.trace("Error detallado", e);
+    } finally {
+      writeLock.unlock();
+    }
+  }
+
+  public void actualizarAutoresPreferidosMarcado(Boolean newAutoresPreferidosMarcado) {
+    writeLock.lock();
+    try {
+      if (newAutoresPreferidosMarcado != null) {
+        this.setAutoresPreferidosMarcado(newAutoresPreferidosMarcado);
+        preferences.setProperty(AUTORES_PREFERIDOS_MARCADO_KEY, newAutoresPreferidosMarcado.toString());
+      } else {
+        this.setAutoresPreferidosMarcado(null);
+        preferences.remove(AUTORES_PREFERIDOS_MARCADO_KEY);
+      }
+      guardarPreferencias();
+    } catch (Exception e) {
+      log.error("Error almacenando autores marcado por defecto: {}", e.getMessage());
+      log.trace("Error detallado", e);
+    } finally {
+      writeLock.unlock();
+    }
+  }
+
+  public void actualizarGenerosPreferidosMarcado(Boolean newGenerosPreferidosMarcado) {
+    writeLock.lock();
+    try {
+      if (newGenerosPreferidosMarcado != null) {
+        this.setGenerosPreferidosMarcado(newGenerosPreferidosMarcado);
+        preferences.setProperty(GENEROS_PREFERIDOS_MARCADO_KEY, newGenerosPreferidosMarcado.toString());
+      } else {
+        this.setGenerosPreferidosMarcado(null);
+        preferences.remove(GENEROS_PREFERIDOS_MARCADO_KEY);
+      }
+      guardarPreferencias();
+    } catch (Exception e) {
+      log.error("Error almacenando generos marcado por defecto: {}", e.getMessage());
+      log.trace("Error detallado", e);
+    } finally {
+      writeLock.unlock();
+    }
+  }
+
+  public void actualizarDescartadosOcultosMarcado(Boolean newDescartadosOcultosMarcado) {
+    writeLock.lock();
+    try {
+      if (newDescartadosOcultosMarcado != null) {
+        this.setDescartadosOcultosMarcado(newDescartadosOcultosMarcado);
+        preferences.setProperty(DESCARTADOS_OCULTOS_MARCADO_KEY, newDescartadosOcultosMarcado.toString());
+      } else {
+        this.setDescartadosOcultosMarcado(null);
+        preferences.remove(DESCARTADOS_OCULTOS_MARCADO_KEY);
+      }
+      guardarPreferencias();
+    } catch (Exception e) {
+      log.error("Error almacenando descartar ocultos marcado por defecto: {}", e.getMessage());
+      log.trace("Error detallado", e);
+    } finally {
+      writeLock.unlock();
+    }
+  }
+
+  public void actualizarSoloNoEnPropiedadMarcado(Boolean newSoloNoEnPropiedadMarcado) {
+    writeLock.lock();
+    try {
+      if (newSoloNoEnPropiedadMarcado != null) {
+        this.setSoloNoEnPropiedadMarcado(newSoloNoEnPropiedadMarcado);
+        preferences.setProperty(SOLO_NO_EN_PROPIEDAD_MARCADO_KEY, newSoloNoEnPropiedadMarcado.toString());
+      } else {
+        this.setSoloNoEnPropiedadMarcado(null);
+        preferences.remove(SOLO_NO_EN_PROPIEDAD_MARCADO_KEY);
+      }
+      guardarPreferencias();
+    } catch (Exception e) {
+      log.error("Error almacenando solo los que tengo marcado por defecto: {}", e.getMessage());
       log.trace("Error detallado", e);
     } finally {
       writeLock.unlock();
@@ -432,6 +542,15 @@ public class PreferencesService implements EnvironmentAware {
     try {
       final String property = preferences.getProperty(THUMBNAILS_IN_MAIN_KEY);
       return Boolean.parseBoolean(property);
+    } finally {
+      readLock.unlock();
+    }
+  }
+
+  public ValoresPorDefecto getValoresPorDefecto() {
+    readLock.lock();
+    try {
+      return new ValoresPorDefecto(idiomasPreferidosMarcado, autoresPreferidosMarcado, generosPreferidosMarcado, descartadosOcultosMarcado, soloNoEnPropiedadMarcado);
     } finally {
       readLock.unlock();
     }

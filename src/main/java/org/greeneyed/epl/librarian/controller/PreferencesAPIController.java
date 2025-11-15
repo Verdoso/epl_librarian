@@ -2,6 +2,7 @@ package org.greeneyed.epl.librarian.controller;
 
 import java.time.Instant;
 import java.time.ZoneId;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.greeneyed.epl.librarian.services.BibliotecaService;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -29,6 +32,22 @@ public class PreferencesAPIController {
 
   private final PreferencesService preferencesService;
   private final BibliotecaService bibliotecaService;
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class ValoresPorDefecto {
+    private Boolean idiomasPreferidosMarcado;
+    private Boolean autoresPreferidosMarcado;
+    private Boolean generosPreferidosMarcado;
+    private Boolean descartadosOcultosMarcado;
+    private Boolean soloNoEnPropiedadMarcado;
+  }
+
+  @GetMapping(value = "/valores_por_defecto")
+  public ResponseEntity<ValoresPorDefecto> valoresPorDefecto() {
+    return ResponseEntity.ok(preferencesService.getValoresPorDefecto());
+  }
 
   @GetMapping(value = "/fecha_base")
   public ResponseEntity<Long> fechaBase() {
