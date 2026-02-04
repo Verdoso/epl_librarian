@@ -644,7 +644,7 @@
                 <entrypoint>
                   <arg>/bin/sh</arg>
                   <arg>-c</arg>
-                  <arg>exec java ${dollar}{JVM_OPTS:-${JVM_OPTS}} ${JAVA_OPTS} -Dspring.profiles.active=docker -cp $( cat /app/jib-classpath-file ) $( cat /app/jib-main-class-file )</arg>
+                  <arg>exec java ${dollar}{JVM_OPTS:-${JVM_OPTS}} ${JAVA_OPTS} -Dspring.profiles.active=docker -Dcan_reload_epl=true -cp $( cat /app/jib-classpath-file ) $( cat /app/jib-main-class-file )</arg>
                 </entrypoint>
                 <labels>
                   <label>v${project.version}</label>

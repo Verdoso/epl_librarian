@@ -41,6 +41,9 @@ public class PreferencesService implements EnvironmentAware {
   @Value("${superportable:false}")
   private boolean superPortable;
 
+  @Value("${can_reload_epl:false}")
+  private boolean reloadEPLEnabled;
+
   private Environment environment;
 
   static final String IDIOMAS_PREFERIDOS_KEY = "idiomas_preferidos";
@@ -57,6 +60,7 @@ public class PreferencesService implements EnvironmentAware {
   static final String CALIBRE_UPDATING_KEY = "calibre_update";
   static final String SKIP_VERSION_CHECK_KEY = "skip_version_check";
   static final String THUMBNAILS_IN_MAIN_KEY = "thumbnails_in_main";
+  static final String CAN_RELOAD_FROM_EPL = "can_reload_epl";
 
   private static final String ERROR_DETALLADO = "Error detallado";
 
@@ -542,6 +546,16 @@ public class PreferencesService implements EnvironmentAware {
     try {
       final String property = preferences.getProperty(THUMBNAILS_IN_MAIN_KEY);
       return Boolean.parseBoolean(property);
+    } finally {
+      readLock.unlock();
+    }
+  }
+
+  public boolean eplReloadEnabled() {
+    readLock.lock();
+    try {
+      final String property = preferences.getProperty(CAN_RELOAD_FROM_EPL);
+      return Boolean.parseBoolean(property) || isReloadEPLEnabled();
     } finally {
       readLock.unlock();
     }

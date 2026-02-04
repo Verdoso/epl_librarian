@@ -293,9 +293,14 @@ public class BibliotecaService {
           .idiomas(numIdiomas)
           .miniaturasEnTabla(preferencesService.thumbnailsInMain())
           .integracionCalibreHabilitada(calibreService.isEnabled())
+          .recargaEPLHabilitada(isEplReloadEnabled())
           .build();
     }
     return sumario;
+  }
+
+  public boolean isEplReloadEnabled() {
+    return preferencesService.eplReloadEnabled();
   }
 
   public Pagina<Libro> paginaLibros(BusquedaLibro busquedaLibro) {

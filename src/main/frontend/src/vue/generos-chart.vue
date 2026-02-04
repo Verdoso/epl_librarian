@@ -144,7 +144,12 @@ export default {
       if(this.calibre){
         this.loadAsyncData();
       }
-    });    
+    });
+    EventBus.$on('updatedData', (payload) => {
+      if (payload === 'Correct') {
+        this.loadAsyncData();
+      }
+    });
   }
 };
 </script>

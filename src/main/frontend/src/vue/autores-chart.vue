@@ -147,6 +147,11 @@ export default {
         this.loadAsyncData();
       }
     });    
+    EventBus.$on('updatedData', (payload) => {
+      if (payload === 'Correct') {
+        this.loadAsyncData();
+      }
+    });
   }
 };
 </script>

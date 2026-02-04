@@ -1,9 +1,11 @@
 package org.greeneyed.epl.librarian.controller;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
+import org.eclipse.jetty.http.HttpStatus;
 import org.greeneyed.epl.librarian.model.Autor;
 import org.greeneyed.epl.librarian.model.Genero;
 import org.greeneyed.epl.librarian.model.Idioma;
@@ -15,7 +17,7 @@ import org.greeneyed.epl.librarian.services.BibliotecaService.AUTOR_ORDERING;
 import org.greeneyed.epl.librarian.services.BibliotecaService.BOOK_ORDERING;
 import org.greeneyed.epl.librarian.services.BibliotecaService.GENERO_ORDERING;
 import org.greeneyed.epl.librarian.services.BibliotecaService.IDIOMA_ORDERING;
-import org.greeneyed.epl.librarian.services.VersionService;
+import org.greeneyed.epl.librarian.services.DataLoaderService;
 import org.greeneyed.epl.librarian.services.model.BusquedaElemento;
 import org.greeneyed.epl.librarian.services.model.BusquedaLibro;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,7 @@ public class LibrarianAPIController {
   private static final String DEFAULT_ORDER_IDIOMA = "POR_IDIOMA";
 
   private final BibliotecaService bibliotecaService;
+  private final DataLoaderService dataLoaderService;
   private final ApplicationContext applicationContext;
 
   @GetMapping(value = "/sumario")
@@ -56,6 +59,20 @@ public class LibrarianAPIController {
   public ResponseEntity<String> updateCalibre() {
     bibliotecaService.updateCalibre(true);
     return ResponseEntity.ok("OK");
+  }
+
+  @GetMapping(value = "/updateData")
+  public ResponseEntity<String> updateData() {
+    try {
+      boolean newData = dataLoaderService.loadData();
+      if(newData) {
+        return ResponseEntity.ok("OK");
+      } else {
+        return ResponseEntity.status(HttpStatus.NOT_MODIFIED_304).build();
+      }
+    } catch (IOException e) {
+      return ResponseEntity.internalServerError().body(e.getMessage());
+    }
   }
 
   @GetMapping(value = "/exit")

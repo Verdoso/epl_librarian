@@ -2,46 +2,49 @@
     <section class="summary">
         <table class="brief_summary" v-if="this.sumario">
             <caption>
-            Sumario <small>- {{ Intl.DateTimeFormat('es', {timeStyle: "short",dateStyle: "medium"}).format(this.fechaActualizacion) }}</small>
+                Sumario <small>- {{ Intl.DateTimeFormat('es', {
+                    timeStyle: "short", dateStyle:
+                        "medium"
+                }).format(this.fechaActualizacion) }}</small>
             </caption>
             <tr>
-            <th>Libros</th>
-            <td align="right">
-                {{ Intl.NumberFormat('ca').format(this.sumario.libros) }}
-            </td>
+                <th>Libros</th>
+                <td align="right">
+                    {{ Intl.NumberFormat('ca').format(this.sumario.libros) }}
+                </td>
             </tr>
             <tr>
-            <th>Autores</th>
-            <td align="right">
-                {{ Intl.NumberFormat('ca').format(this.sumario.autores) }}
-            </td>
+                <th>Autores</th>
+                <td align="right">
+                    {{ Intl.NumberFormat('ca').format(this.sumario.autores) }}
+                </td>
             </tr>
             <tr>
-            <th>Idiomas</th>
-            <td align="right">
-                {{ Intl.NumberFormat('ca').format(this.sumario.idiomas) }}
-            </td>
+                <th>Idiomas</th>
+                <td align="right">
+                    {{ Intl.NumberFormat('ca').format(this.sumario.idiomas) }}
+                </td>
             </tr>
             <tr>
-            <th>Generos</th>
-            <td align="right">
-                {{ Intl.NumberFormat('ca').format(this.sumario.generos) }}
-            </td>
+                <th>Generos</th>
+                <td align="right">
+                    {{ Intl.NumberFormat('ca').format(this.sumario.generos) }}
+                </td>
             </tr>
         </table>
         <span></span>
         <div class="brief_summary">
-            <b-button
-                :class="this.$store.state.calibreIntegration ? 'button is-link' : 'button is-light'"
-                :loading="actualizando"
-                @click="actualizar()"
-                >
-                <b-icon
-                    pack="fa"
-                    :icon="this.$store.state.calibreIntegration ? 'check' : 'times'"
-                ></b-icon>
+            <b-button :class="this.$store.state.calibreIntegration ? 'button is-link' : 'button is-light'"
+                :loading="actualizando" :disabled="!this.$store.state.calibreIntegration" @click="actualizar()">
+                <b-icon pack="fa" :icon="this.$store.state.calibreIntegration ? 'check' : 'times'"></b-icon>
                 <span>Integración con Calibre</span>
-                {{  }}
+            </b-button>
+        </div>
+        <div class="brief_summary" v-if="this.$store.state.eplReloadEnabled">
+            <b-button :class="this.$store.state.eplReloadEnabled ? 'button is-warning' : 'button is-warning'"
+                :loading="actualizando" @click="recargarDatos()">
+                <b-icon pack="fa" :icon="this.$store.state.eplReloadEnabled ? 'check' : 'times'"></b-icon>
+                <span>Recargar biblioteca</span>
             </b-button>
         </div>
     </section>
@@ -56,67 +59,105 @@ import { EventBus } from '../event-bus';
 Vue.use(Vuex);
 
 export default {
-        data () {
-            return {
-                sumario: null,
-                fechaActualizacion: null,
-                actualizando: false
+    data() {
+        return {
+            sumario: null,
+            fechaActualizacion: null,
+            actualizando: false
+        }
+    },
+    mounted() {
+        axios
+            .get('/librarian/sumario')
+            .then(response => {
+                this.sumario = response.data;
+                this.fechaActualizacion = new Date(this.sumario.fechaActualizacion);
+                this.$store.commit("changeVersion", this.sumario.buildVersion);
+                this.$store.commit("changeLatestVersion", this.sumario.latestVersion);
+                this.$store.commit("changeCalibreIntegration", this.sumario.integracionCalibreHabilitada);
+                this.$store.commit("changeEplReloadEnabled", this.sumario.recargaEPLHabilitada);
+                this.$store.commit("changeMiniaturasEnTabla", this.sumario.miniaturasEnTabla);
+            })
+            .catch(e => {
+                this.$buefy.notification.open({
+                    type: 'is-danger'
+                    , duration: 5000
+                    , message: 'Error mostrando sumario: ' + e
+                    , hasIcon: true
+                })
+                console.error(e)
+            });
+    },
+    methods: {
+        recargarDatos() {
+            if (this.$store.state.eplReloadEnabled) {
+                this.actualizando = true;
+                axios.get('/librarian/updateData')
+                    .then(({ data }) => {
+                        this.actualizando = false;
+                        EventBus.$emit('updatedData', 'Correct');
+                        this.$buefy.notification.open({
+                            type: 'is-info'
+                            , duration: 3000
+                            , message: 'Recargados los datos de la biblioteca.'
+                            , hasIcon: true
+                        });
+                    })
+                    .catch(error => {
+                        this.actualizando = false;
+                        if(error.response.status === 304){
+                            this.$buefy.notification.open({
+                                type: 'is-warning'
+                                , duration: 3000
+                                , message: 'No se han obtenido nuevos datos para la biblioteca.'
+                                , hasIcon: true
+                            });
+                        } else {
+                            EventBus.$emit('updatedData', 'Error');
+                            this.$buefy.notification.open({
+                                type: 'is-error'
+                                , duration: 3000
+                                , message: 'Error recargando los datos de la biblioteca.'
+                                , hasIcon: true
+                            });
+                            this.$nextTick(() => {
+                                throw error;
+                            });
+                        }
+                    });
             }
         },
-        mounted() {
-          axios
-          .get('/librarian/sumario')
-          .then(response => {
-            this.sumario = response.data;
-            this.fechaActualizacion = new Date(this.sumario.fechaActualizacion);
-            this.$store.commit("changeVersion", this.sumario.buildVersion);
-            this.$store.commit("changeLatestVersion", this.sumario.latestVersion);
-            this.$store.commit("changeCalibreIntegration", this.sumario.integracionCalibreHabilitada);
-            this.$store.commit("changeMiniaturasEnTabla", this.sumario.miniaturasEnTabla);            
-          })
-         .catch(e => {
-             this.$buefy.notification.open({
-                 type: 'is-danger'
-                 , duration: 5000
-                 , message:'Error mostrando sumario: ' + e
-                 , hasIcon: true
-             })
-             console.error(e)
-         });
-        },
-        methods: {
-          actualizar() {
-            if(this.$store.state.calibreIntegration) {
-              this.actualizando = true;
-              axios.get('/librarian/updateCalibre')
-                      .then(({ data }) => {
+        actualizar() {
+            if (this.$store.state.calibreIntegration) {
+                this.actualizando = true;
+                axios.get('/librarian/updateCalibre')
+                    .then(({ data }) => {
                         this.actualizando = false;
                         EventBus.$emit('updatedCalibre', 'Correct');
                         this.$buefy.notification.open({
-                           type: 'is-info'
-                           , duration: 3000
-                           , message:'Sincronización con Calibre finalizada correctamente.'
-                           , hasIcon: true
+                            type: 'is-info'
+                            , duration: 3000
+                            , message: 'Sincronización con Calibre finalizada correctamente.'
+                            , hasIcon: true
                         });
-                      })
-                      .catch(error => {
+                    })
+                    .catch(error => {
                         this.actualizando = false;
                         EventBus.$emit('updatedCalibre', 'Error');
                         this.$buefy.notification.open({
-                           type: 'is-error'
-                           , duration: 3000
-                           , message:'Error sincronizando con Calibre.'
-                           , hasIcon: true
+                            type: 'is-error'
+                            , duration: 3000
+                            , message: 'Error sincronizando con Calibre.'
+                            , hasIcon: true
                         });
                         this.$nextTick(() => {
-                          throw error;
+                            throw error;
                         });
-                      });
+                    });
             }
-          }
-        },
-    }
+        }
+    },
+}
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
