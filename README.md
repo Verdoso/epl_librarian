@@ -51,13 +51,13 @@ Primero hay que decidir donde queremos almacenar las preferencias y los ficheros
 Por ejemplo: Estando en Windows y queriendo las preferencias y los directorios en el directorio %HOME%\.librarian y teniendo la libreria de Calibre (metadata.db) en D:\libreria_calibre, podriamos usar un comando tal que así:
 
 ```
-docker run --rm -p 7070:7070 -v %HOME%\.librarian:/librarian -v D:\libreria_calibre:/calibre verdoso/epl_librarian:1.17.35
+docker run --rm -p 7070:7070 -v %HOME%\.librarian:/librarian -v D:\libreria_calibre:/calibre verdoso/epl_librarian:1.17.39
 ```
 
 Para utilizar cualquiera de las opciones avanzadas al ejecutar la imagen Docker, debemos pasar las  opciones como variables de entorno docker. Por ejemplo, si queremos que no intente acceder a ePubLibre (flag -Ddescarga_epl=false en el modo Java), en el modo docker debemos añadir `-e descarga_epl=false` al comando de ejecución, y quedaría así:
 
 ```
-docker run --rm -p 7070:7070 -v %HOME%\.librarian:/librarian -v D:\libreria_calibre:/calibre -e descarga_epl=false verdoso/epl_librarian:1.17.35
+docker run --rm -p 7070:7070 -v %HOME%\.librarian:/librarian -v D:\libreria_calibre:/calibre -e descarga_epl=false verdoso/epl_librarian:1.17.39
 ```
 
 **Nota**: En docker, el modo '**superportable**' no tiene mucho sentido, así que dicha opción se ignora.
