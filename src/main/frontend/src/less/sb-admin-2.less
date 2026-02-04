@@ -799,6 +799,15 @@ TD.chevron-cell {
 	border-bottom: thin solid lightgray;
 }
 
+.brief_summary button.button {
+    width: 15rem;
+}
+
+.brief_summary:has(button.button) {
+    text-align: center;
+    margin: 1rem auto;
+}
+
 UL.campus_list {
     display: inline-block;
     margin: 0;
@@ -820,7 +829,6 @@ UL.campus_list li {
 }
 
 #filtre-tipus {
-	display: inline-block;
 	float: right;
 	position: relative;
 	top: -2em;
@@ -829,12 +837,6 @@ UL.campus_list li {
 .navbar-nav.navbar-top-links .dropdown-menu .dropdown-item {
     cursor: pointer;
 }
-
-/*
-div.sidebar table.brief_summary {
-  background: red;
-}
-*/
 
 LI.list-group-item SPAN.label {
   display: inline-block;

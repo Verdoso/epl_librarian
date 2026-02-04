@@ -35,9 +35,6 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
   private static String OS = System.getProperty("os.name")
       .toLowerCase();
 
-  @Value("${descarga_epl:true}")
-  private boolean descargarDeEPL;
-
   @Value("${actualizacion_automatica:true}")
   private boolean actualizacionAutomatica;
 
@@ -53,42 +50,54 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
   @Override
   public void run(ApplicationArguments arguments) throws Exception {
     if (!environment.acceptsProfiles(Profiles.of("test"))) {
-      log.info("Inicializando datos...");
-      boolean comprobaremosActualizacionAutomatica = actualizacionAutomatica;
-      StopWatch timeMeasure = new StopWatch();
-      timeMeasure.start("Procesando datos");
-      UpdateSpec updateSpec = eplCSVProcessor.processBackup();
+      try {
+        loadData();
+        abrirEnNavegador();
+      } catch (IOException e) {
+        throw e;
+      } catch (Exception e) {
+
+      }
+    }
+  }
+
+  public boolean loadData() throws IOException {
+    log.info("Inicializando datos...");
+    boolean comprobaremosActualizacionAutomatica = actualizacionAutomatica;
+    StopWatch timeMeasure = new StopWatch();
+    timeMeasure.start("Procesando datos");
+    UpdateSpec updateSpec = eplCSVProcessor.processBackup();
+    final boolean descargarDeEPL = bibliotecaService.isEplReloadEnabled();
+    if (updateSpec.isEmpty()) {
+      if (descargarDeEPL) {
+        updateSpec = eplCSVProcessor.updateFromEPL();
+      }
       if (updateSpec.isEmpty()) {
-        if (descargarDeEPL) {
-          updateSpec = eplCSVProcessor.updateFromEPL();
-        }
-        if (updateSpec.isEmpty()) {
-          updateSpec = eplCSVProcessor.updateFromEPLManual();
-        }
+        updateSpec = eplCSVProcessor.updateFromEPLManual();
+      }
+    } else {
+      if (descargarDeEPL && comprobaremosActualizacionAutomatica) {
+        updateSpec = comprobarActualizacionAutomatica(updateSpec);
       } else {
-        if (descargarDeEPL && comprobaremosActualizacionAutomatica) {
-          updateSpec = comprobarActualizacionAutomatica(updateSpec);
-        } else {
-          if (!descargarDeEPL) {
-            log.info("La descarga desde EPL est\u00e1 deshabilitada");
-          }
-          if (!comprobaremosActualizacionAutomatica) {
-            log.info("La comprobaci\u00f3n de actualizaciones autom\u00e1ticas est\u00e1 deshablitada");
-          }
+        if (!descargarDeEPL) {
+          log.info("La descarga desde EPL est\u00e1 deshabilitada");
+        }
+        if (!comprobaremosActualizacionAutomatica) {
+          log.info("La comprobaci\u00f3n de actualizaciones autom\u00e1ticas est\u00e1 deshablitada");
         }
       }
-      //
-      if (updateSpec.isEmpty()) {
-        throw new IOException("Sin datos, para qu\u00e9 arrancar.");
-      } else {
+    }
+    //
+    if (updateSpec.isEmpty()) {
+      throw new IOException("Sin datos, para qu\u00e9 arrancar.");
+    } else {
         log.info("Preparando {} libros de la descarga con fecha {}", updateSpec.getLibroCSVs()
             .size(), DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(updateSpec.getFechaActualizacion()));
         bibliotecaService.update(updateSpec);
-        timeMeasure.stop();
-        log.info("EPL Librarian inicializado en ~{}s", (int) timeMeasure.getTotalTimeSeconds());
-        abrirEnNavegador();
-      }
+      timeMeasure.stop();
+      log.info("EPL Librarian inicializado en ~{}s", (int) timeMeasure.getTotalTimeSeconds());
     }
+    return updateSpec.isNewData();
   }
 
   private void abrirEnNavegador() {

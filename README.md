@@ -54,7 +54,7 @@ Por ejemplo: Estando en Windows y queriendo las preferencias y los directorios e
 docker run --rm -p 7070:7070 -v %HOME%\.librarian:/librarian -v D:\libreria_calibre:/calibre verdoso/epl_librarian:1.17.35
 ```
 
-Para utilizar cualquiera de las opciones avanzadas al ejecutar la imagen Docker, debemos pasar las  opciones como variables de entorno docker. Por ejemplo, si queremos que no intente acceder a ePubLlibre (flag -Ddescarga_epl=false en el modo Java), en el modo docker debemos añadir `-e descarga_epl=false` al comando de ejecución, y quedaría así:
+Para utilizar cualquiera de las opciones avanzadas al ejecutar la imagen Docker, debemos pasar las  opciones como variables de entorno docker. Por ejemplo, si queremos que no intente acceder a ePubLibre (flag -Ddescarga_epl=false en el modo Java), en el modo docker debemos añadir `-e descarga_epl=false` al comando de ejecución, y quedaría así:
 
 ```
 docker run --rm -p 7070:7070 -v %HOME%\.librarian:/librarian -v D:\libreria_calibre:/calibre -e descarga_epl=false verdoso/epl_librarian:1.17.35
@@ -65,10 +65,10 @@ docker run --rm -p 7070:7070 -v %HOME%\.librarian:/librarian -v D:\libreria_cali
 ### Acceder a la aplicación
 En cualquiera de las versiones, al acabar de preparar el catalogo (aparece en el log el mensaje `EPL Librarian inicializado`), debería abrirse automáticamente una ventana del navegador apuntando a la direccion http://localhost:7070/librarian/, si no es así (como por ejemplo al ejecutar desde Docker o en Linux) tendremos que escribirla nosotros en un navegador para acceder.
 
-## Actualizaciones de ePubLlibre
+## Actualizaciones de ePubLibre
 Hay que tener en cuenta que:
 * El programa almacena los ficheros del catalogo en el directorio temporal del usuario
-* Si el catalogo almacenado tienes mas de 24h, intentará descargarse una versión nueva desde ePubLlibre
+* Si el catalogo almacenado tienes mas de 24h, intentará descargarse una versión nueva desde ePubLibre
 * En caso de no poder descargarse una versión nueva, intentará cargar un fichero que se haya descargado manualmente y colocado en el directorio temporal.
 
 ## Actualizaciones de esta misma aplicación
@@ -78,11 +78,12 @@ A partir de la versión 1.17.30, EPL Librarian consulta este mismo README en Git
 
 
 ## Uso avanzado
-* En caso de que no queramos que intente descargarse una versión nueva de la biblioteca de ePubLlibre, podemos añadir al arrancar la propiedad ```-Ddescarga_epl=false```. En ese caso intentará usar el backup o el fichero descargado manualmente, pero en ningún caso intentará acceder a ePubLlibre.
-* Si queremos incrementar el número de horas antes de descargar una una versión nueva de la biblioteca de ePubLlibre (por defecto 24h) podemos incrementarlo, por ejemplo a 48h, añadiendo la propiedad ```-Dantiguedad_maxima=48``` al arranque.
-* Si queremos que directamente ignore la antiguedad del backup y si tiene uno lo use, podemos hacerlo añadiendo al arranque la propiedad ```-Dactualizacion_automatica=false```. Si no hay backup intentará la descarga de ePubLlibre, pero si lo hay no la intentará.
+* En caso de que no queramos que intente descargarse una versión nueva de la biblioteca de ePubLibre, podemos añadir al arrancar la propiedad ```-Ddescarga_epl=false```. En ese caso intentará usar el backup o el fichero descargado manualmente, pero en ningún caso intentará acceder a ePubLibre.
+* Si queremos incrementar el número de horas antes de descargar una una versión nueva de la biblioteca de ePubLibre (por defecto 24h) podemos incrementarlo, por ejemplo a 48h, añadiendo la propiedad ```-Dantiguedad_maxima=48``` al arranque.
+* Si queremos que directamente ignore la antiguedad del backup y si tiene uno lo use, podemos hacerlo añadiendo al arranque la propiedad ```-Dactualizacion_automatica=false```. Si no hay backup intentará la descarga de ePubLibre, pero si lo hay no la intentará.
 * Modo '**superportable**'. Si queremos que el programa no cree ningún fichero fuera del directorio del programa, podemos pasarle el flag ```-Dsuperportable=true```. En ese caso, el fichero de preferencias y los ficheros temporales/backup de las descargas se almacenaran el el mismo directorio desde donde se lanza el programa, en los directorios .librariany y tmp. **Ojo** Eso quiere decir que al cambiar de versión del programa, tendremos que copiar las preferencias (directorio .librarian) y los ficheros temporales (directorio tmp) para no perder esos datos.
 * Si queremos que se muestren las miniaturas de las portadas en la tabla principal, sin tener que abrir el detalle de cada libro para verlas, podemos añadir la propiedad ```thumbnails_in_main``` a true en nuestro fichero de preferencias. Con eso podremos ver las portadas de los libros directamente sin abrir los detalles.
+* Por defecto, el programa intenta descargarse una nueva versión de la biblioteca de ePubLibre únicamente al arrancar. Si queremos poder refrescar el fichero (normalmente solo es útil desde la versión docker si no reiniciamos el contenedor), podemos añadir la propiedad ```-Dcan_reload_epl=true``` al arranque. Con eso podremos ver un botón en el sumario para intentar recargar los libros. El refresco de datos sigue las mismas reglas de caducidad de backups e indicaciones de las preferencias.
 
 ![Tabla de libros mostrando directamente las miniaturas de las portadas](https://raw.githubusercontent.com/Verdoso/epl_librarian/master/docs/miniaturasLibros.png)
 
@@ -113,7 +114,7 @@ Esta funcionalidad es útil cuando estamos añadiendo al Calibre libros que nos 
 El programa ofrece varios listados
 
 ### Listado principal (libros)
-En este listado se muestran los datos básicos de los libros y se puede filtrar y ordenar por distintos criterios (título, colección, autor, idioma, género). En este listado se puede escoger una fecha (indicada por "Considerar novedades libros posteriores a") para que únicamente se muestres los libros disponibles en ePubLlibre a partir de esa fecha. Para que el filtro se lleve a cabo hay que activar el interruptor "Solo novedades". Si le damos al botón de guardar almacenará la fecha y la recordará para posteriores arranques. Por otro lado, si hemos marcado como favoritos algunos idiomas, generos o autores, podemos activar los filtros para que solo se muestren los libros que cumplan esos criterios. Si tenemos activa la integración con Calibre también tendremos el filtro de ocultar los libros que ya tenemos o que hemos descartado, y veremos las columnas correspondientes a esos valores.
+En este listado se muestran los datos básicos de los libros y se puede filtrar y ordenar por distintos criterios (título, colección, autor, idioma, género). En este listado se puede escoger una fecha (indicada por "Considerar novedades libros posteriores a") para que únicamente se muestres los libros disponibles en ePubLibre a partir de esa fecha. Para que el filtro se lleve a cabo hay que activar el interruptor "Solo novedades". Si le damos al botón de guardar almacenará la fecha y la recordará para posteriores arranques. Por otro lado, si hemos marcado como favoritos algunos idiomas, generos o autores, podemos activar los filtros para que solo se muestren los libros que cumplan esos criterios. Si tenemos activa la integración con Calibre también tendremos el filtro de ocultar los libros que ya tenemos o que hemos descartado, y veremos las columnas correspondientes a esos valores.
 
 ![Imagen de la página principal](https://raw.githubusercontent.com/Verdoso/epl_librarian/master/docs/Screen_Principal.PNG)
 

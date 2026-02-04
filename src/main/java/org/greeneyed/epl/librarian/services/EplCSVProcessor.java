@@ -182,10 +182,11 @@ public class EplCSVProcessor implements EnvironmentAware {
 
   @Data
   public static class UpdateSpec {
-    public static final UpdateSpec NO_SPEC = new UpdateSpec(null, Collections.emptyList());
+    public static final UpdateSpec NO_SPEC = new UpdateSpec(null, Collections.emptyList(), false);
 
     private final LocalDateTime fechaActualizacion;
     private final List<LibroCSV> libroCSVs;
+    private final boolean newData;
 
     public boolean isEmpty() {
       return libroCSVs == null || libroCSVs.isEmpty();
@@ -223,7 +224,7 @@ public class EplCSVProcessor implements EnvironmentAware {
               librosCSVs.clear();
             }
             log.warn("Backup Le\u00eddo con {} libros.", librosCSVs.size());
-            return new UpdateSpec(fechaActualizacion, librosCSVs);
+            return new UpdateSpec(fechaActualizacion, librosCSVs, false);
           })
           .orElse(UpdateSpec.NO_SPEC);
       // Borramos los ficheros de backup que no sean el ultimo
@@ -307,7 +308,7 @@ public class EplCSVProcessor implements EnvironmentAware {
                   .toEpochMilli());
             }
           }
-          return new UpdateSpec(fechaActualizacion, librosCSVs);
+          return new UpdateSpec(fechaActualizacion, librosCSVs, true);
         }
       } catch (IOException e) {
         log.error("Error leyendo fichero: {}", e.getMessage());

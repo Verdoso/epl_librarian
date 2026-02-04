@@ -327,11 +327,11 @@ import axios from "axios";
 import Vuex from "vuex";
 import Bottleneck from "bottleneck";
 import { EventBus } from '../event-bus';
-import TimeAgo from 'javascript-time-ago'
 import es from 'javascript-time-ago/locale/es'
 
 Vue.use(Vuex);
-TimeAgo.addDefaultLocale(es)
+import TimeAgo from 'javascript-time-ago'
+TimeAgo.addLocale(es)
 
 const limiter = new Bottleneck({
   maxConcurrent: 1,
@@ -674,8 +674,13 @@ export default {
         throw error;
       });    
     EventBus.$on('updatedCalibre', () => {
-      this.loadAsyncData();
-    });    
+      this.loadAsyncData();      
+    });
+    EventBus.$on('updatedData', (payload) => {
+      if (payload === 'Correct') {
+        this.loadAsyncData();
+      }
+    });
   }
 };
 </script>

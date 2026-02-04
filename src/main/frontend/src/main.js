@@ -47,6 +47,7 @@ const store = new Vuex.Store({
   buildVersion: null,
   latestVersion: null,
   calibreIntegration: false,
+  eplReloadEnabled: false,
   miniaturasEnTabla: false,
   },
   getters: {
@@ -75,6 +76,9 @@ const store = new Vuex.Store({
     },
     changeCalibreIntegration (state,integration) {
       state.calibreIntegration = integration
+    },
+    changeEplReloadEnabled (state,integration) {
+      state.eplReloadEnabled = integration
     },
     changeMiniaturasEnTabla (state,newMiniaturasEnTabla) {
       state.miniaturasEnTabla = newMiniaturasEnTabla
