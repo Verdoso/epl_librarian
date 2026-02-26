@@ -35,6 +35,9 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
   private static String OS = System.getProperty("os.name")
       .toLowerCase();
 
+  @Value("${descarga_epl:true}")
+  private boolean descargarDeEPL;
+
   @Value("${actualizacion_automatica:true}")
   private boolean actualizacionAutomatica;
 
@@ -63,7 +66,6 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
 
   public boolean loadData() throws IOException {
     log.info("Inicializando datos...");
-    final boolean descargarDeEPL = bibliotecaService.isEplReloadEnabled();
     boolean comprobaremosActualizacionAutomatica = actualizacionAutomatica;
     log.info("descargarDeEPL: {}, actualizacionAutomatica: {} ", descargarDeEPL, actualizacionAutomatica);
     StopWatch timeMeasure = new StopWatch();
