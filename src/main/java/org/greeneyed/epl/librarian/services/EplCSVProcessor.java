@@ -390,10 +390,13 @@ public class EplCSVProcessor implements EnvironmentAware {
     UpdateSpec updateSpec = UpdateSpec.NO_SPEC;
     File librosEPL;
     try {
+      log.info("Intentando actualizar desde fichero local ya descargado");
       librosEPL = new File(getTempDirectory().toFile(), "epublibre_csv.zip");
       if (librosEPL.exists()) {
         log.info("Encontrada descarga manual ({}), procesando...", librosEPL.getAbsoluteFile());
         updateSpec = procesarFicheroManual(updateSpec, librosEPL);
+      } else {
+        log.warn("No hay descarga manual");
       }
     } catch (IOException e1) {
       log.error("Error intentando leer descarga manual: {}", e1.getMessage());

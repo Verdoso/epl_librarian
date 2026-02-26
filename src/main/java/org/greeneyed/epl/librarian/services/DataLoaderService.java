@@ -63,11 +63,12 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
 
   public boolean loadData() throws IOException {
     log.info("Inicializando datos...");
+    final boolean descargarDeEPL = bibliotecaService.isEplReloadEnabled();
     boolean comprobaremosActualizacionAutomatica = actualizacionAutomatica;
+    log.info("descargarDeEPL: {}, actualizacionAutomatica: {} ", descargarDeEPL, actualizacionAutomatica);
     StopWatch timeMeasure = new StopWatch();
     timeMeasure.start("Procesando datos");
     UpdateSpec updateSpec = eplCSVProcessor.processBackup();
-    final boolean descargarDeEPL = bibliotecaService.isEplReloadEnabled();
     if (updateSpec.isEmpty()) {
       if (descargarDeEPL) {
         updateSpec = eplCSVProcessor.updateFromEPL();
