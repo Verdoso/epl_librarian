@@ -7,7 +7,7 @@ Repositorio para una mini-aplicación para consultar localmente el catálogo de 
 
 ## Últimas versiones
 [//]: # (BEGIN)
-* Release 1.17.40: https://github.com/Verdoso/epl_librarian/releases/tag/Release_Tag_v1.17.40
+* Release 1.17.41: https://github.com/Verdoso/epl_librarian/releases/tag/Release_Tag_v1.17.41
 * Release 1.17.39: https://github.com/Verdoso/epl_librarian/releases/tag/Release_Tag_v1.17.39
 * Release 1.17.38: https://github.com/Verdoso/epl_librarian/releases/tag/Release_Tag_v1.17.38
 
