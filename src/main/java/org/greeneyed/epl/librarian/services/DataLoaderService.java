@@ -66,6 +66,9 @@ public class DataLoaderService implements ApplicationRunner, EnvironmentAware {
 
   public boolean loadData() throws IOException {
     log.info("Inicializando datos...");
+    //
+    bibliotecaService.clean();
+    //
     boolean comprobaremosActualizacionAutomatica = actualizacionAutomatica;
     log.info("descargarDeEPL: {}, actualizacionAutomatica: {} ", descargarDeEPL, actualizacionAutomatica);
     StopWatch timeMeasure = new StopWatch();

@@ -186,6 +186,15 @@ public class BibliotecaService {
     log.info("Inicializando versi\u00f3n: {}", buildVersion);
   }
 
+  public void clean() {
+    writeLock.lock();
+    libreria.clear();
+    try {
+    } finally {
+      writeLock.unlock();
+    }
+  }
+
   public void update(UpdateSpec updateSpec) {
     writeLock.lock();
     try {
