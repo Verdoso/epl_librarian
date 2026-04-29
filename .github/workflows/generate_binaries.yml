@@ -42,7 +42,7 @@ jobs:
           swap-size-gb: 10
       - name:
           Configure pagefile
-        uses: al-cheb/configure-pagefile-action@v1.4
+        uses: al-cheb/configure-pagefile-action@v1.5
         if: runner.os == 'Windows'
         with:
           minimum-size: 10GB
@@ -53,7 +53,7 @@ jobs:
           (Get-CimInstance Win32_PageFileUsage).AllocatedBaseSize
         shell: pwsh
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -68,7 +68,7 @@ jobs:
            git checkout ${CLEAN_RELEASE_TAG}
     
       - name: Cache Maven dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
