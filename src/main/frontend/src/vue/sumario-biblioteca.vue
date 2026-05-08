@@ -92,8 +92,8 @@ export default {
         recargarDatos() {
             if (this.$store.state.eplReloadEnabled) {
                 this.actualizando = true;
-                axios.get('/librarian/updateData')
-                    .then(({ data }) => {
+                axios.get('/librarian/updateData', { timeout: 60000 })
+                    .then(() => {
                         this.actualizando = false;
                         EventBus.$emit('updatedData', 'Correct');
                         this.$buefy.notification.open({
